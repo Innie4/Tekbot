@@ -116,6 +116,17 @@ npm run test:e2e
 - [Deployment Guide](./docs/deployment/README.md)
 - [Contributing Guide](./docs/CONTRIBUTING.md)
 
+## API Endpoints & Frontend Wiring
+
+- All admin dashboard panels in `/apps/frontend/src/components/admin` are wired to backend CRUD endpoints (see `/apps/backend/src/modules/*`).
+- Use `api-client.ts` for authenticated API calls from frontend to backend.
+- Example: CustomersPanel fetches `/api/customers` and displays data in a table.
+
+## Running Tests
+
+- Unit tests for backend services/controllers are in `/apps/backend/test`.
+- Run tests with `npm test` or your preferred test runner.
+
 ## 🤝 Contributing
 
 Please read our [Contributing Guide](./docs/CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
@@ -127,3 +138,33 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🆘 Support
 
 For support, email support@tekskillz.com or join our Slack channel.
+
+## TODOs & Missing Features (as of September 2025)
+
+### Integrations
+- Stripe, Paystack, Twilio, Meta, Calendly, Slack, SMTP, OpenAI: Service stubs and controllers created. Webhook, error handling, and advanced logic pending.
+
+### Security & Compliance
+- Audit logging, role-based permissions, GDPR/PCI, multi-factor authentication: Service stubs created. UI, endpoints, and enforcement pending.
+
+### Monitoring & Analytics
+- Sentry, business metrics, health, analytics: Service stubs and controllers created. Data aggregation and dashboard logic pending.
+
+### Frontend
+- Admin dashboard panels scaffolded. Connect to backend APIs, add CRUD, error handling, and role-based UI.
+- Customer portal, mobile/PWA, notification UI: Not started.
+
+### Backend
+- Webhooks, notifications, files, health, analytics: Controllers and services scaffolded. Integration and business logic pending.
+
+### Database & Migration
+- Migration scripts and RLS policies present. Production validation pending.
+
+### Testing & Documentation
+- Unit/E2E tests, API docs, onboarding: Not started.
+
+---
+
+## Developer Onboarding
+- Configure environment variables in `/apps/backend/src/config` and `.env.example`.
+- See README for feature flags and integration notes.

@@ -11,6 +11,13 @@ export class UsersService {
     private readonly userRepository: Repository<User>,
   ) {}
 
+  async findByVerificationToken(token: string): Promise<User | null> {
+    return this.userRepository.findOne({
+      where: { emailVerificationToken: token },
+      relations: ['tenant'],
+    });
+  }
+
   async findAll(): Promise<User[]> {
     return this.userRepository.find({
       relations: ['tenant'],

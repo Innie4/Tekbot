@@ -8,8 +8,10 @@ import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
 
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
+import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
 import { TenantMiddleware } from './common/middleware/tenant.middleware';
 
 async function bootstrap() {
@@ -69,11 +71,15 @@ async function bootstrap() {
     }),
   );
 
-  // Global filters
-  app.useGlobalFilters(new HttpExceptionFilter());
+  // Global filters (order matters - most specific first)
+  app.useGlobalFilters(
+    new HttpExceptionFilter(),
+    new AllExceptionsFilter(),
+  );
 
   // Global interceptors
   app.useGlobalInterceptors(
+    new TimeoutInterceptor(),
     new LoggingInterceptor(),
     new TransformInterceptor(app.get('Reflector')),
   );

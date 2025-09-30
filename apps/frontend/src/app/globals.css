@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 222 47% 11%;
+  --foreground: 210 40% 98%;
+  --card: 222 47% 11%;
+  --card-foreground: 210 40% 98%;
+  --popover: 222 47% 11%;
+  --popover-foreground: 210 40% 98%;
+  --primary: 217 91% 60%;
+  --primary-foreground: 210 40% 98%;
+  --secondary: 199 89% 48%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 217 33% 17%;
+  --muted-foreground: 215 20% 65%;
+  --accent: 199 89% 48%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 62% 30%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 217 33% 17%;
+  --input: 217 33% 17%;
+  --ring: 224 76% 48%;
+  --radius: 0.5rem;
+}
+
+* {
+  @apply border-gray-700;
+}
+
+body {
+  @apply bg-gray-900 text-gray-100;
+  font-feature-settings: "rlig" 1, "calt" 1;
+}
+
+@layer components {
+  .glass-effect {
+    @apply backdrop-blur-md bg-white/10 border border-white/20;
+  }
+  .glass-effect-dark {
+    @apply backdrop-blur-md bg-black/30 border border-white/10;
+  }
+  .glass-card-effect {
+    @apply backdrop-blur-xl bg-white/5 border border-white/10 rounded-xl;
+  }
+  .glass-button-effect {
+    @apply backdrop-blur-sm bg-white/10 border border-white/20 transition-all duration-200;
+  }
+  .glass-input-effect {
+    @apply backdrop-blur-sm bg-white/5 border border-white/10;
+  }
+}
+
+@layer utilities {
+  .transition-standard {
+    @apply transition-all duration-300 ease-out;
+  }
+  .transition-micro {
+    @apply transition-all duration-150 ease-in-out;
+  }
+  .hover-scale {
+    @apply hover:scale-[1.02] transition-micro;
+  }}

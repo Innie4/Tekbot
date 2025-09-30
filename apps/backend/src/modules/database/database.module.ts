@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
+import { DatabaseService } from './database.service';
 
 @Module({
   imports: [
@@ -10,11 +11,12 @@ import { DataSource } from 'typeorm';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        host: configService.get('DB_HOST', 'localhost'),
-        port: configService.get('DB_PORT', 5432),
-        username: configService.get('DB_USERNAME', 'postgres'),
-        password: configService.get('DB_PASSWORD', 'password'),
-        database: configService.get('DB_NAME', 'tekassist'),
+        url: configService.get('DATABASE_URL'),
+        host: configService.get('DATABASE_HOST', 'localhost'),
+        port: configService.get('DATABASE_PORT', 5432),
+        username: configService.get('DATABASE_USERNAME', 'postgres'),
+        password: configService.get('DATABASE_PASSWORD', 'password'),
+        database: configService.get('DATABASE_NAME', 'tekassist'),
         entities: [__dirname + '/../**/*.entity{.ts,.js}'],
         migrations: [__dirname + '/../../migrations/*{.ts,.js}'],
         synchronize: configService.get('NODE_ENV') === 'development',
@@ -32,6 +34,7 @@ import { DataSource } from 'typeorm';
       },
     }),
   ],
-  exports: [TypeOrmModule],
+  providers: [DatabaseService],
+  exports: [TypeOrmModule, DatabaseService],
 })
 export class DatabaseModule {}

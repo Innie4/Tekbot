@@ -1,14 +1,12 @@
 import {
   Injectable,
-  CanActivate,
   ExecutionContext,
   HttpException,
   HttpStatus,
-  SetMetadata,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Request, Response } from 'express';
-import { ThrottlerGuard, ThrottlerException, ThrottlerModuleOptions, ThrottlerStorage } from '@nestjs/throttler';
+import { ThrottlerGuard, ThrottlerModuleOptions, ThrottlerStorage } from '@nestjs/throttler';
 
 interface ThrottleConfig {
   ttl: number; // Time to live in seconds
@@ -21,6 +19,8 @@ interface ThrottleConfig {
 
 @Injectable()
 export class CustomThrottleGuard extends ThrottlerGuard {
+  private static requestCounts: Record<string, { count: number; windowStart: number }> = {};
+
   constructor(
     options: ThrottlerModuleOptions,
     storageService: ThrottlerStorage,
@@ -38,7 +38,6 @@ export class CustomThrottleGuard extends ThrottlerGuard {
       context.getHandler(),
       context.getClass(),
     ]);
-
     if (skipThrottle) {
       return true;
     }
@@ -48,111 +47,55 @@ export class CustomThrottleGuard extends ThrottlerGuard {
       context.getHandler(),
       context.getClass(),
     ]);
-
-    // Check if should skip based on custom logic
     if (throttleConfig?.skipIf && throttleConfig.skipIf(context)) {
       return true;
     }
 
-    try {
-      // Use parent throttler logic
-      const result = await super.canActivate(context);
-      
-      // Add rate limit headers
-      this.addRateLimitHeaders(response, request, throttleConfig);
-      
-      return result;
-    } catch (error) {
-      if (error instanceof ThrottlerException) {
-        // Add rate limit headers even when throttled
-        this.addRateLimitHeaders(response, request, throttleConfig, true);
-        
-        // Customize throttle error message
-        const customMessage = this.getCustomThrottleMessage(request, throttleConfig);
-        throw new HttpException(
-          {
-            statusCode: HttpStatus.TOO_MANY_REQUESTS,
-            message: customMessage,
-            error: 'Too Many Requests',
-            retryAfter: this.getRetryAfter(throttleConfig),
-          },
-          HttpStatus.TOO_MANY_REQUESTS,
-        );
-      }
-      throw error;
-    }
-  }
-
-  protected async getTracker(req: Record<string, any>): Promise<string> {
-    // Get custom key generator from metadata
-    const context = this.getExecutionContext(req);
-    const throttleConfig = this.reflector.getAllAndOverride<ThrottleConfig>('throttleConfig', [
-      context?.getHandler(),
-      context?.getClass(),
-    ]);
-
-    if (throttleConfig?.generateKey) {
-      return throttleConfig.generateKey(context);
-    }
-
-    // Default tracking by IP and user ID (if authenticated)
-    const ip = req.ip || req.connection?.remoteAddress || 'unknown';
-    const userId = req.user?.id;
-    
-    if (userId) {
-      return `user:${userId}`;
-    }
-    
-    return `ip:${ip}`;
-  }
-
-  private getExecutionContext(req: any): ExecutionContext | null {
-    // This is a workaround to get execution context in getTracker
-    // In a real implementation, you might need to store this differently
-    return req.__executionContext || null;
-  }
-
-  private addRateLimitHeaders(
-    response: Response,
-    request: Request,
-    config?: ThrottleConfig,
-    isThrottled: boolean = false,
-  ): void {
-    const limit = config?.limit || 100;
-    const ttl = config?.ttl || 60;
-    
-    // Add standard rate limit headers
-    response.setHeader('X-RateLimit-Limit', limit.toString());
-    response.setHeader('X-RateLimit-Window', ttl.toString());
-    
-    if (isThrottled) {
-      response.setHeader('X-RateLimit-Remaining', '0');
-      response.setHeader('Retry-After', this.getRetryAfter(config).toString());
+    // Real request tracking logic
+    const key = request.ip || (request.user?.id ? `user-${request.user.id}` : 'anonymous');
+    const limit = throttleConfig?.limit || 100;
+    const ttl = throttleConfig?.ttl || 60; // seconds
+    const now = Date.now();
+    const windowStart = Math.floor(now / 1000 / ttl) * ttl * 1000;
+    if (!CustomThrottleGuard.requestCounts[key] || CustomThrottleGuard.requestCounts[key].windowStart !== windowStart) {
+      CustomThrottleGuard.requestCounts[key] = { count: 1, windowStart };
     } else {
-      // In a real implementation, you'd track remaining requests
-      response.setHeader('X-RateLimit-Remaining', (limit - 1).toString());
+      CustomThrottleGuard.requestCounts[key].count++;
     }
+    const remaining = Math.max(0, limit - CustomThrottleGuard.requestCounts[key].count);
+    this.addRateLimitHeaders(response, throttleConfig, remaining);
+    response.setHeader('X-RateLimit-Remaining', remaining.toString());
+    if (CustomThrottleGuard.requestCounts[key].count > limit) {
+      const customMessage = this.getCustomThrottleMessage(request, throttleConfig);
+      throw new HttpException(
+        {
+          statusCode: HttpStatus.TOO_MANY_REQUESTS,
+          message: customMessage,
+          error: 'Too Many Requests',
+          retryAfter: this.getRetryAfter(throttleConfig),
+        },
+        HttpStatus.TOO_MANY_REQUESTS,
+      );
+    }
+    return true;
   }
 
-  private getCustomThrottleMessage(request: Request, config?: ThrottleConfig): string {
-    const limit = config?.limit || 100;
-    const ttl = config?.ttl || 60;
-    const retryAfter = this.getRetryAfter(config);
-    
-    const endpoint = request.path;
-    const method = request.method;
-    
-    return `Rate limit exceeded for ${method} ${endpoint}. ` +
-           `Limit: ${limit} requests per ${ttl} seconds. ` +
-           `Please try again in ${retryAfter} seconds.`;
+  // Helper to add rate limit headers
+  private addRateLimitHeaders(response: Response, throttleConfig: ThrottleConfig | undefined, remaining: number) {
+    response.setHeader('X-RateLimit-Limit', throttleConfig?.limit || 100);
+    response.setHeader('X-RateLimit-Remaining', remaining);
+    response.setHeader('X-RateLimit-Reset', throttleConfig?.ttl || 60);
   }
 
-  private getRetryAfter(config?: ThrottleConfig): number {
-    return config?.ttl || 60;
+  // Helper to get custom throttle message
+  private getCustomThrottleMessage(request: Request, throttleConfig: ThrottleConfig | undefined): string {
+    return throttleConfig?.limit
+      ? `Rate limit exceeded. Max ${throttleConfig.limit} requests per ${throttleConfig.ttl || 60} seconds.`
+      : 'Too many requests.';
+  }
+
+  // Helper to get retry after value
+  private getRetryAfter(throttleConfig: ThrottleConfig | undefined): number {
+    return throttleConfig?.ttl || 60;
   }
 }
-
-// Decorator for custom throttle configuration
-export const CustomThrottle = (config: ThrottleConfig) => SetMetadata('throttleConfig', config);
-
-export const SkipThrottle = () => SetMetadata('skipThrottle', true);

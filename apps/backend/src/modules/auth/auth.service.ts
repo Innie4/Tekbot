@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { UsersService } from '../users/users.service';
+import { EmailNotificationService } from '../notifications/email-notification.service';
 import { User, UserStatus } from '../users/entities/user.entity';
 import * as bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
@@ -37,9 +38,10 @@ export interface JwtPayload {
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly usersService: UsersService,
-    private readonly jwtService: JwtService,
-    private readonly configService: ConfigService,
+  private readonly usersService: UsersService,
+  private readonly jwtService: JwtService,
+  private readonly configService: ConfigService,
+  private readonly emailNotificationService: EmailNotificationService,
   ) {}
 
   async validateUser(email: string, password: string): Promise<User | null> {
@@ -125,14 +127,11 @@ export class AuthService {
   }
 
   async verifyEmail(token: string): Promise<{ message: string }> {
-    const user = await this.usersService.findByEmail(''); // This needs to be implemented to find by verification token
-    
-    if (!user || user.emailVerificationToken !== token) {
+    const user = await this.usersService.findByVerificationToken(token);
+    if (!user) {
       throw new BadRequestException('Invalid verification token');
     }
-
     await this.usersService.verifyEmail(user.id);
-    
     return { message: 'Email verified successfully' };
   }
 
@@ -149,7 +148,11 @@ export class AuthService {
 
     await this.usersService.setPasswordResetToken(email, resetToken, expiresAt);
     
-    // TODO: Send email with reset token
+    // Send password reset email
+    const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password?token=${resetToken}`;
+    const subject = 'TekBot Password Reset Request';
+    const html = `<p>Hello,</p><p>You requested a password reset. Click <a href="${resetUrl}">here</a> to reset your password. This link will expire in 1 hour.</p>`;
+    await this.emailNotificationService.sendMail(user.email, subject, html);
     
     return { message: 'If the email exists, a password reset link has been sent' };
   }

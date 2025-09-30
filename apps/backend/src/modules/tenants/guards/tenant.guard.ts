@@ -1,0 +1,1 @@
+export { TenantGuard } from '../../../common/guards/tenant.guard';
