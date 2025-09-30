@@ -33,7 +33,7 @@
     "docker:up": "docker-compose up -d",
     "docker:down": "docker-compose down",
     "docker:logs": "docker-compose logs -f",
-    "prepare": "husky install",
+    "prepare": "husky install || true",
     "start": "npm run start --workspace=apps/frontend"
   },
   "devDependencies": {
