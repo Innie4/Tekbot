@@ -12,6 +12,7 @@ import { Logger, UseGuards } from '@nestjs/common';
 import { ConversationsService } from '../conversations/conversations.service';
 import { OpenAIService } from '../ai/openai.service';
 import { CustomersService } from '../customers/customers.service';
+import { LeadsService } from '../leads/leads.service';
 
 interface ChatMessage {
   id: string;
@@ -50,6 +51,7 @@ export class WebSocketGateway implements OnGatewayConnection, OnGatewayDisconnec
     private readonly conversationsService: ConversationsService,
     private readonly openAIService: OpenAIService,
     private readonly customersService: CustomersService,
+    private readonly leadsService: LeadsService,
   ) {}
 
   handleConnection(client: Socket) {
@@ -87,6 +89,15 @@ export class WebSocketGateway implements OnGatewayConnection, OnGatewayDisconnec
       this.logger.error(`Error joining room: ${error.message}`);
       client.emit('error', { message: 'Failed to join room' });
     }
+  }
+
+  // Alias to support widget clients emitting 'joinRoom'
+  @SubscribeMessage('joinRoom')
+  async handleJoinRoomAlias(
+    @MessageBody() data: JoinRoomData,
+    @ConnectedSocket() client: Socket,
+  ) {
+    return this.handleJoinRoom(data, client);
   }
 
   @SubscribeMessage('send_message')
@@ -141,6 +152,9 @@ export class WebSocketGateway implements OnGatewayConnection, OnGatewayDisconnec
         timestamp: new Date(),
       });
 
+      // Attempt lead capture based on message content/metadata
+      await this.captureLeadIfApplicable(message, tenantId, customerId, conversationId, roomId);
+
       // Generate AI response
       const aiResponse = await this.generateAIResponse(message.content, conversationId, tenantId);
 
@@ -161,7 +175,7 @@ export class WebSocketGateway implements OnGatewayConnection, OnGatewayDisconnec
 
       await this.conversationsService.addMessage(conversationId, tenantId, aiMessageData);
 
-      // Send AI response to room
+      // Send AI response to room (both legacy and widget alias events)
       const aiMessage: ChatMessage = {
         id: `ai_${Date.now()}`,
         content: aiResponse,
@@ -175,6 +189,12 @@ export class WebSocketGateway implements OnGatewayConnection, OnGatewayDisconnec
       };
 
       this.server.to(roomId).emit('message_received', aiMessage);
+      this.server.to(roomId).emit('message', {
+        message: aiResponse,
+        timestamp: new Date(),
+        sessionId,
+        messageId: aiMessage.id,
+      });
 
       // Notify admin dashboard of new conversation activity
       this.server.emit('admin_notification', {
@@ -189,6 +209,15 @@ export class WebSocketGateway implements OnGatewayConnection, OnGatewayDisconnec
       this.logger.error(`Error handling message: ${error.message}`, error.stack);
       client.emit('error', { message: 'Failed to send message' });
     }
+  }
+
+  // Alias to support widget clients emitting 'message'
+  @SubscribeMessage('message')
+  async handleWidgetMessage(
+    @MessageBody() message: ChatMessage,
+    @ConnectedSocket() client: Socket,
+  ) {
+    return this.handleMessage(message, client);
   }
 
   @SubscribeMessage('typing_start')
@@ -253,6 +282,91 @@ export class WebSocketGateway implements OnGatewayConnection, OnGatewayDisconnec
     } catch (error) {
       this.logger.error(`Error generating AI response: ${error.message}`);
       return 'I apologize, but I encountered an error processing your request. Please try again.';
+    }
+  }
+
+  private extractEmail(text: string): string | undefined {
+    const match = text?.match(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/);
+    return match ? match[0] : undefined;
+  }
+
+  private extractPhone(text: string): string | undefined {
+    const match = text?.match(/\+?\d[\d\s\-().]{7,}\d/);
+    return match ? match[0] : undefined;
+  }
+
+  private async captureLeadIfApplicable(
+    message: ChatMessage,
+    tenantId: string,
+    customerId: string | undefined,
+    conversationId: string,
+    roomId: string,
+  ): Promise<void> {
+    try {
+      const conversation = await this.conversationsService.findOne(conversationId, tenantId);
+      const alreadyCaptured = conversation.metadata?.leadCaptured;
+      if (alreadyCaptured) return;
+
+      const meta = message.metadata || {};
+      const content = message.content || '';
+
+      const email = meta.email || meta.contact?.email || this.extractEmail(content);
+      const phone = meta.phone || meta.contact?.phone || this.extractPhone(content);
+      const serviceInterest = meta.service_interest || meta.intent || meta.service || meta.product;
+
+      // Only capture if we have a signal (contact or interest)
+      if (!email && !phone && !serviceInterest) {
+        return;
+      }
+
+      let resolvedCustomerId = customerId;
+
+      if (!resolvedCustomerId) {
+        // Try to find existing customer by phone
+        if (phone) {
+          const existing = await this.customersService.findByPhone(phone);
+          if (existing && existing.tenantId === tenantId) {
+            resolvedCustomerId = existing.id;
+          }
+        }
+
+        if (!resolvedCustomerId) {
+          const name = meta.name || meta.contact?.name || 'Website Visitor';
+          const created = await this.customersService.createForTenant(tenantId, {
+            name,
+            email,
+            phone,
+            preferences: { source: 'widget', ...meta },
+          });
+          resolvedCustomerId = created.id;
+        }
+      }
+
+      const notes = meta.notes || `Widget chat: ${content.slice(0, 500)}`;
+      const lead = await this.leadsService.createForTenant(tenantId, {
+        customerId: resolvedCustomerId,
+        source: 'widget',
+        status: 'new',
+        service_interest: serviceInterest,
+        notes,
+      });
+
+      const updatedMetadata = { ...(conversation.metadata || {}), leadCaptured: true, leadId: lead.id };
+      await this.conversationsService.update(conversationId, tenantId, { metadata: updatedMetadata });
+
+      // Notify admin systems
+      this.server.emit('admin_notification', {
+        type: 'new_lead',
+        tenantId,
+        conversationId,
+        leadId: lead.id,
+        timestamp: new Date(),
+      });
+
+      // Optionally notify participants in the room
+      this.server.to(roomId).emit('lead_captured', { leadId: lead.id });
+    } catch (error) {
+      this.logger.error(`Error capturing lead: ${error.message}`, error.stack);
     }
   }
 

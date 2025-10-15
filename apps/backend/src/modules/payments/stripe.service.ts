@@ -30,6 +30,16 @@ export interface CreateCustomerOptions {
   paymentMethod?: string;
 }
 
+export interface CreateCheckoutSessionOptions {
+  amount: number;
+  currency: string;
+  successUrl: string;
+  cancelUrl: string;
+  metadata?: Record<string, string>;
+  customerEmail?: string;
+  description?: string;
+}
+
 @Injectable()
 export class StripeService {
   private readonly logger = new Logger(StripeService.name);
@@ -165,6 +175,48 @@ export class StripeService {
         ...context,
       },
       30000, // timeout
+      {
+        maxAttempts: 3,
+        delay: 1000,
+        exponentialBackoff: true,
+      },
+    );
+  }
+
+  async createCheckoutSession(
+    options: CreateCheckoutSessionOptions,
+    context?: ErrorContext,
+  ): Promise<Stripe.Checkout.Session> {
+    return ErrorHandlerUtil.handleExternalApiCall(
+      async () => {
+        const session = await this.stripe.checkout.sessions.create({
+          mode: 'payment',
+          success_url: options.successUrl,
+          cancel_url: options.cancelUrl,
+          customer_email: options.customerEmail,
+          line_items: [
+            {
+              price_data: {
+                currency: options.currency.toLowerCase(),
+                unit_amount: Math.round(options.amount * 100),
+                product_data: {
+                  name: options.description || 'TekAssist Payment',
+                },
+              },
+              quantity: 1,
+            },
+          ],
+          metadata: options.metadata || {},
+        });
+        return session;
+      },
+      {
+        service: 'StripeService',
+        method: 'createCheckoutSession',
+        metadata: { amount: options.amount, currency: options.currency },
+        ...context,
+      },
+      30000,
       {
         maxAttempts: 3,
         delay: 1000,

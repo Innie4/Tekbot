@@ -7,10 +7,11 @@ export class PaystackService {
   private baseUrl = 'https://api.paystack.co';
   constructor(private readonly configService: ConfigService) {}
 
-  async initializeTransaction(amount: number, email: string) {
+  async initializeTransaction(amountNaira: number, email: string) {
     const secret = this.configService.get<string>('PAYSTACK_SECRET_KEY');
+    const amountKobo = Math.round(amountNaira * 100);
     return axios.post(`${this.baseUrl}/transaction/initialize`, {
-      amount,
+      amount: amountKobo,
       email,
     }, {
       headers: { Authorization: `Bearer ${secret}` },

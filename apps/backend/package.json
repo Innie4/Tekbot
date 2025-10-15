@@ -18,6 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
+    "db:init": "ts-node scripts/init-db.ts",
     "db:migrate": "prisma migrate dev",
     "db:generate": "prisma generate",
     "db:studio": "prisma studio",
@@ -38,6 +39,7 @@
     "@nestjs/schedule": "^4.0.0",
     "@nestjs/swagger": "^7.1.16",
     "@nestjs/throttler": "^5.0.1",
+    "@nestjs/typeorm": "^10.0.2",
     "@nestjs/websockets": "^11.1.6",
     "@prisma/client": "^5.6.0",
     "@sentry/node": "^10.16.0",
@@ -75,6 +77,7 @@
     "stripe": "^14.7.0",
     "swagger-ui-express": "^5.0.0",
     "twilio": "^4.19.0",
+    "typeorm": "^0.3.27",
     "uuid": "^9.0.1",
     "winston": "^3.11.0"
   },
