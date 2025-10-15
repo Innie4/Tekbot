@@ -1,4 +1,4 @@
-import { Controller, Get, Version } from '@nestjs/common';
+import { Controller, Get, Version, SetMetadata } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
 import { AppService } from './app.service';
@@ -34,6 +34,7 @@ export class AppController {
 
   @Public()
   @Get('health')
+  @SetMetadata('skipThrottle', true)
   @Version('1')
   @ApiOperation({ summary: 'Health check endpoint' })
   @ApiResponse({
@@ -61,6 +62,7 @@ export class AppController {
 
   @Public()
   @Get('version')
+  @SetMetadata('skipThrottle', true)
   @Version('1')
   @ApiOperation({ summary: 'Get API version' })
   @ApiResponse({

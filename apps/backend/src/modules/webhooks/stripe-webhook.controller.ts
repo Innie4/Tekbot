@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Headers, Inject, Logger, HttpStatus, HttpException, RawBodyRequest, Req } from '@nestjs/common';
+import { Controller, Post, Body, Headers, Inject, Logger, HttpStatus, HttpException, RawBodyRequest, Req, SetMetadata } from '@nestjs/common';
 import { StripeService } from '../payments/stripe.service';
 import { PaymentsService } from '../payments/payments.service';
 import { AppointmentsService } from '../appointments/appointments.service';
@@ -7,6 +7,7 @@ import Stripe from 'stripe';
 import { Request } from 'express';
 
 @Controller('webhooks/stripe')
+@SetMetadata('skipThrottle', true)
 export class StripeWebhookController {
   private readonly logger = new Logger(StripeWebhookController.name);
 

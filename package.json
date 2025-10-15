@@ -3,10 +3,13 @@
   "version": "1.0.0",
   "description": "Multi-tenant AI assistant engine for SMBs",
   "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "apps/*",
+      "packages/*"
+    ],
+    "nohoist": []
+  },
   "scripts": {
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\" \"npm run dev:admin\" \"npm run dev:widget\"",
     "dev:backend": "npm run dev --workspace=apps/backend",
@@ -80,8 +83,8 @@
     ]
   },
   "dependencies": {
-    "@nestjs/common": "^10.4.20",
-    "@nestjs/typeorm": "^11.0.0",
+    "@nestjs/common": "^10.2.8",
+    "@nestjs/typeorm": "^10.0.2",
     "recharts": "^3.2.1",
     "rxjs": "^7.8.2",
     "typeorm": "^0.3.27"

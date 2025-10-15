@@ -36,8 +36,6 @@ const AppointmentsPanel: React.FC = () => {
         return 'bg-blue-100 text-blue-800';
       case 'confirmed':
         return 'bg-green-100 text-green-800';
-      case 'in_progress':
-        return 'bg-yellow-100 text-yellow-800';
       case 'completed':
         return 'bg-purple-100 text-purple-800';
       case 'cancelled':
@@ -140,7 +138,7 @@ const AppointmentsPanel: React.FC = () => {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               {appointments.map((appointment) => {
-                const { date, time } = formatDateTime(appointment.scheduled_at);
+                const { date, time } = formatDateTime(appointment.start_time);
                 return (
                   <tr key={appointment.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -153,11 +151,8 @@ const AppointmentsPanel: React.FC = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900">
-                        {appointment.service?.name || `Service ID: ${appointment.service_id}`}
+                        {appointment.service_id ? `Service ID: ${appointment.service_id}` : 'No service'}
                       </div>
-                      {appointment.service?.price && (
-                        <div className="text-sm text-gray-500">${appointment.service.price}</div>
-                      )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900">{date}</div>
@@ -169,7 +164,10 @@ const AppointmentsPanel: React.FC = () => {
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {appointment.duration_minutes ? `${appointment.duration_minutes} min` : '-'}
+                      {/* Calculate duration from start_time and end_time */}
+                      {appointment.end_time ? 
+                        `${Math.round((new Date(appointment.end_time).getTime() - new Date(appointment.start_time).getTime()) / (1000 * 60))} min` 
+                        : '-'}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <button className="text-blue-600 hover:text-blue-900 mr-3">

@@ -10,7 +10,6 @@ import { Campaign, CampaignStatus, CampaignType, TriggerType } from './entities/
 import { Appointment } from '../appointments/entities/appointment.entity';
 import { Customer } from '../customers/entities/customer.entity';
 import { NotificationService } from '../notifications/notification.service';
-import { reminderConfig } from '../appointments/config/reminder.config';
 
 export interface CampaignJobData {
   campaignId: string;
@@ -21,6 +20,17 @@ export interface CampaignJobData {
   recipientName?: string;
   templateData?: Record<string, any>;
   variantId?: string;
+  type?: CampaignType;
+  subject?: string;
+  content?: string;
+  recipient?: {
+    id: string;
+    email?: string;
+    firstName?: string;
+    lastName?: string;
+    phone?: string;
+    deviceToken?: string;
+  };
 }
 
 export interface CampaignExecutionResult {
@@ -46,8 +56,6 @@ export class CampaignAutomationService {
     private readonly campaignQueue: Queue<CampaignJobData>,
     private readonly notificationService: NotificationService,
     private readonly eventEmitter: EventEmitter2,
-    @Inject(reminderConfig.KEY)
-    private readonly config: ConfigType<typeof reminderConfig>,
   ) {}
 
   /**
@@ -82,7 +90,7 @@ export class CampaignAutomationService {
       const activeCampaigns = await this.campaignRepository.find({
         where: {
           status: CampaignStatus.ACTIVE,
-          triggerType: 'recurring',
+          triggerType: TriggerType.RECURRING,
         },
       });
 
@@ -443,7 +451,7 @@ export class CampaignAutomationService {
       const campaigns = await this.campaignRepository.find({
         where: {
           status: CampaignStatus.ACTIVE,
-          triggerType: 'event_based',
+          triggerType: TriggerType.EVENT_BASED,
           tenantId: eventData.tenantId,
         },
       });

@@ -1,16 +1,121 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { io, Socket } from 'socket.io-client';
+
+interface Message {
+  sender: "bot" | "user";
+  text: string;
+  timestamp?: Date;
+}
 
 export default function ChatWidget() {
-  const [messages, setMessages] = useState([
+  const [messages, setMessages] = useState<Message[]>([
     { sender: "bot", text: "Hi! I'm TekAssist. How can I help you today?" }
   ]);
   const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [socket, setSocket] = useState<Socket | null>(null);
+  const [sessionId] = useState(`session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`);
+  const [conversationId, setConversationId] = useState<string | null>(null);
+  
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const sendMessage = () => {
-    if (!input.trim()) return;
-    setMessages([...messages, { sender: "user", text: input }]);
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  useEffect(() => {
+    // Initialize WebSocket connection
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+    const socketInstance = io(`${apiUrl}/chat`, {
+      query: {
+        tenantId: 'default-tenant',
+        sessionId: sessionId,
+      },
+    });
+
+    socketInstance.on('connect', () => {
+      console.log('Connected to WebSocket');
+      // Join tenant room for receiving messages
+      socketInstance.emit('join_room', { tenantId: 'default-tenant', sessionId });
+    });
+
+    socketInstance.on('message_received', (data: any) => {
+      const botMessage: Message = {
+        sender: "bot",
+        text: data.content || data.message || data.response || "Sorry, I couldn't process your request.",
+        timestamp: new Date(data.timestamp || Date.now()),
+      };
+      setMessages(prev => [...prev, botMessage]);
+      setIsLoading(false);
+    });
+
+    socketInstance.on('typing', (data: any) => {
+      if (data.sessionId !== sessionId) {
+        // Handle typing indicator if needed
+      }
+    });
+
+    socketInstance.on('disconnect', () => {
+      console.log('Disconnected from WebSocket');
+    });
+
+    socketInstance.on('error', (error: any) => {
+      console.error('WebSocket error:', error);
+      const errorMessage: Message = { 
+        sender: "bot", 
+        text: "Sorry, I encountered a connection error. Please try again." 
+      };
+      setMessages(prev => [...prev, errorMessage]);
+      setIsLoading(false);
+    });
+
+    setSocket(socketInstance);
+
+    return () => {
+      socketInstance.disconnect();
+    };
+  }, [sessionId]);
+
+  const sendMessage = async () => {
+    if (!input.trim() || isLoading || !socket) return;
+    
+    const userMessage: Message = { 
+      sender: "user", 
+      text: input.trim(),
+      timestamp: new Date()
+    };
+    setMessages(prev => [...prev, userMessage]);
+    
+    const messageContent = input.trim();
     setInput("");
-    // TODO: Integrate with backend AI API
+    setIsLoading(true);
+
+    // Send message via WebSocket
+    socket.emit('send_message', {
+      id: `msg_${Date.now()}`,
+      content: messageContent,
+      direction: 'outbound',
+      timestamp: new Date(),
+      sessionId: sessionId,
+      tenantId: 'default-tenant',
+      conversationId,
+    });
+
+    // Set a timeout to handle cases where no response is received
+    setTimeout(() => {
+      if (isLoading) {
+        const timeoutMessage: Message = { 
+          sender: "bot", 
+          text: "Sorry, the response is taking longer than expected. Please try again." 
+        };
+        setMessages(prev => [...prev, timeoutMessage]);
+        setIsLoading(false);
+      }
+    }, 30000); // 30 second timeout
   };
 
   return (
@@ -28,6 +133,18 @@ export default function ChatWidget() {
               </span>
             </div>
           ))}
+          {isLoading && (
+            <div className="mb-3 flex justify-start">
+              <span className="inline-block px-4 py-2 rounded-xl shadow bg-glass text-white">
+                <div className="flex items-center space-x-1">
+                  <div className="w-2 h-2 bg-white rounded-full animate-bounce"></div>
+                  <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                  <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                </div>
+              </span>
+            </div>
+          )}
+          <div ref={messagesEndRef} />
         </div>
         <div className="p-4 flex bg-background rounded-b-2xl border-t border-gray-700">
           <input
@@ -36,12 +153,14 @@ export default function ChatWidget() {
             onChange={e => setInput(e.target.value)}
             placeholder="Type your message..."
             onKeyDown={e => e.key === "Enter" && sendMessage()}
+            disabled={isLoading}
           />
           <button
-            className="glass-button px-6 py-3 rounded-xl text-electric-blue font-bold shadow hover:bg-electric-blue hover:text-white transition"
+            className="glass-button px-6 py-3 rounded-xl text-electric-blue font-bold shadow hover:bg-electric-blue hover:text-white transition disabled:opacity-50"
             onClick={sendMessage}
+            disabled={isLoading || !socket}
           >
-            Send
+            {isLoading ? "..." : "Send"}
           </button>
         </div>
       </div>

@@ -6,6 +6,7 @@ import { GlassCard } from '@/components/ui/glass-card';
 import { motion } from 'framer-motion';
 
 export default function AdminWidgetPage() {
+  const apiUrl = `${(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api').replace(/\/$/, '')}/v${process.env.NEXT_PUBLIC_API_VERSION || '1'}/widget`;
   const handleConfigSave = (config: any) => {
     console.log('Widget configuration saved:', config);
     // Here you would typically save to your backend
@@ -33,7 +34,7 @@ export default function AdminWidgetPage() {
         <GlassCard className="p-6">
           <WidgetConfigurator
             tenantId="default-tenant"
-            apiUrl="/api/widget"
+            apiUrl={apiUrl}
             onConfigSave={handleConfigSave}
           />
         </GlassCard>

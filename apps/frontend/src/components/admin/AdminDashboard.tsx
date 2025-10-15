@@ -1,16 +1,8 @@
 'use client';
 
-import React, { useEffect, useState } from "react";
-
-const fetchData = async (endpoint: string) => {
-  try {
-    const res = await fetch(endpoint);
-    if (!res.ok) throw new Error("Failed to fetch");
-    return await res.json();
-  } catch (err) {
-    return [];
-  }
-};
+import React, { useMemo, useState } from "react";
+import { useQuery } from '@tanstack/react-query';
+import { api } from '@/lib/api/api-client';
 
 const SECTIONS = ["Leads", "Appointments", "Payments", "Messages", "Analytics"];
 
@@ -28,11 +20,39 @@ const AdminDashboard: React.FC = () => {
   const [msgSort, setMsgSort] = useState("asc");
   const [msgFilter, setMsgFilter] = useState("");
 
-  useEffect(() => {
-    fetchData("/api/appointments").then(setAppointments);
-    fetchData("/api/payments").then(setPayments);
-    fetchData("/api/notifications").then(setMessages);
+  const tenantId = useMemo(() => {
+    try {
+      return typeof window !== 'undefined' ? localStorage.getItem('tenant-id') : null;
+    } catch {
+      return null;
+    }
   }, []);
+
+  const { data: apptData = [], isFetching: apptLoading } = useQuery({
+    queryKey: ['appointments', tenantId || 'default'],
+    queryFn: () => api.get<any[]>('/appointments'),
+  });
+
+  const { data: payData = [], isFetching: payLoading } = useQuery({
+    queryKey: ['payments', tenantId || 'default'],
+    queryFn: () => api.get<any[]>('/payments'),
+  });
+
+  const { data: msgData = [], isFetching: msgLoading } = useQuery({
+    queryKey: ['notifications', tenantId || 'default'],
+    queryFn: () => api.get<any[]>('/notifications'),
+  });
+
+  // Mirror data into local state to reuse existing sorting/filtering logic without larger refactor
+  React.useEffect(() => {
+    setAppointments(apptData);
+  }, [apptData]);
+  React.useEffect(() => {
+    setPayments(payData);
+  }, [payData]);
+  React.useEffect(() => {
+    setMessages(msgData);
+  }, [msgData]);
 
   // Sorting/filtering logic
   const sortedAppointments = [...appointments]
@@ -96,6 +116,7 @@ const AdminDashboard: React.FC = () => {
               </button>
             </div>
             <div className="h-40 overflow-y-auto">
+              {apptLoading && <span className="text-gray-400">Loading...</span>}
               {sortedAppointments.length === 0 ? (
                 <span className="text-gray-400">No appointments found.</span>
               ) : (
@@ -130,6 +151,7 @@ const AdminDashboard: React.FC = () => {
               </button>
             </div>
             <div className="h-40 overflow-y-auto">
+              {payLoading && <span className="text-gray-400">Loading...</span>}
               {sortedPayments.length === 0 ? (
                 <span className="text-gray-400">No payments found.</span>
               ) : (
@@ -164,6 +186,7 @@ const AdminDashboard: React.FC = () => {
               </button>
             </div>
             <div className="h-40 overflow-y-auto">
+              {msgLoading && <span className="text-gray-400">Loading...</span>}
               {sortedMessages.length === 0 ? (
                 <span className="text-gray-400">No messages found.</span>
               ) : (

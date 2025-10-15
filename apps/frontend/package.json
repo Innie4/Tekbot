@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "dev:bot": "echo 'Starting TekAssist AI bot frontend (for chat widget, integrations, etc.)' && next dev",
+    "build": "next build",
     "build:bot": "next build",
+    "start": "next start",
     "start:bot": "next start"
   },
   "dependencies": {
@@ -26,6 +28,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.48.2",
+    "socket.io-client": "^4.8.1",
     "tailwind-merge": "^2.0.0",
     "tailwindcss-animate": "^1.0.7",
     "zod": "^3.22.4",
@@ -35,6 +38,8 @@
     "@types/node": "^20.10.0",
     "@types/react": "^18.2.39",
     "@types/react-dom": "^18.2.17",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
     "autoprefixer": "^10.4.21",
     "eslint": "^8.54.0",
     "eslint-config-next": "^14.0.3",

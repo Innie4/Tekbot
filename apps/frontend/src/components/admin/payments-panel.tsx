@@ -36,7 +36,7 @@ const PaymentsPanel: React.FC = () => {
         return 'bg-yellow-100 text-yellow-800';
       case 'processing':
         return 'bg-blue-100 text-blue-800';
-      case 'completed':
+      case 'succeeded':
         return 'bg-green-100 text-green-800';
       case 'failed':
         return 'bg-red-100 text-red-800';
@@ -181,7 +181,7 @@ const PaymentsPanel: React.FC = () => {
                     <button className="text-blue-600 hover:text-blue-900 mr-3">
                       View
                     </button>
-                    {payment.status === 'completed' && (
+                    {payment.status === 'succeeded' && (
                       <button className="text-purple-600 hover:text-purple-900 mr-3">
                         Refund
                       </button>

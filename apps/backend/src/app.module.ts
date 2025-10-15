@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { ScheduleModule } from '@nestjs/schedule';
@@ -45,6 +46,8 @@ import { FilesModule } from './modules/files/files.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { WebhooksModule } from './modules/webhooks/webhooks.module';
 import { AnalyticsModule } from './modules/analytics/analytics.module';
+import { WebSocketModule } from './modules/websocket/websocket.module';
+import { CustomThrottleGuard } from './common/guards/throttle.guard';
 
 @Module({
   imports: [
@@ -172,14 +175,21 @@ import { AnalyticsModule } from './modules/analytics/analytics.module';
     AiModule,
     AdminModule,
 
-    // Common modules
+    // Common Modules
     HealthModule,
     FilesModule,
     NotificationsModule,
     WebhooksModule,
     AnalyticsModule,
+    WebSocketModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: CustomThrottleGuard,
+    },
+  ],
 })
 export class AppModule {}

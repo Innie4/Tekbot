@@ -4,9 +4,9 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, LessThan, MoreThan } from 'typeorm';
 import { Queue } from 'bull';
-import { ConfigType } from '@nestjs/config';
+import { ConfigType, ConfigService } from '@nestjs/config';
 import { Appointment } from './entities/appointment.entity';
-import { NotificationService } from '../notification/notification.service';
+import { NotificationService } from '../notifications/notification.service';
 import { reminderConfig } from './config';
 
 export interface ReminderJobData {

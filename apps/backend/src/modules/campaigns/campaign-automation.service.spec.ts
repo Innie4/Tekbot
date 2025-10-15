@@ -9,8 +9,8 @@ import { CampaignAutomationService } from './campaign-automation.service';
 import { Campaign, CampaignStatus, CampaignType, TriggerType } from './entities/campaign.entity';
 import { Appointment } from '../appointments/entities/appointment.entity';
 import { Customer } from '../customers/entities/customer.entity';
-import { NotificationService } from '../notification/notification.service';
-import { reminderConfig } from '../appointments/config/reminder.config';
+import { NotificationService } from '../notifications/notification.service';
+import { reminderConfig } from '../appointments/config';
 
 describe('CampaignAutomationService', () => {
   let service: CampaignAutomationService;
@@ -136,10 +136,10 @@ describe('CampaignAutomationService', () => {
       mockCampaignRepository.find.mockResolvedValue([mockCampaign]);
       jest.spyOn(service, 'executeCampaign').mockResolvedValue({
         campaignId: '1',
-        success: true,
-        recipientCount: 1,
-        deliveredCount: 1,
-        failedCount: 0,
+        totalRecipients: 100,
+        sentCount: 95,
+        failedCount: 5,
+        errors: [],
       });
 
       await service.processScheduledCampaigns();
@@ -151,7 +151,7 @@ describe('CampaignAutomationService', () => {
           scheduledAt: expect.any(Object),
         },
       });
-      expect(service.executeCampaign).toHaveBeenCalledWith(mockCampaign);
+      expect(service.executeCampaign).toHaveBeenCalledWith(mockCampaign.id);
     });
   });
 
@@ -171,40 +171,67 @@ describe('CampaignAutomationService', () => {
         { id: 'customer1', email: 'test@example.com', firstName: 'John' },
       ];
 
-      jest.spyOn(service, 'getTargetRecipients').mockResolvedValue(mockCustomers);
-      jest.spyOn(service, 'executeCampaignVariant').mockResolvedValue({
-        delivered: 1,
-        failed: 0,
-      });
-      jest.spyOn(service, 'updateCampaignMetrics').mockResolvedValue(undefined);
+      mockCampaignRepository.findOne.mockResolvedValue(mockCampaign);
+      mockCustomerRepository.find.mockResolvedValue(mockCustomers);
 
-      const result = await service.executeCampaign(mockCampaign);
+      const result = await service.executeCampaign(mockCampaign.id);
 
       expect(result).toEqual({
-        campaignId: '1',
-        success: true,
-        recipientCount: 1,
-        deliveredCount: 1,
-        failedCount: 0,
+          campaignId: '1',
+          totalRecipients: 100,
+          sentCount: 95,
+          failedCount: 5,
+          errors: [],
+        });
+      expect(mockCampaignRepository.findOne).toHaveBeenCalledWith({
+        where: { id: mockCampaign.id },
+        relations: ['tenant'],
       });
-      expect(service.getTargetRecipients).toHaveBeenCalledWith(mockCampaign.targetAudience);
-      expect(service.executeCampaignVariant).toHaveBeenCalled();
-      expect(service.updateCampaignMetrics).toHaveBeenCalled();
     });
 
     it('should handle A/B testing campaigns', async () => {
       const mockCampaign = {
         id: '1',
         tenantId: 'tenant1',
+        name: 'Test Campaign',
+        status: CampaignStatus.ACTIVE,
         type: CampaignType.EMAIL,
+        triggerType: TriggerType.MANUAL,
         targetAudience: { customerIds: ['customer1', 'customer2'] },
         subject: 'Test Campaign',
         content: 'Test content',
+        estimatedRecipients: 2,
+        sentCount: 0,
+        deliveredCount: 0,
+        openedCount: 0,
+        clickedCount: 0,
+        unsubscribedCount: 0,
+        bouncedCount: 0,
+        failedCount: 0,
+        created_at: new Date(),
+        updated_at: new Date(),
+        active: true,
+        tenant: null,
         abTestConfig: {
           enabled: true,
-          splitPercentage: 50,
-          variantSubject: 'Variant Subject',
-          variantContent: 'Variant content',
+          variants: [
+            {
+              id: 'variant-1',
+              name: 'Variant A',
+              percentage: 50,
+              subject: 'Test Subject A',
+              content: 'Test Content A'
+            },
+            {
+              id: 'variant-2',
+              name: 'Variant B',
+              percentage: 50,
+              subject: 'Test Subject B',
+              content: 'Test Content B'
+            }
+          ],
+          winnerCriteria: 'open_rate' as const,
+          testDuration: 24
         },
       } as Campaign;
 
@@ -213,55 +240,22 @@ describe('CampaignAutomationService', () => {
         { id: 'customer2', email: 'test2@example.com', firstName: 'Jane' },
       ];
 
-      jest.spyOn(service, 'getTargetRecipients').mockResolvedValue(mockCustomers);
-      jest.spyOn(service, 'executeCampaignVariant').mockResolvedValue({
-        delivered: 1,
-        failed: 0,
-      });
-      jest.spyOn(service, 'updateCampaignMetrics').mockResolvedValue(undefined);
-
-      const result = await service.executeCampaign(mockCampaign);
-
-      expect(result.success).toBe(true);
-      expect(service.executeCampaignVariant).toHaveBeenCalledTimes(2);
-    });
-  });
-
-  describe('getTargetRecipients', () => {
-    it('should get recipients by customer IDs', async () => {
-      const targetAudience = { customerIds: ['customer1', 'customer2'] };
-      const mockCustomers = [
-        { id: 'customer1', email: 'test1@example.com' },
-        { id: 'customer2', email: 'test2@example.com' },
-      ];
-
+      mockCampaignRepository.findOne.mockResolvedValue(mockCampaign);
       mockCustomerRepository.find.mockResolvedValue(mockCustomers);
 
-      const result = await service.getTargetRecipients(targetAudience);
+      const result = await service.executeCampaign(mockCampaign.id);
 
-      expect(result).toEqual(mockCustomers);
-      expect(mockCustomerRepository.find).toHaveBeenCalledWith({
-        where: { id: expect.any(Object) },
-      });
-    });
-
-    it('should get recipients by segment', async () => {
-      const targetAudience = { segment: 'premium' };
-      const mockQueryBuilder = {
-        where: jest.fn().mockReturnThis(),
-        getMany: jest.fn().mockResolvedValue([
-          { id: 'customer1', email: 'test1@example.com', segment: 'premium' },
-        ]),
-      };
-
-      mockCustomerRepository.createQueryBuilder.mockReturnValue(mockQueryBuilder);
-
-      const result = await service.getTargetRecipients(targetAudience);
-
-      expect(result).toHaveLength(1);
-      expect(mockCustomerRepository.createQueryBuilder).toHaveBeenCalled();
+      expect(result).toEqual({
+        campaignId: '1',
+        totalRecipients: 2,
+        sentCount: 2,
+        failedCount: 0,
+        errors: [],
+       });
     });
   });
+
+
 
   describe('pauseCampaign', () => {
     it('should pause an active campaign', async () => {
@@ -289,10 +283,10 @@ describe('CampaignAutomationService', () => {
       mockCampaignRepository.findOne.mockResolvedValue(mockCampaign);
       jest.spyOn(service, 'executeCampaign').mockResolvedValue({
         campaignId: '1',
-        success: true,
-        recipientCount: 1,
-        deliveredCount: 1,
-        failedCount: 0,
+        totalRecipients: 100,
+        sentCount: 95,
+        failedCount: 5,
+        errors: [],
       });
 
       await service.resumeCampaign('1');
@@ -306,11 +300,17 @@ describe('CampaignAutomationService', () => {
   describe('handleAppointmentEvent', () => {
     it('should trigger event-based campaigns', async () => {
       const eventData = {
-        appointmentId: 'appointment1',
-        customerId: 'customer1',
+        id: 'appointment-1',
         tenantId: 'tenant1',
-        eventType: 'appointment.created',
-      };
+        customerId: 'customer1',
+        staffId: 'staff1',
+        serviceId: 'service1',
+        start_time: new Date(),
+        end_time: new Date(),
+        status: 'scheduled',
+        created_at: new Date(),
+        updated_at: new Date(),
+      } as Appointment;
 
       const mockCampaigns = [
         {
@@ -329,13 +329,13 @@ describe('CampaignAutomationService', () => {
       mockCampaignRepository.find.mockResolvedValue(mockCampaigns);
       jest.spyOn(service, 'executeCampaign').mockResolvedValue({
         campaignId: '1',
-        success: true,
-        recipientCount: 1,
-        deliveredCount: 1,
-        failedCount: 0,
+        totalRecipients: 100,
+        sentCount: 95,
+        failedCount: 5,
+        errors: [],
       });
 
-      await service.handleAppointmentEvent(eventData);
+      await service.handleAppointmentCreated(eventData);
 
       expect(mockCampaignRepository.find).toHaveBeenCalledWith({
         where: {
@@ -344,7 +344,7 @@ describe('CampaignAutomationService', () => {
           triggerType: TriggerType.EVENT_BASED,
         },
       });
-      expect(service.executeCampaign).toHaveBeenCalledWith(mockCampaigns[0]);
+      expect(service.executeCampaign).toHaveBeenCalledWith(mockCampaigns[0].id);
     });
   });
 
@@ -352,13 +352,23 @@ describe('CampaignAutomationService', () => {
     it('should return campaign analytics', async () => {
       const mockCampaign = {
         id: '1',
-        sentCount: 100,
-        deliveredCount: 95,
-        openedCount: 50,
-        clickedCount: 25,
-        unsubscribedCount: 2,
-        bounceCount: 5,
-        createdAt: new Date(),
+        tenantId: 'tenant-1',
+        name: 'Test Campaign',
+        type: CampaignType.EMAIL,
+        status: CampaignStatus.ACTIVE,
+        triggerType: TriggerType.MANUAL,
+        subject: 'Test Subject',
+        content: 'Test Content',
+        estimatedRecipients: 100,
+        sentCount: 50,
+        deliveredCount: 45,
+        openedCount: 20,
+        clickedCount: 10,
+        unsubscribedCount: 1,
+        bouncedCount: 2,
+        failedCount: 3,
+        created_at: new Date(),
+        updated_at: new Date(),
         startedAt: new Date(),
         completedAt: new Date(),
       } as Campaign;
@@ -384,7 +394,7 @@ describe('CampaignAutomationService', () => {
           bounceRate: 5.26,
         },
         timeline: {
-          created: mockCampaign.createdAt,
+          created: mockCampaign.created_at,
           started: mockCampaign.startedAt,
           completed: mockCampaign.completedAt,
         },

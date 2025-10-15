@@ -8,6 +8,7 @@ export interface ErrorContext {
   userId?: string;
   requestId?: string;
   metadata?: Record<string, any>;
+  finalAttempt?: boolean;
 }
 
 export interface RetryOptions {

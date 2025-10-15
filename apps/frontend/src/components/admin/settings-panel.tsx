@@ -1,29 +1,74 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { GlassCard } from '@/components/ui/glass-card';
 import { Button } from '@/components/ui/button';
 import { GlassInput } from '@/components/ui/glass-input';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { motion } from 'framer-motion';
+import { Loader2, AlertCircle, Save } from 'lucide-react';
+import { api } from '@/lib/api/api-client';
+
+interface GeneralSettings {
+  siteName: string;
+  siteDescription: string;
+  enableNotifications: boolean;
+  darkMode: boolean;
+  enableAnalytics: boolean;
+}
+
+interface ApiSettings {
+  apiKey: string;
+  maxTokens: string;
+  temperature: string;
+  enableRateLimiting: boolean;
+  rateLimitPerMinute: string;
+}
 
 export default function SettingsPanel() {
-  const [generalSettings, setGeneralSettings] = useState({
-    siteName: 'TekAssist Admin',
-    siteDescription: 'AI-powered technical assistance platform',
+  const [generalSettings, setGeneralSettings] = useState<GeneralSettings>({
+    siteName: '',
+    siteDescription: '',
     enableNotifications: true,
     darkMode: true,
     enableAnalytics: true,
   });
 
-  const [apiSettings, setApiSettings] = useState({
-    apiKey: 'sk-••••••••••••••••••••••••',
+  const [apiSettings, setApiSettings] = useState<ApiSettings>({
+    apiKey: '',
     maxTokens: '2048',
     temperature: '0.7',
     enableRateLimiting: true,
     rateLimitPerMinute: '60',
   });
+
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+
+  const fetchSettings = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const [generalData, apiData] = await Promise.all([
+        api.get<GeneralSettings>('/settings/general'),
+        api.get<ApiSettings>('/settings/api')
+      ]);
+      setGeneralSettings(generalData);
+      setApiSettings(apiData);
+    } catch (err: any) {
+      setError(err.message || 'Failed to fetch settings');
+      console.error('Error fetching settings:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchSettings();
+  }, []);
 
   const handleGeneralChange = (key: string, value: string | boolean) => {
     setGeneralSettings(prev => ({ ...prev, [key]: value }));
@@ -33,8 +78,89 @@ export default function SettingsPanel() {
     setApiSettings(prev => ({ ...prev, [key]: value }));
   };
 
+  const saveGeneralSettings = async () => {
+    try {
+      setSaving(true);
+      setError(null);
+      await api.put('/settings/general', generalSettings);
+      setSuccess('General settings saved successfully');
+      setTimeout(() => setSuccess(null), 3000);
+    } catch (err: any) {
+      setError(err.message || 'Failed to save general settings');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const saveApiSettings = async () => {
+    try {
+      setSaving(true);
+      setError(null);
+      await api.put('/settings/api', apiSettings);
+      setSuccess('API settings saved successfully');
+      setTimeout(() => setSuccess(null), 3000);
+    } catch (err: any) {
+      setError(err.message || 'Failed to save API settings');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-bold">Settings</h2>
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <Loader2 className="h-4 w-4 animate-spin" />
+            Loading settings...
+          </div>
+        </div>
+        <GlassCard className="p-6 animate-pulse">
+          <div className="h-4 bg-white/10 rounded mb-4"></div>
+          <div className="space-y-4">
+            <div className="h-10 bg-white/10 rounded"></div>
+            <div className="h-10 bg-white/10 rounded"></div>
+            <div className="h-6 bg-white/10 rounded w-1/3"></div>
+          </div>
+        </GlassCard>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
+      {/* Error/Success Display */}
+      {error && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-red-500/10 border border-red-500/20 rounded-lg p-4 flex items-center gap-3"
+        >
+          <AlertCircle className="w-5 h-5 text-red-400" />
+          <p className="text-red-400">{error}</p>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={() => setError(null)}
+            className="ml-auto text-red-400 hover:text-red-300"
+          >
+            ×
+          </Button>
+        </motion.div>
+      )}
+
+      {success && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-green-500/10 border border-green-500/20 rounded-lg p-4 flex items-center gap-3"
+        >
+          <Save className="w-5 h-5 text-green-400" />
+          <p className="text-green-400">{success}</p>
+        </motion.div>
+      )}
+
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold">Settings</h2>
       </div>
@@ -54,7 +180,26 @@ export default function SettingsPanel() {
             transition={{ duration: 0.3 }}
           >
             <GlassCard className="p-6">
-              <h3 className="text-lg font-medium mb-6">General Settings</h3>
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-lg font-medium">General Settings</h3>
+                <Button 
+                  onClick={saveGeneralSettings} 
+                  disabled={saving}
+                  className="glass-button-effect"
+                >
+                  {saving ? (
+                    <>
+                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      <Save className="h-4 w-4 mr-2" />
+                      Save Changes
+                    </>
+                  )}
+                </Button>
+              </div>
               
               <div className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Send, X, Minimize2, MessageCircle, Bot, User } from 'lucide-react';
 import { ThemeEngine, AdvancedThemeConfig } from '../../lib/theme-engine';
+import { io, Socket } from 'socket.io-client';
 
 interface Message {
   id: string;
@@ -70,6 +71,7 @@ export default function ChatWidgetStandalone({
   const [conversationId, setConversationId] = useState<string | null>(null);
   const [currentSessionId, setCurrentSessionId] = useState(sessionId || generateSessionId());
   const [themeEngine, setThemeEngine] = useState<ThemeEngine | null>(null);
+  const [socket, setSocket] = useState<Socket | null>(null);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -110,6 +112,49 @@ export default function ChatWidgetStandalone({
       themeEngine.applyTheme(themeConfig);
     }
   }, [themeEngine, config]);
+
+  useEffect(() => {
+    // Initialize WebSocket connection
+    const socketInstance = io(apiUrl, {
+      query: {
+        tenantId,
+        sessionId: currentSessionId,
+      },
+    });
+
+    socketInstance.on('connect', () => {
+      console.log('Connected to WebSocket');
+      // Join tenant room for receiving messages
+      socketInstance.emit('joinRoom', { tenantId, sessionId: currentSessionId });
+    });
+
+    socketInstance.on('message', (data: any) => {
+      const botMessage: Message = {
+        id: data.messageId || `bot_${Date.now()}`,
+        content: data.message,
+        direction: 'inbound',
+        timestamp: new Date(data.timestamp),
+      };
+      setMessages(prev => [...prev, botMessage]);
+      onMessage?.(botMessage);
+    });
+
+    socketInstance.on('typing', (data: any) => {
+      if (data.sessionId !== currentSessionId) {
+        setIsTyping(data.isTyping);
+      }
+    });
+
+    socketInstance.on('disconnect', () => {
+      console.log('Disconnected from WebSocket');
+    });
+
+    setSocket(socketInstance);
+
+    return () => {
+      socketInstance.disconnect();
+    };
+  }, [apiUrl, tenantId, currentSessionId]);
 
   useEffect(() => {
     scrollToBottom();
@@ -161,7 +206,7 @@ export default function ChatWidgetStandalone({
   };
 
   const sendMessage = async () => {
-    if (!inputValue.trim() || isLoading) return;
+    if (!inputValue.trim() || isLoading || !socket) return;
 
     const userMessage: Message = {
       id: `msg_${Date.now()}`,
@@ -171,80 +216,22 @@ export default function ChatWidgetStandalone({
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const messageContent = inputValue.trim();
     setInputValue('');
     setIsLoading(true);
-    setIsTyping(true);
 
     onMessage?.(userMessage);
 
-    try {
-      // Create or get conversation
-      if (!conversationId) {
-        const convResponse = await fetch(`${apiUrl}/conversations`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Tenant-ID': tenantId,
-          },
-          body: JSON.stringify({
-            sessionId: currentSessionId,
-            channel: 'web',
-            metadata: {
-              userAgent: navigator.userAgent,
-              referrer: document.referrer,
-              url: window.location.href,
-            },
-          }),
-        });
+    // Send message via WebSocket
+    socket.emit('message', {
+      message: messageContent,
+      tenantId,
+      sessionId: currentSessionId,
+      conversationId,
+    });
 
-        if (convResponse.ok) {
-          const conversation = await convResponse.json();
-          setConversationId(conversation.id);
-        }
-      }
-
-      // Send message to AI
-      const response = await fetch(`${apiUrl}/openai/chat`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Tenant-ID': tenantId,
-        },
-        body: JSON.stringify({
-          message: inputValue.trim(),
-          conversationId,
-          sessionId: currentSessionId,
-        }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        
-        const botMessage: Message = {
-          id: `bot_${Date.now()}`,
-          content: data.response || data.message || 'Sorry, I could not process your request.',
-          direction: 'inbound',
-          timestamp: new Date(),
-        };
-
-        setMessages(prev => [...prev, botMessage]);
-        onMessage?.(botMessage);
-      } else {
-        throw new Error('Failed to get response');
-      }
-    } catch (error) {
-      console.error('Error sending message:', error);
-      const errorMessage: Message = {
-        id: `error_${Date.now()}`,
-        content: 'Sorry, something went wrong. Please try again.',
-        direction: 'inbound',
-        timestamp: new Date(),
-      };
-      setMessages(prev => [...prev, errorMessage]);
-    } finally {
-      setIsLoading(false);
-      setIsTyping(false);
-    }
+    // Set loading to false after a short delay (will be updated when response arrives)
+    setTimeout(() => setIsLoading(false), 1000);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {

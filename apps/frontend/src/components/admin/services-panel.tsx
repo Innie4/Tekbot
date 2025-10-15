@@ -157,7 +157,7 @@ const ServicesPanel: React.FC = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">
-                      {formatDuration(service.duration_minutes)}
+                      {formatDuration(service.duration)}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">

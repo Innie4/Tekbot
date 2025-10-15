@@ -4,35 +4,19 @@ import { GlassCard } from '@/components/ui/glass-card';
 import { Button } from '@/components/ui/button';
 import { ArrowUp, ArrowDown, Calendar } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { api } from '@/lib/api/api-client';
 import ConversationVolumeChart from './charts/ConversationVolumeChart';
 import ResponseTimeChart from './charts/ResponseTimeChart';
 
-const analyticsCards = [
-	{
-		title: 'Total Conversations',
-		value: '12,543',
-		change: '+18.2%',
-		trend: 'up',
-	},
-	{
-		title: 'Avg. Response Time',
-		value: '1.2s',
-		change: '-0.3s',
-		trend: 'up',
-	},
-	{
-		title: 'User Satisfaction',
-		value: '94%',
-		change: '+2.4%',
-		trend: 'up',
-	},
-	{
-		title: 'Failed Responses',
-		value: '2.1%',
-		change: '+0.5%',
-		trend: 'down',
-	},
-];
+interface AnalyticsData {
+  totalConversations: { value: string; change: string; trend: string };
+  avgResponseTime: { value: string; change: string; trend: string };
+  userSatisfaction: { value: string; change: string; trend: string };
+  failedResponses: { value: string; change: string; trend: string };
+  conversationVolume: Array<{ date: string; conversations: number }>;
+  responseTimeData: Array<{ hour: number; responseTime: number }>;
+}
 
 const container = {
 	hidden: { opacity: 0 },
@@ -50,6 +34,70 @@ const item = {
 };
 
 export default function AnalyticsDashboard() {
+	const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
+	const [isLoading, setIsLoading] = useState(true);
+
+	useEffect(() => {
+		loadAnalyticsData();
+	}, []);
+
+	const loadAnalyticsData = async () => {
+		try {
+			const response = await api.get<{ success: boolean; message: string; data: AnalyticsData }>('/analytics/dashboard');
+			setAnalyticsData(response.data);
+		} catch (error) {
+			console.error('Failed to load analytics data:', error);
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+	const analyticsCards = analyticsData ? [
+		{
+			title: 'Total Conversations',
+			value: analyticsData.totalConversations.value,
+			change: analyticsData.totalConversations.change,
+			trend: analyticsData.totalConversations.trend,
+		},
+		{
+			title: 'Avg. Response Time',
+			value: analyticsData.avgResponseTime.value,
+			change: analyticsData.avgResponseTime.change,
+			trend: analyticsData.avgResponseTime.trend,
+		},
+		{
+			title: 'User Satisfaction',
+			value: analyticsData.userSatisfaction.value,
+			change: analyticsData.userSatisfaction.change,
+			trend: analyticsData.userSatisfaction.trend,
+		},
+		{
+			title: 'Failed Responses',
+			value: analyticsData.failedResponses.value,
+			change: analyticsData.failedResponses.change,
+			trend: analyticsData.failedResponses.trend,
+		},
+	] : [];
+
+	if (isLoading) {
+		return (
+			<div className="space-y-6">
+				<div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+					<h2 className="text-2xl font-bold">Analytics Dashboard</h2>
+				</div>
+				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+					{[1, 2, 3, 4].map((i) => (
+						<GlassCard key={i} className="p-6 animate-pulse">
+							<div className="h-4 bg-gray-300 rounded mb-2"></div>
+							<div className="h-8 bg-gray-300 rounded mb-2"></div>
+							<div className="h-4 bg-gray-300 rounded w-1/2"></div>
+						</GlassCard>
+					))}
+				</div>
+			</div>
+		);
+	}
+
 	return (
 		<div className="space-y-6">
 			<div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">

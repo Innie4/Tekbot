@@ -1,4 +1,4 @@
-import { Controller, Post, Req, Inject, Logger, HttpStatus, HttpException, RawBodyRequest } from '@nestjs/common';
+import { Controller, Post, Req, Inject, Logger, HttpStatus, HttpException, RawBodyRequest, SetMetadata } from '@nestjs/common';
 import { PaystackService } from '../payments/paystack.service';
 import { PaymentsService } from '../payments/payments.service';
 import { AppointmentsService } from '../appointments/appointments.service';
@@ -6,6 +6,7 @@ import { NotificationService } from '../notifications/notification.service';
 import { Request } from 'express';
 
 @Controller('webhooks/paystack')
+@SetMetadata('skipThrottle', true)
 export class PaystackWebhookController {
   private readonly logger = new Logger(PaystackWebhookController.name);
 

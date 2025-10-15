@@ -152,11 +152,11 @@ export class CampaignExecutionProcessor {
       );
     }
 
-    await this.notificationService.sendEmail(
-      data.recipientEmail,
-      content.subject,
-      htmlContent
-    );
+    await this.notificationService.sendEmail({
+      to: data.recipientEmail,
+      subject: content.subject,
+      html: htmlContent
+    });
   }
 
   /**
@@ -176,7 +176,10 @@ export class CampaignExecutionProcessor {
       ? content.content.substring(0, 157) + '...'
       : content.content;
 
-    await this.notificationService.sendSms(data.recipientPhone, smsContent);
+    await this.notificationService.sendSms({
+      to: data.recipientPhone,
+      body: smsContent
+    });
   }
 
   /**

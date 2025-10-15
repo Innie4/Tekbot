@@ -1,103 +1,168 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { GlassCard } from '@/components/ui/glass-card';
 import { Button } from '@/components/ui/button';
 import { GlassInput } from '@/components/ui/glass-input';
-import { Search, MoreHorizontal, UserPlus, Filter, ArrowUpDown } from 'lucide-react';
+import { Search, MoreHorizontal, UserPlus, Filter, ArrowUpDown, Loader2, AlertCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { api } from '@/lib/api/api-client';
 
 type User = {
   id: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   role: string;
   status: 'active' | 'inactive';
-  lastActive: string;
+  lastLoginAt?: string;
+  createdAt: string;
+  updatedAt: string;
 };
 
-const mockUsers: User[] = [
-  {
-    id: '1',
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    role: 'Admin',
-    status: 'active',
-    lastActive: '2 hours ago',
-  },
-  {
-    id: '2',
-    name: 'Jane Smith',
-    email: 'jane.smith@example.com',
-    role: 'User',
-    status: 'active',
-    lastActive: '5 hours ago',
-  },
-  {
-    id: '3',
-    name: 'Robert Johnson',
-    email: 'robert.johnson@example.com',
-    role: 'User',
-    status: 'inactive',
-    lastActive: '2 days ago',
-  },
-  {
-    id: '4',
-    name: 'Emily Davis',
-    email: 'emily.davis@example.com',
-    role: 'Editor',
-    status: 'active',
-    lastActive: '1 hour ago',
-  },
-  {
-    id: '5',
-    name: 'Michael Wilson',
-    email: 'michael.wilson@example.com',
-    role: 'User',
-    status: 'active',
-    lastActive: 'Just now',
-  },
-];
+type CreateUserDto = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  role: string;
+  status: 'active' | 'inactive';
+};
 
 export default function UserManagement() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [users, setUsers] = useState<User[]>(mockUsers);
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showActionMenu, setShowActionMenu] = useState<string | null>(null);
-  const [newUser, setNewUser] = useState({ name: '', email: '', role: 'User', status: 'active' });
+  const [newUser, setNewUser] = useState<CreateUserDto>({ 
+    firstName: '', 
+    lastName: '', 
+    email: '', 
+    password: '', 
+    role: 'user', 
+    status: 'active' 
+  });
+  const [submitting, setSubmitting] = useState(false);
 
-  const handleAddUser = () => {
-    setUsers([
-      ...users,
-      {
-        id: (users.length + 1).toString(),
-        name: newUser.name,
-        email: newUser.email,
-        role: newUser.role,
-        status: newUser.status as 'active' | 'inactive',
-        lastActive: 'Just now',
-      },
-    ]);
-    setShowAddModal(false);
-    setNewUser({ name: '', email: '', role: 'User', status: 'active' });
+  // Fetch users from API
+  const fetchUsers = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await api.get<any>('/users');
+      const items = Array.isArray(data) ? data : (data?.items ?? []);
+      setUsers(items as User[]);
+    } catch (err: any) {
+      setError(err.message || 'Failed to fetch users');
+      console.error('Error fetching users:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleDeleteUser = (id: string) => {
-    setUsers(users.filter(u => u.id !== id));
-    setShowActionMenu(null);
+  // Load users on component mount
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const handleAddUser = async () => {
+    if (!newUser.firstName || !newUser.lastName || !newUser.email || !newUser.password) {
+      setError('Please fill in all required fields');
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+      setError(null);
+      const createdUser = await api.post<User>('/users', newUser);
+      setUsers([...users, createdUser]);
+      setShowAddModal(false);
+      setNewUser({ 
+        firstName: '', 
+        lastName: '', 
+        email: '', 
+        password: '', 
+        role: 'user', 
+        status: 'active' 
+      });
+    } catch (err: any) {
+      setError(err.message || 'Failed to create user');
+      console.error('Error creating user:', err);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
-  const filteredUsers = users.filter(
+  const handleDeleteUser = async (id: string) => {
+    try {
+      await api.delete(`/users/${id}`);
+      setUsers(users.filter(u => u.id !== id));
+      setShowActionMenu(null);
+    } catch (err: any) {
+      setError(err.message || 'Failed to delete user');
+      console.error('Error deleting user:', err);
+    }
+  };
+
+  const handleUpdateUserStatus = async (id: string, status: 'active' | 'inactive') => {
+    try {
+      const updatedUser = await api.patch<User>(`/users/${id}`, { status });
+      setUsers(users.map(u => u.id === id ? updatedUser : u));
+    } catch (err: any) {
+      setError(err.message || 'Failed to update user status');
+      console.error('Error updating user status:', err);
+    }
+  };
+
+  const filteredUsers = (Array.isArray(users) ? users : []) .filter(
     (user) =>
-      user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      `${user.firstName} ${user.lastName}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const formatLastActive = (lastLoginAt?: string) => {
+    if (!lastLoginAt) return 'Never';
+    const date = new Date(lastLoginAt);
+    const now = new Date();
+    const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
+    
+    if (diffInHours < 1) return 'Just now';
+    if (diffInHours < 24) return `${diffInHours} hours ago`;
+    const diffInDays = Math.floor(diffInHours / 24);
+    return `${diffInDays} days ago`;
+  };
+
   return (
     <div className="space-y-6">
+      {/* Error Display */}
+      {error && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-red-500/10 border border-red-500/20 rounded-lg p-4 flex items-center gap-3"
+        >
+          <AlertCircle className="w-5 h-5 text-red-400" />
+          <p className="text-red-400">{error}</p>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={() => setError(null)}
+            className="ml-auto text-red-400 hover:text-red-300"
+          >
+            ×
+          </Button>
+        </motion.div>
+      )}
+
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold">User Management</h2>
-        <Button className="glass-button-effect" onClick={() => setShowAddModal(true)}>
+        <Button 
+          className="glass-button-effect" 
+          onClick={() => setShowAddModal(true)}
+          disabled={loading}
+        >
           <UserPlus className="h-4 w-4 mr-2" />
           Add User
         </Button>
@@ -109,13 +174,22 @@ export default function UserManagement() {
           <div className="bg-white rounded-xl p-8 w-full max-w-md">
             <h3 className="text-xl font-bold mb-4">Add New User</h3>
             <div className="space-y-4">
-              <input
-                type="text"
-                placeholder="Name"
-                className="border rounded px-3 py-2 w-full"
-                value={newUser.name}
-                onChange={e => setNewUser({ ...newUser, name: e.target.value })}
-              />
+              <div className="grid grid-cols-2 gap-4">
+                <input
+                  type="text"
+                  placeholder="First Name"
+                  className="border rounded px-3 py-2 w-full"
+                  value={newUser.firstName}
+                  onChange={e => setNewUser({ ...newUser, firstName: e.target.value })}
+                />
+                <input
+                  type="text"
+                  placeholder="Last Name"
+                  className="border rounded px-3 py-2 w-full"
+                  value={newUser.lastName}
+                  onChange={e => setNewUser({ ...newUser, lastName: e.target.value })}
+                />
+              </div>
               <input
                 type="email"
                 placeholder="Email"
@@ -123,19 +197,26 @@ export default function UserManagement() {
                 value={newUser.email}
                 onChange={e => setNewUser({ ...newUser, email: e.target.value })}
               />
+              <input
+                type="password"
+                placeholder="Password"
+                className="border rounded px-3 py-2 w-full"
+                value={newUser.password}
+                onChange={e => setNewUser({ ...newUser, password: e.target.value })}
+              />
               <select
                 className="border rounded px-3 py-2 w-full"
                 value={newUser.role}
                 onChange={e => setNewUser({ ...newUser, role: e.target.value })}
               >
-                <option value="User">User</option>
-                <option value="Admin">Admin</option>
-                <option value="Editor">Editor</option>
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+                <option value="editor">Editor</option>
               </select>
               <select
                 className="border rounded px-3 py-2 w-full"
                 value={newUser.status}
-                onChange={e => setNewUser({ ...newUser, status: e.target.value })}
+                onChange={e => setNewUser({ ...newUser, status: e.target.value as 'active' | 'inactive' })}
               >
                 <option value="active">Active</option>
                 <option value="inactive">Inactive</option>
@@ -217,25 +298,25 @@ export default function UserManagement() {
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-full bg-gradient-to-r from-electric-blue to-electric-cyan flex items-center justify-center text-xs font-medium">
-                          {user.name.split(' ').map(n => n[0]).join('')}
+                          {user.firstName[0]}{user.lastName[0]}
                         </div>
-                        <span>{user.name}</span>
+                        <span>{user.firstName} {user.lastName}</span>
                       </div>
                     </td>
                     <td className="py-3 px-4 text-muted-foreground">{user.email}</td>
                     <td className="py-3 px-4">
-                      <span className="px-2 py-1 rounded-full text-xs bg-white/10">
+                      <span className="px-2 py-1 rounded-full text-xs bg-white/10 capitalize">
                         {user.role}
                       </span>
                     </td>
                     <td className="py-3 px-4">
                       <span
-                        className={`px-2 py-1 rounded-full text-xs ${user.status === 'active' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}
+                        className={`px-2 py-1 rounded-full text-xs capitalize ${user.status === 'active' ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}
                       >
                         {user.status}
                       </span>
                     </td>
-                    <td className="py-3 px-4 text-muted-foreground">{user.lastActive}</td>
+                    <td className="py-3 px-4 text-muted-foreground">{formatLastActive(user.lastLoginAt)}</td>
                     <td className="py-3 px-4 text-right">
                       <Button variant="ghost" size="icon" onClick={() => setShowActionMenu(user.id)}>
                         <MoreHorizontal className="h-4 w-4" />

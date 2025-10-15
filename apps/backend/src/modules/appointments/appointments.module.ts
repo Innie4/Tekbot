@@ -7,7 +7,7 @@ import { AppointmentsService } from './appointments.service';
 import { AppointmentReminderService } from './appointment-reminder.service';
 import { AppointmentReminderProcessor } from './appointment-reminder.processor';
 import { Appointment } from './entities/appointment.entity';
-import { NotificationModule } from '../notifications/notifications.module';
+import { NotificationsModule } from '../notifications/notifications.module';
 import { reminderConfig } from './config';
 
 @Module({
@@ -17,7 +17,7 @@ import { reminderConfig } from './config';
       name: 'appointment-reminders',
     }),
     ConfigModule.forFeature(reminderConfig),
-    NotificationModule,
+    NotificationsModule,
   ],
   controllers: [AppointmentsController],
   providers: [

@@ -1,37 +1,18 @@
 'use client';
 
 import { GlassCard } from '@/components/ui/glass-card';
-import { BarChart3, Users, MessageSquare, ArrowUp, ArrowDown } from 'lucide-react';
+import { BarChart3, Users, MessageSquare, ArrowUp, ArrowDown, Loader2, AlertCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { api } from '@/lib/api/api-client';
 import ActivityChart from './charts/ActivityChart';
 import AdminDashboard from './AdminDashboard';
 
-const statsCards = [
-	{
-		title: 'Total Users',
-		value: '2,543',
-		change: '+12.5%',
-		trend: 'up',
-		icon: Users,
-		color: 'from-electric-blue to-blue-400',
-	},
-	{
-		title: 'Active Sessions',
-		value: '1,873',
-		change: '+18.2%',
-		trend: 'up',
-		icon: BarChart3,
-		color: 'from-green-400 to-emerald-500',
-	},
-	{
-		title: 'Messages',
-		value: '10,483',
-		change: '-3.4%',
-		trend: 'down',
-		icon: MessageSquare,
-		color: 'from-purple-400 to-indigo-500',
-	},
-];
+interface DashboardStats {
+  totalUsers: { value: string; change: string; trend: 'up' | 'down' };
+  activeSessions: { value: string; change: string; trend: 'up' | 'down' };
+  totalMessages: { value: string; change: string; trend: 'up' | 'down' };
+}
 
 const container = {
 	hidden: { opacity: 0 },
@@ -49,11 +30,107 @@ const item = {
 };
 
 export default function DashboardOverview() {
+	const [stats, setStats] = useState<DashboardStats | null>(null);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState<string | null>(null);
+
+	const fetchDashboardStats = async () => {
+		try {
+			setLoading(true);
+			setError(null);
+			const data = await api.get<DashboardStats>('/analytics/overview');
+			setStats(data);
+		} catch (err: any) {
+			setError(err.message || 'Failed to fetch dashboard stats');
+			console.error('Error fetching dashboard stats:', err);
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	useEffect(() => {
+		fetchDashboardStats();
+	}, []);
+
+	const statsCards = stats ? [
+		{
+			title: 'Total Users',
+			value: stats.totalUsers.value,
+			change: stats.totalUsers.change,
+			trend: stats.totalUsers.trend,
+			icon: Users,
+			color: 'from-electric-blue to-blue-400',
+		},
+		{
+			title: 'Active Sessions',
+			value: stats.activeSessions.value,
+			change: stats.activeSessions.change,
+			trend: stats.activeSessions.trend,
+			icon: BarChart3,
+			color: 'from-green-400 to-emerald-500',
+		},
+		{
+			title: 'Messages',
+			value: stats.totalMessages.value,
+			change: stats.totalMessages.change,
+			trend: stats.totalMessages.trend,
+			icon: MessageSquare,
+			color: 'from-purple-400 to-indigo-500',
+		},
+	] : [];
+
+	if (loading) {
+		return (
+			<div className="space-y-6">
+				<div className="flex items-center justify-between">
+					<h2 className="text-2xl font-bold">Dashboard Overview</h2>
+					<div className="flex items-center gap-2 text-sm text-muted-foreground">
+						<Loader2 className="h-4 w-4 animate-spin" />
+						Loading...
+					</div>
+				</div>
+				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+					{[1, 2, 3].map((i) => (
+						<GlassCard key={i} className="p-6 animate-pulse">
+							<div className="h-4 bg-white/10 rounded mb-2"></div>
+							<div className="h-8 bg-white/10 rounded mb-2"></div>
+							<div className="h-4 bg-white/10 rounded w-1/2"></div>
+						</GlassCard>
+					))}
+				</div>
+			</div>
+		);
+	}
+
+	if (error) {
+		return (
+			<div className="space-y-6">
+				<div className="flex items-center justify-between">
+					<h2 className="text-2xl font-bold">Dashboard Overview</h2>
+				</div>
+				<motion.div
+					initial={{ opacity: 0, y: -20 }}
+					animate={{ opacity: 1, y: 0 }}
+					className="bg-red-500/10 border border-red-500/20 rounded-lg p-4 flex items-center gap-3"
+				>
+					<AlertCircle className="w-5 h-5 text-red-400" />
+					<p className="text-red-400">{error}</p>
+					<button 
+						onClick={fetchDashboardStats}
+						className="ml-auto px-3 py-1 bg-red-500/20 text-red-400 rounded hover:bg-red-500/30 transition-colors"
+					>
+						Retry
+					</button>
+				</motion.div>
+			</div>
+		);
+	}
+
 	return (
 		<div className="space-y-6">
 			<div className="flex items-center justify-between">
 				<h2 className="text-2xl font-bold">Dashboard Overview</h2>
-				<p className="text-sm text-muted-foreground">Last updated: Today at 09:41 AM</p>
+				<p className="text-sm text-muted-foreground">Last updated: {new Date().toLocaleString()}</p>
 			</div>
 
 			<motion.div

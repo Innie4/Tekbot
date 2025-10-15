@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
+import { getEnvironmentConfig } from './config/index';
 import helmet from 'helmet';
 import compression from 'compression';
 import { WINSTON_MODULE_NEST_PROVIDER } from 'nest-winston';
@@ -23,7 +24,7 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const port = configService.get<number>('PORT', 3000);
   const nodeEnv = configService.get<string>('NODE_ENV', 'development');
-  const corsOrigin = configService.get<string>('CORS_ORIGIN', 'http://localhost:3001');
+  const envConfig = getEnvironmentConfig();
 
   // Use Winston logger
   app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
@@ -39,7 +40,7 @@ async function bootstrap() {
 
   // CORS configuration
   app.enableCors({
-    origin: corsOrigin.split(','),
+    origin: envConfig.corsOrigins,
     credentials: configService.get<boolean>('CORS_CREDENTIALS', true),
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: [
@@ -56,7 +57,7 @@ async function bootstrap() {
   app.enableVersioning({
     type: VersioningType.URI,
     defaultVersion: '1',
-    prefix: 'api/v',
+    prefix: 'v',
   });
 
   // Global validation pipe
@@ -72,14 +73,25 @@ async function bootstrap() {
   );
 
   // Global filters (order matters - most specific first)
+  // Register exception filters with Sentry integration
+  const sentryService = (() => {
+    try {
+      // SentryService is provided by AnalyticsModule
+      const service = app.get<any>('SentryService');
+      return service;
+    } catch (e) {
+      return undefined;
+    }
+  })();
+
   app.useGlobalFilters(
-    new HttpExceptionFilter(),
-    new AllExceptionsFilter(),
+    new HttpExceptionFilter(sentryService),
+    new AllExceptionsFilter(sentryService),
   );
 
   // Global interceptors
   app.useGlobalInterceptors(
-    new TimeoutInterceptor(),
+    new TimeoutInterceptor(app.get('Reflector')),
     new LoggingInterceptor(),
     new TransformInterceptor(app.get('Reflector')),
   );
@@ -133,6 +145,9 @@ async function bootstrap() {
 
   // Global prefix
   app.setGlobalPrefix('api');
+
+  // Global tenant resolution middleware
+  app.use(TenantMiddleware);
 
   // Graceful shutdown
   app.enableShutdownHooks();

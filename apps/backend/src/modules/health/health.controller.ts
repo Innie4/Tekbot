@@ -1,9 +1,10 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, SetMetadata } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { HealthService } from '../analytics/health.service';
 
 @ApiTags('Health')
 @Controller('health')
+@SetMetadata('skipThrottle', true)
 export class HealthController {
   constructor(private readonly healthService: HealthService) {}
 

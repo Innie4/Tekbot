@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Save, Eye, Copy, RefreshCw, Palette, Settings, Code, Monitor } from 'lucide-react';
+import { api } from '@/lib/api/api-client';
 
 interface WidgetTheme {
   primaryColor?: string;
@@ -109,14 +110,8 @@ export default function WidgetConfigurator({
   const loadConfig = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`${apiUrl}/widget-config/tenant/${tenantId}`, {
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-      
-      if (response.ok) {
-        const existingConfig = await response.json();
+      const existingConfig = await api.get<WidgetConfig>(`/widget/widget-config/tenant/${tenantId}`);
+      if (existingConfig) {
         setConfig(existingConfig);
       }
     } catch (error) {
@@ -129,28 +124,15 @@ export default function WidgetConfigurator({
   const saveConfig = async () => {
     setIsSaving(true);
     try {
-      const method = config.id ? 'PUT' : 'POST';
-      const url = config.id 
-        ? `${apiUrl}/widget-config/${config.id}`
-        : `${apiUrl}/widget-config`;
-
-      const response = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify(config),
-      });
-
-      if (response.ok) {
-        const savedConfig = await response.json();
-        setConfig(savedConfig);
-        onConfigSave?.(savedConfig);
-        alert('Widget configuration saved successfully');
+      let savedConfig: WidgetConfig;
+      if (config.id) {
+        savedConfig = await api.put<WidgetConfig>(`/widget/widget-config/${config.id}`, config);
       } else {
-        throw new Error('Failed to save configuration');
+        savedConfig = await api.post<WidgetConfig>(`/widget/widget-config`, config);
       }
+      setConfig(savedConfig);
+      onConfigSave?.(savedConfig);
+      alert('Widget configuration saved successfully');
     } catch (error) {
       console.error('Failed to save widget config:', error);
       alert('Failed to save widget configuration');
@@ -160,6 +142,7 @@ export default function WidgetConfigurator({
   };
 
   const generateEmbedCode = () => {
+    const apiBase = `${(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api').replace(/\/$/, '')}/v${process.env.NEXT_PUBLIC_API_VERSION || '1'}/widget`;
     const code = `<!-- TekAssist Widget -->
 <script>
   (function() {
@@ -169,7 +152,7 @@ export default function WidgetConfigurator({
     script.onload = function() {
       TekAssistWidget.init({
         tenantId: '${tenantId}',
-        apiUrl: '${apiUrl}',
+        apiUrl: '${apiBase}',
         containerId: 'tekassist-widget'
       });
     };

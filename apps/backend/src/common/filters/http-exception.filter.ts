@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ThrottlerException } from '@nestjs/throttler';
+import { SentryService } from '../../modules/analytics/sentry.service';
 
 interface ErrorResponse {
   statusCode: number;
@@ -25,6 +26,7 @@ interface ErrorResponse {
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger(HttpExceptionFilter.name);
+  constructor(private readonly sentry?: SentryService) {}
 
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
@@ -64,6 +66,13 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     // Log error
     this.logError(exception, request, errorResponse);
+
+    // Capture with Sentry for server errors and throttling
+    try {
+      if (this.sentry && (status >= 500 || exception instanceof ThrottlerException)) {
+        this.sentry.captureException(exception);
+      }
+    } catch {}
 
     // Send response
     response.status(status).json(errorResponse);

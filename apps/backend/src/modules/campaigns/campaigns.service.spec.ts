@@ -443,7 +443,7 @@ describe('CampaignsService', () => {
       const targetAudience = { customerIds: ['customer1', 'customer2'] };
       mockCustomerRepository.count.mockResolvedValue(2);
 
-      const result = await service['estimateRecipients'](targetAudience);
+      const result = await service['estimateRecipients']('tenant1', targetAudience);
 
       expect(result).toBe(2);
       expect(mockCustomerRepository.count).toHaveBeenCalledWith({
@@ -452,7 +452,7 @@ describe('CampaignsService', () => {
     });
 
     it('should estimate recipients by segment', async () => {
-      const targetAudience = { segment: 'premium' };
+      const targetAudience = { segments: ['premium'] };
       const mockQueryBuilder = {
         where: jest.fn().mockReturnThis(),
         getCount: jest.fn().mockResolvedValue(5),
@@ -460,7 +460,7 @@ describe('CampaignsService', () => {
 
       mockCustomerRepository.createQueryBuilder.mockReturnValue(mockQueryBuilder);
 
-      const result = await service['estimateRecipients'](targetAudience);
+      const result = await service['estimateRecipients']('tenant1', targetAudience);
 
       expect(result).toBe(5);
     });

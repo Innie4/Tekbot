@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Send, X, Minimize2, MessageCircle, Bot, User } from 'lucide-react';
 import { WidgetConfig, WidgetState, WidgetCallbacks, ChatMessage } from './widget-types';
+import { io, Socket } from 'socket.io-client';
 
 interface ChatWidgetStandaloneProps {
   config: WidgetConfig;
@@ -31,6 +32,7 @@ export function ChatWidgetStandalone({
   const [isTyping, setIsTyping] = useState(false);
   const [conversationId, setConversationId] = useState<string | null>(initialState?.conversationId || null);
   const [currentSessionId, setCurrentSessionId] = useState(sessionId || generateSessionId());
+  const [socket, setSocket] = useState<Socket | null>(null);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -42,6 +44,55 @@ export function ChatWidgetStandalone({
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  useEffect(() => {
+    // Initialize WebSocket connection
+    const socketInstance = io(apiUrl, {
+      query: {
+        tenantId,
+        sessionId: currentSessionId,
+        ...(customerId && { customerId }),
+      },
+    });
+
+    socketInstance.on('connect', () => {
+      console.log('Connected to WebSocket');
+      // Join tenant room for receiving messages
+      socketInstance.emit('joinRoom', { tenantId, sessionId: currentSessionId });
+    });
+
+    socketInstance.on('message', (data: any) => {
+      const botMessage: ChatMessage = {
+        id: data.messageId || `bot_${Date.now()}`,
+        content: data.message,
+        direction: 'inbound',
+        timestamp: new Date(data.timestamp),
+        metadata: {
+          conversationId: data.conversationId,
+          sessionId: currentSessionId,
+          ...data.metadata,
+        },
+      };
+      setMessages(prev => [...prev, botMessage]);
+      callbacks.onMessage?.(botMessage);
+    });
+
+    socketInstance.on('typing', (data: any) => {
+      if (data.sessionId !== currentSessionId) {
+        setIsTyping(data.isTyping);
+      }
+    });
+
+    socketInstance.on('disconnect', () => {
+      console.log('Disconnected from WebSocket');
+    });
+
+    setSocket(socketInstance);
+
+    return () => {
+      socketInstance.disconnect();
+    };
+  }, [apiUrl, tenantId, currentSessionId, customerId]);
 
   useEffect(() => {
     scrollToBottom();
@@ -71,7 +122,7 @@ export function ChatWidgetStandalone({
   }, [config.welcomeMessage]);
 
   const sendMessage = async () => {
-    if (!inputValue.trim() || isLoading) return;
+    if (!inputValue.trim() || isLoading || !socket) return;
 
     const userMessage: ChatMessage = {
       id: `msg_${Date.now()}`,
@@ -88,72 +139,22 @@ export function ChatWidgetStandalone({
     setMessages(prev => [...prev, userMessage]);
     setInputValue('');
     setIsLoading(true);
-    setIsTyping(true);
 
     // Notify parent of new message
     callbacks.onMessage?.(userMessage);
 
-    try {
-      const response = await fetch(`${apiUrl}/chat/send`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          message: inputValue.trim(),
-          tenantId,
-          sessionId: currentSessionId,
-          conversationId,
-          customerId,
-          metadata,
-        }),
-      });
+    // Send message via WebSocket
+    socket.emit('message', {
+      message: inputValue.trim(),
+      tenantId,
+      sessionId: currentSessionId,
+      conversationId,
+      customerId,
+      metadata,
+    });
 
-      if (response.ok) {
-        const data = await response.json();
-        
-        // Update conversation ID if provided
-        if (data.conversationId && !conversationId) {
-          setConversationId(data.conversationId);
-        }
-
-        const botMessage: ChatMessage = {
-          id: data.messageId || `bot_${Date.now()}`,
-          content: data.message || data.response || 'Sorry, I could not process your request.',
-          direction: 'inbound',
-          timestamp: new Date(),
-          metadata: {
-            conversationId: data.conversationId,
-            sessionId: currentSessionId,
-            ...data.metadata,
-          },
-        };
-
-        setMessages(prev => [...prev, botMessage]);
-        callbacks.onMessage?.(botMessage);
-      } else {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-      }
-    } catch (error) {
-      console.error('Failed to send message:', error);
-      
-      const errorMessage: ChatMessage = {
-        id: `error_${Date.now()}`,
-        content: 'Sorry, I encountered an error. Please try again.',
-        direction: 'inbound',
-        timestamp: new Date(),
-        metadata: {
-          type: 'error',
-          error: error instanceof Error ? error.message : 'Unknown error',
-        },
-      };
-
-      setMessages(prev => [...prev, errorMessage]);
-      callbacks.onError?.(error instanceof Error ? error : new Error('Unknown error'));
-    } finally {
-      setIsLoading(false);
-      setIsTyping(false);
-    }
+    // Set loading to false after a short delay (will be updated when response arrives)
+    setTimeout(() => setIsLoading(false), 1000);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {

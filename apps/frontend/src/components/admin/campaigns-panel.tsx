@@ -55,7 +55,7 @@ const CampaignsPanel: React.FC = () => {
         return 'bg-green-50 text-green-700';
       case 'push':
         return 'bg-purple-50 text-purple-700';
-      case 'in_app':
+      case 'multi_channel':
         return 'bg-orange-50 text-orange-700';
       default:
         return 'bg-gray-50 text-gray-700';
@@ -174,8 +174,8 @@ const CampaignsPanel: React.FC = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">
-                      {campaign.scheduled_at 
-                        ? new Date(campaign.scheduled_at).toLocaleDateString()
+                      {campaign.start_date 
+                        ? new Date(campaign.start_date).toLocaleDateString()
                         : 'Immediate'
                       }
                     </div>

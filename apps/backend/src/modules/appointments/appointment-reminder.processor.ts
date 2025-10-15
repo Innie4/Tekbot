@@ -117,20 +117,9 @@ export class AppointmentReminderProcessor {
       const emailHtml = this.generateEmailTemplate(params);
 
       await this.notificationService.sendEmail({
-        tenantId: params.tenantId,
         to: params.customerEmail,
         subject: emailSubject,
         html: emailHtml,
-        template: 'appointment-reminder',
-        templateData: {
-          customerName: params.customerName,
-          serviceName: params.serviceName,
-          staffName: params.staffName,
-          appointmentDate: params.formattedDate,
-          appointmentTime: params.formattedTime,
-          reminderMinutes: params.reminderMinutes,
-          appointmentId: params.appointmentId,
-        },
       });
 
       this.logger.log(`Email reminder sent to ${params.customerEmail} for appointment ${params.appointmentId}`);
@@ -154,13 +143,8 @@ export class AppointmentReminderProcessor {
       const smsMessage = `Hi ${params.customerName}! Reminder: You have a ${params.serviceName} appointment on ${params.formattedDate} at ${params.formattedTime}. See you soon!`;
 
       await this.notificationService.sendSms({
-        tenantId: params.tenantId,
         to: params.customerPhone,
-        message: smsMessage,
-        metadata: {
-          appointmentId: params.appointmentId,
-          type: 'appointment_reminder',
-        },
+        body: smsMessage,
       });
 
       this.logger.log(`SMS reminder sent to ${params.customerPhone} for appointment ${params.appointmentId}`);

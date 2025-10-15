@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
+import TenantSelector from '@/components/admin/tenant-selector';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -116,6 +117,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             </div>
             
             <div className="flex items-center gap-2">
+              <TenantSelector />
               <Button variant="outline" size="sm">
                 Profile
               </Button>

@@ -1,4 +1,4 @@
-import { Controller, Post, Req, Inject, Logger, HttpStatus, HttpException, Headers } from '@nestjs/common';
+import { Controller, Post, Req, Inject, Logger, HttpStatus, HttpException, Headers, SetMetadata } from '@nestjs/common';
 import { TwilioService } from '../messaging/twilio.service';
 import { ConversationsService } from '../conversations/conversations.service';
 import { NotificationService } from '../notifications/notification.service';
@@ -37,6 +37,7 @@ interface TwilioWebhookEvent {
 }
 
 @Controller('webhooks/twilio')
+@SetMetadata('skipThrottle', true)
 export class TwilioWebhookController {
   private readonly logger = new Logger(TwilioWebhookController.name);
 

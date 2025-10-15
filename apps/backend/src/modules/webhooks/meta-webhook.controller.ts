@@ -1,7 +1,8 @@
-import { Controller, Post, Get, Req, Inject } from '@nestjs/common';
+import { Controller, Post, Get, Req, Inject, SetMetadata } from '@nestjs/common';
 import { MetaService } from '../messaging/meta.service';
 
 @Controller('webhooks/meta')
+@SetMetadata('skipThrottle', true)
 export class MetaWebhookController {
   constructor(
     @Inject(MetaService)

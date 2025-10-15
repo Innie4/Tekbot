@@ -40,22 +40,20 @@ const MessagesPanel: React.FC = () => {
         return 'bg-purple-100 text-purple-800';
       case 'failed':
         return 'bg-red-100 text-red-800';
-      case 'pending':
-        return 'bg-yellow-100 text-yellow-800';
       default:
         return 'bg-gray-100 text-gray-800';
     }
   };
 
-  const getTypeColor = (type: Message['type']) => {
-    switch (type) {
+  const getTypeColor = (channel: Message['channel']) => {
+    switch (channel) {
       case 'email':
         return 'bg-blue-50 text-blue-700';
       case 'sms':
         return 'bg-green-50 text-green-700';
-      case 'push':
+      case 'whatsapp':
         return 'bg-purple-50 text-purple-700';
-      case 'in_app':
+      case 'slack':
         return 'bg-orange-50 text-orange-700';
       case 'chat':
         return 'bg-indigo-50 text-indigo-700';
@@ -154,23 +152,17 @@ const MessagesPanel: React.FC = () => {
                 <tr key={message.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">
-                      {message.customer?.name || `Customer ID: ${message.customer_id}`}
+                      {message.recipient_id ? `Recipient ID: ${message.recipient_id}` : 'No recipient'}
                     </div>
-                    {message.customer?.email && (
-                      <div className="text-sm text-gray-500">{message.customer.email}</div>
-                    )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getTypeColor(message.type)}`}>
-                      {message.type.toUpperCase()}
+                    <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getTypeColor(message.channel)}`}>
+                      {message.channel.toUpperCase()}
                     </span>
                   </td>
                   <td className="px-6 py-4">
                     <div className="text-sm text-gray-900">
-                      {message.subject && (
-                        <div className="font-medium">{truncateContent(message.subject, 30)}</div>
-                      )}
-                      <div className="text-gray-500 mt-1">
+                      <div className="text-gray-500">
                         {truncateContent(message.content)}
                       </div>
                     </div>
@@ -182,19 +174,14 @@ const MessagesPanel: React.FC = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">
-                      {message.sent_at 
-                        ? new Date(message.sent_at).toLocaleDateString()
-                        : 'Not sent'
-                      }
+                      {new Date(message.created_at).toLocaleDateString()}
                     </div>
-                    {message.sent_at && (
-                      <div className="text-sm text-gray-500">
-                        {new Date(message.sent_at).toLocaleTimeString([], { 
-                          hour: '2-digit', 
-                          minute: '2-digit' 
-                        })}
-                      </div>
-                    )}
+                    <div className="text-sm text-gray-500">
+                      {new Date(message.created_at).toLocaleTimeString([], { 
+                        hour: '2-digit', 
+                        minute: '2-digit' 
+                      })}
+                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <button className="text-blue-600 hover:text-blue-900 mr-3">
