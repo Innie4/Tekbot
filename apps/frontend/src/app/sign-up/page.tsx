@@ -5,6 +5,7 @@ import { GlassInput } from '@/components/ui/glass-input';
 import { Button } from '@/components/ui/button';
 import { api } from '@/lib/api/api-client';
 import { useToast } from '@/components/ui/use-toast';
+import { ArrowRight, Chrome } from 'lucide-react';
 
 export default function SignUpPage() {
   const [firstName, setFirstName] = useState('');
@@ -88,6 +89,7 @@ export default function SignUpPage() {
         localStorage.setItem('auth-token', result.accessToken);
         localStorage.setItem('refresh-token', result.refreshToken);
         localStorage.setItem('auth-user', JSON.stringify(result.user));
+        localStorage.setItem('has-onboarded', 'false');
         if ((result.user as any)?.tenantId) {
           localStorage.setItem('tenant-id', (result.user as any).tenantId);
         }
@@ -97,12 +99,21 @@ export default function SignUpPage() {
       }
 
       toast({ title: 'Account created', description: 'Welcome to TekAssist!' });
-      window.location.href = '/admin';
+      window.location.href = '/onboarding';
     } catch (err: any) {
       const message = err?.message || 'Sign up failed';
       setError(message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const startGoogleSignIn = () => {
+    try {
+      // If backend Google OAuth is configured, this route should exist
+      window.location.href = '/api/v1/auth/google';
+    } catch (e) {
+      toast({ title: 'Google Sign-In unavailable', description: 'OAuth not configured yet.' });
     }
   };
 
@@ -118,6 +129,17 @@ export default function SignUpPage() {
             {error}
           </div>
         )}
+        <Button type="button" variant="outline" className="w-full mb-4" onClick={startGoogleSignIn}>
+          <Chrome className="mr-2 h-4 w-4" /> Continue with Google
+        </Button>
+        <div className="relative my-4">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t border-border/50" />
+          </div>
+          <div className="relative flex justify-center text-xs">
+            <span className="px-2 bg-background text-muted-foreground">or</span>
+          </div>
+        </div>
         <form onSubmit={onSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
@@ -176,7 +198,7 @@ export default function SignUpPage() {
           <Button type="submit" className="w-full" disabled={
             loading || !!firstNameError || !!lastNameError || !!emailError || !!passwordError
           }>
-            {loading ? 'Creating account…' : 'Sign Up'}
+            {loading ? 'Creating account…' : 'Create Account'}
           </Button>
         </form>
         <div className="text-sm mt-4 text-center">

@@ -124,7 +124,7 @@ export default function SignInPage() {
             )}
           </div>
           <Button type="submit" className="w-full" disabled={loading || !!emailError || !!passwordError}>
-            {loading ? 'Signing in…' : 'Sign In'}
+            {loading ? 'Signing in…' : 'Log In'}
           </Button>
         </form>
         <div className="text-sm mt-4 text-center">

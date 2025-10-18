@@ -56,7 +56,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/terms" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Terms of Service
+                  Terms of Use
                 </Link>
               </li>
             </ul>

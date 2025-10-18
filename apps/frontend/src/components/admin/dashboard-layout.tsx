@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { GlassCard } from '@/components/ui/glass-card';
 import { Button } from '@/components/ui/button';
@@ -13,7 +13,9 @@ import {
   MessageSquare,
   Puzzle,
   Menu,
-  X
+  X,
+  FileText,
+  LogOut
 } from 'lucide-react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -24,18 +26,39 @@ interface DashboardLayoutProps {
 }
 
 const sidebarItems = [
-  { icon: LayoutDashboard, label: 'Dashboard', href: '/admin' },
-  { icon: Users, label: 'Users', href: '/admin/users' },
-  { icon: MessageSquare, label: 'Messages', href: '/admin/messages' },
-  { icon: Puzzle, label: 'Widget Config', href: '/admin/widget' },
+  { icon: LayoutDashboard, label: 'Home', href: '/admin' },
+  { icon: MessageSquare, label: 'My Chatbots', href: '/admin/chatbots' },
+  { icon: FileText, label: 'Training Data', href: '/admin/training' },
+  { icon: Puzzle, label: 'Integrations', href: '/admin/integrations' },
   { icon: BarChart3, label: 'Analytics', href: '/admin/analytics' },
   { icon: Settings, label: 'Settings', href: '/admin/settings' },
-  { icon: HelpCircle, label: 'Help', href: '/admin/help' },
 ];
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    try {
+      const token = localStorage.getItem('auth-token');
+      if (!token) {
+        window.location.href = '/sign-in';
+      }
+    } catch {}
+  }, []);
+
+  const handleLogout = () => {
+    try {
+      localStorage.removeItem('auth-token');
+      localStorage.removeItem('refresh-token');
+      localStorage.removeItem('auth-user');
+      localStorage.removeItem('tenant-id');
+      localStorage.removeItem('tenant-slug');
+      // Optional: clear onboarding flag for a full reset
+      // localStorage.removeItem('has-onboarded');
+    } catch {}
+    window.location.href = '/sign-in';
+  };
 
   return (
     <div className="flex min-h-screen bg-tech-dark">
@@ -77,13 +100,16 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                 ))}
               </nav>
               
-              <div className="mt-auto">
+              <div className="mt-auto space-y-3">
                 <GlassCard className="p-4">
                   <p className="text-sm text-muted-foreground mb-2">Need help?</p>
                   <Button variant="outline" size="sm" className="w-full">
                     Contact Support
                   </Button>
                 </GlassCard>
+                <Button variant="destructive" size="sm" className="w-full" onClick={handleLogout}>
+                  <LogOut className="h-4 w-4 mr-2" /> Logout
+                </Button>
               </div>
             </div>
           </motion.aside>
@@ -147,6 +173,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                     <span>{item.label}</span>
                   </Link>
                 ))}
+                <Button variant="destructive" size="sm" className="w-full" onClick={() => { setMobileMenuOpen(false); handleLogout(); }}>
+                  <LogOut className="h-4 w-4 mr-2" /> Logout
+                </Button>
               </nav>
             </motion.div>
           )}
