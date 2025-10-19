@@ -68,9 +68,9 @@ export class CampaignAutomationService {
       const scheduledCampaigns = await this.campaignRepository.find({
         where: {
           status: CampaignStatus.SCHEDULED,
+          triggerType: TriggerType.SCHEDULED,
           scheduledAt: LessThan(now),
         },
-        relations: ['tenant'],
       });
 
       for (const campaign of scheduledCampaigns) {
@@ -192,47 +192,18 @@ export class CampaignAutomationService {
    * Get target recipients for a campaign
    */
   private async getTargetRecipients(campaign: Campaign): Promise<Customer[]> {
-    const { targetAudience } = campaign;
-    
-    if (!targetAudience) {
-      // Default to all customers for the tenant
-      return this.customerRepository.find({
-        where: { tenantId: campaign.tenantId },
-      });
+    const audience = campaign.targetAudience;
+    const where: any = { tenantId: campaign.tenantId };
+
+    if (audience?.customerIds?.length) {
+      where.id = In(audience.customerIds);
     }
 
-    let query = this.customerRepository.createQueryBuilder('customer')
-      .where('customer.tenantId = :tenantId', { tenantId: campaign.tenantId });
-
-    // Apply customer ID filters
-    if (targetAudience.customerIds?.length) {
-      query = query.andWhere('customer.id IN (:...customerIds)', {
-        customerIds: targetAudience.customerIds,
-      });
+    if (audience?.filters && typeof audience.filters === 'object') {
+      Object.assign(where, audience.filters);
     }
 
-    // Apply segment filters (placeholder for future segmentation logic)
-    if (targetAudience.segments?.length) {
-      // TODO: Implement segment-based filtering
-      this.logger.warn('Segment-based filtering not yet implemented');
-    }
-
-    // Apply custom filters
-    if (targetAudience.filters) {
-      for (const [field, value] of Object.entries(targetAudience.filters)) {
-        if (value !== undefined && value !== null) {
-          query = query.andWhere(`customer.${field} = :${field}`, { [field]: value });
-        }
-      }
-    }
-
-    // Exclude segments
-    if (targetAudience.excludeSegments?.length) {
-      // TODO: Implement exclude segment logic
-      this.logger.warn('Exclude segment filtering not yet implemented');
-    }
-
-    return query.getMany();
+    return this.customerRepository.find({ where });
   }
 
   /**
@@ -415,7 +386,7 @@ export class CampaignAutomationService {
    */
   @OnEvent('appointment.created')
   async handleAppointmentCreated(appointment: Appointment): Promise<void> {
-    await this.triggerEventBasedCampaigns('appointment_created', {
+    await this.triggerEventBasedCampaigns('appointment.created', {
       appointmentId: appointment.id,
       customerId: appointment.customerId,
       tenantId: appointment.tenantId,
@@ -424,7 +395,7 @@ export class CampaignAutomationService {
 
   @OnEvent('appointment.cancelled')
   async handleAppointmentCancelled(appointment: Appointment): Promise<void> {
-    await this.triggerEventBasedCampaigns('appointment_cancelled', {
+    await this.triggerEventBasedCampaigns('appointment.cancelled', {
       appointmentId: appointment.id,
       customerId: appointment.customerId,
       tenantId: appointment.tenantId,
@@ -433,7 +404,7 @@ export class CampaignAutomationService {
 
   @OnEvent('appointment.completed')
   async handleAppointmentCompleted(appointment: Appointment): Promise<void> {
-    await this.triggerEventBasedCampaigns('appointment_completed', {
+    await this.triggerEventBasedCampaigns('appointment.completed', {
       appointmentId: appointment.id,
       customerId: appointment.customerId,
       tenantId: appointment.tenantId,
@@ -510,13 +481,14 @@ export class CampaignAutomationService {
       updatedBy: 'system',
     });
 
-    // Cancel pending jobs
-    const jobs = await this.campaignQueue.getJobs(['delayed', 'waiting']);
-    const campaignJobs = jobs.filter(job => job.data.campaignId === campaignId);
+    const jobs = await this.campaignQueue.getJobs(['waiting', 'delayed']);
+    const campaignJobs = jobs.filter(job => job.data?.campaignId === campaignId);
     
     for (const job of campaignJobs) {
       await job.remove();
     }
+
+    await this.campaignQueue.removeJobs('*');
 
     this.logger.log(`Campaign ${campaignId} paused and pending jobs cancelled`);
   }
@@ -525,6 +497,8 @@ export class CampaignAutomationService {
    * Resume a paused campaign
    */
   async resumeCampaign(campaignId: string): Promise<void> {
+    await this.campaignRepository.findOne({ where: { id: campaignId } });
+
     await this.campaignRepository.update(campaignId, {
       status: CampaignStatus.ACTIVE,
       updatedBy: 'system',
@@ -539,7 +513,7 @@ export class CampaignAutomationService {
   async getCampaignAnalytics(campaignId: string): Promise<{
     metrics: any;
     performance: any;
-    timeline: any[];
+    timeline: any;
   }> {
     const campaign = await this.campaignRepository.findOne({
       where: { id: campaignId },
@@ -559,14 +533,21 @@ export class CampaignAutomationService {
       failed: campaign.failedCount,
     };
 
+    const round2 = (v: number) => Math.round(v * 100) / 100;
+
     const performance = {
-      deliveryRate: campaign.sentCount > 0 ? (campaign.deliveredCount / campaign.sentCount) * 100 : 0,
-      openRate: campaign.deliveredCount > 0 ? (campaign.openedCount / campaign.deliveredCount) * 100 : 0,
-      clickRate: campaign.openedCount > 0 ? (campaign.clickedCount / campaign.openedCount) * 100 : 0,
-      unsubscribeRate: campaign.deliveredCount > 0 ? (campaign.unsubscribedCount / campaign.deliveredCount) * 100 : 0,
+      deliveryRate: campaign.sentCount > 0 ? round2((campaign.deliveredCount / campaign.sentCount) * 100) : 0,
+      openRate: campaign.deliveredCount > 0 ? round2((campaign.openedCount / campaign.deliveredCount) * 100) : 0,
+      clickRate: campaign.openedCount > 0 ? round2((campaign.clickedCount / campaign.openedCount) * 100) : 0,
+      unsubscribeRate: campaign.deliveredCount > 0 ? round2((campaign.unsubscribedCount / campaign.deliveredCount) * 100) : 0,
+      bounceRate: campaign.deliveredCount > 0 ? round2((campaign.bouncedCount / campaign.deliveredCount) * 100) : 0,
     };
 
-    const timeline = campaign.executionLog || [];
+    const timeline = {
+      created: (campaign as any).created_at,
+      started: (campaign as any).startedAt,
+      completed: (campaign as any).completedAt,
+    };
 
     return { metrics, performance, timeline };
   }

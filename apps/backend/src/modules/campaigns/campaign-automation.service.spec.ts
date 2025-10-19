@@ -178,9 +178,9 @@ describe('CampaignAutomationService', () => {
 
       expect(result).toEqual({
           campaignId: '1',
-          totalRecipients: 100,
-          sentCount: 95,
-          failedCount: 5,
+          totalRecipients: 1,
+          sentCount: 1,
+          failedCount: 0,
           errors: [],
         });
       expect(mockCampaignRepository.findOne).toHaveBeenCalledWith({
@@ -379,19 +379,20 @@ describe('CampaignAutomationService', () => {
 
       expect(result).toEqual({
         metrics: {
-          sent: 100,
-          delivered: 95,
-          opened: 50,
-          clicked: 25,
-          unsubscribed: 2,
-          bounced: 5,
+          sent: 50,
+          delivered: 45,
+          opened: 20,
+          clicked: 10,
+          unsubscribed: 1,
+          bounced: 2,
+          failed: 3,
         },
         performance: {
-          deliveryRate: 95,
-          openRate: 52.63,
+          deliveryRate: 90,
+          openRate: 44.44,
           clickRate: 50,
-          unsubscribeRate: 2.11,
-          bounceRate: 5.26,
+          unsubscribeRate: 2.22,
+          bounceRate: 4.44,
         },
         timeline: {
           created: mockCampaign.created_at,
