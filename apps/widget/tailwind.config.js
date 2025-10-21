@@ -1,9 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    './src/**/*.{js,ts,jsx,tsx}',
-    './embed.html',
-  ],
+  content: ['./src/**/*.{js,ts,jsx,tsx}', './embed.html'],
   prefix: 'tw-', // Prefix to avoid conflicts with parent site
   important: '#tekassist-widget-root', // Scope styles to widget container
   theme: {
@@ -71,25 +68,31 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans: ['var(--tekassist-font-family, ui-sans-serif)', 'system-ui', 'sans-serif'],
+        sans: [
+          'var(--tekassist-font-family, ui-sans-serif)',
+          'system-ui',
+          'sans-serif',
+        ],
       },
       fontSize: {
-        'xs': ['0.75rem', { lineHeight: '1rem' }],
-        'sm': ['0.875rem', { lineHeight: '1.25rem' }],
-        'base': ['1rem', { lineHeight: '1.5rem' }],
-        'lg': ['1.125rem', { lineHeight: '1.75rem' }],
-        'xl': ['1.25rem', { lineHeight: '1.75rem' }],
+        xs: ['0.75rem', { lineHeight: '1rem' }],
+        sm: ['0.875rem', { lineHeight: '1.25rem' }],
+        base: ['1rem', { lineHeight: '1.5rem' }],
+        lg: ['1.125rem', { lineHeight: '1.75rem' }],
+        xl: ['1.25rem', { lineHeight: '1.75rem' }],
       },
       spacing: {
-        '18': '4.5rem',
-        '88': '22rem',
+        18: '4.5rem',
+        88: '22rem',
       },
       borderRadius: {
-        'widget': 'var(--tekassist-border-radius, 0.75rem)',
+        widget: 'var(--tekassist-border-radius, 0.75rem)',
       },
       boxShadow: {
-        'widget': 'var(--tekassist-shadow, 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05))',
-        'widget-lg': 'var(--tekassist-shadow-lg, 0 25px 50px -12px rgba(0, 0, 0, 0.25))',
+        widget:
+          'var(--tekassist-shadow, 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05))',
+        'widget-lg':
+          'var(--tekassist-shadow-lg, 0 25px 50px -12px rgba(0, 0, 0, 0.25))',
       },
       animation: {
         'fade-in': 'fadeIn 0.2s ease-in-out',
@@ -118,18 +121,19 @@ module.exports = {
     },
   },
   plugins: [
-    function({ addBase, addUtilities }) {
+    function ({ addBase, addUtilities }) {
       addBase({
         '#tekassist-widget-root': {
           '--tekassist-z-index': '9999',
-          fontFamily: 'var(--tekassist-font-family, ui-sans-serif, system-ui, sans-serif)',
+          fontFamily:
+            'var(--tekassist-font-family, ui-sans-serif, system-ui, sans-serif)',
           fontSize: '14px',
           lineHeight: '1.5',
           color: 'var(--tekassist-text-color, #1f2937)',
           backgroundColor: 'var(--tekassist-background-color, #ffffff)',
         },
       });
-      
+
       addUtilities({
         '.widget-container': {
           position: 'fixed',
@@ -137,7 +141,8 @@ module.exports = {
           fontFamily: 'inherit',
         },
         '.widget-shadow': {
-          boxShadow: 'var(--tekassist-shadow, 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05))',
+          boxShadow:
+            'var(--tekassist-shadow, 0 10px 25px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05))',
         },
         '.widget-border': {
           borderRadius: 'var(--tekassist-border-radius, 0.75rem)',

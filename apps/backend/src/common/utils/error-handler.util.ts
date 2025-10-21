@@ -33,11 +33,11 @@ export class ErrorHandlerUtil {
       return await operation();
     } catch (error) {
       this.logError(error, context);
-      
+
       if (fallback !== undefined) {
         return fallback;
       }
-      
+
       throw this.transformError(error, context);
     }
   }
@@ -51,37 +51,37 @@ export class ErrorHandlerUtil {
     options: RetryOptions,
   ): Promise<T> {
     let lastError: any;
-    
+
     for (let attempt = 1; attempt <= options.maxAttempts; attempt++) {
       try {
         return await operation();
       } catch (error) {
         lastError = error;
-        
+
         // Check if we should retry this error
         if (options.retryCondition && !options.retryCondition(error)) {
           break;
         }
-        
+
         // Don't retry on the last attempt
         if (attempt === options.maxAttempts) {
           break;
         }
-        
+
         // Calculate delay
-        const delay = options.exponentialBackoff 
+        const delay = options.exponentialBackoff
           ? options.delay * Math.pow(2, attempt - 1)
           : options.delay;
-        
+
         this.logger.warn(
           `Attempt ${attempt}/${options.maxAttempts} failed for ${context.service}.${context.method}. Retrying in ${delay}ms`,
-          { error: error.message, context }
+          { error: error.message, context },
         );
-        
+
         await this.sleep(delay);
       }
     }
-    
+
     this.logError(lastError, { ...context, finalAttempt: true });
     throw this.transformError(lastError, context);
   }
@@ -100,7 +100,7 @@ export class ErrorHandlerUtil {
         this.logDatabaseError(error, context);
         throw this.transformDatabaseError(error);
       }
-      
+
       this.logError(error, context);
       throw this.transformError(error, context);
     }
@@ -128,10 +128,10 @@ export class ErrorHandlerUtil {
         maxAttempts: 3,
         delay: 1000,
         exponentialBackoff: true,
-        retryCondition: (error) => this.isRetryableError(error),
+        retryCondition: error => this.isRetryableError(error),
         ...retryOptions,
       };
-      
+
       return this.retryAsync(wrappedOperation, context, defaultRetryOptions);
     }
 
@@ -141,7 +141,10 @@ export class ErrorHandlerUtil {
   /**
    * Transform errors into appropriate HTTP exceptions
    */
-  private static transformError(error: any, context: ErrorContext): HttpException {
+  private static transformError(
+    error: any,
+    context: ErrorContext,
+  ): HttpException {
     // Already an HTTP exception
     if (error instanceof HttpException) {
       return error;
@@ -173,10 +176,7 @@ export class ErrorHandlerUtil {
 
     // Authorization errors
     if (this.isAuthorizationError(error)) {
-      return new HttpException(
-        'Access denied',
-        HttpStatus.FORBIDDEN,
-      );
+      return new HttpException('Access denied', HttpStatus.FORBIDDEN);
     }
 
     // Default to internal server error
@@ -189,14 +189,16 @@ export class ErrorHandlerUtil {
   /**
    * Transform database errors into appropriate HTTP exceptions
    */
-  private static transformDatabaseError(error: QueryFailedError): HttpException {
+  private static transformDatabaseError(
+    error: QueryFailedError,
+  ): HttpException {
     const message = error.message.toLowerCase();
 
-    if (message.includes('unique constraint') || message.includes('duplicate')) {
-      return new HttpException(
-        'Resource already exists',
-        HttpStatus.CONFLICT,
-      );
+    if (
+      message.includes('unique constraint') ||
+      message.includes('duplicate')
+    ) {
+      return new HttpException('Resource already exists', HttpStatus.CONFLICT);
     }
 
     if (message.includes('foreign key constraint')) {
@@ -246,16 +248,25 @@ export class ErrorHandlerUtil {
     };
 
     if (error instanceof HttpException && error.getStatus() < 500) {
-      this.logger.warn(`Client error in ${context.service}.${context.method}`, logData);
+      this.logger.warn(
+        `Client error in ${context.service}.${context.method}`,
+        logData,
+      );
     } else {
-      this.logger.error(`Server error in ${context.service}.${context.method}`, logData);
+      this.logger.error(
+        `Server error in ${context.service}.${context.method}`,
+        logData,
+      );
     }
   }
 
   /**
    * Log database errors with query context
    */
-  private static logDatabaseError(error: QueryFailedError, context: ErrorContext): void {
+  private static logDatabaseError(
+    error: QueryFailedError,
+    context: ErrorContext,
+  ): void {
     const logData = {
       service: context.service,
       method: context.method,
@@ -272,7 +283,10 @@ export class ErrorHandlerUtil {
       timestamp: new Date().toISOString(),
     };
 
-    this.logger.error(`Database error in ${context.service}.${context.method}`, logData);
+    this.logger.error(
+      `Database error in ${context.service}.${context.method}`,
+      logData,
+    );
   }
 
   /**
@@ -315,8 +329,8 @@ export class ErrorHandlerUtil {
       'EHOSTUNREACH',
     ];
 
-    return networkErrors.some(code => 
-      error.code === code || error.message?.includes(code)
+    return networkErrors.some(
+      code => error.code === code || error.message?.includes(code),
     );
   }
 
@@ -324,27 +338,30 @@ export class ErrorHandlerUtil {
    * Check if error is a validation error
    */
   private static isValidationError(error: any): boolean {
-    return error.name === 'ValidationError' || 
-           error.name === 'ValidatorError' ||
-           error.message?.includes('validation');
+    return (
+      error.name === 'ValidationError' ||
+      error.name === 'ValidatorError' ||
+      error.message?.includes('validation')
+    );
   }
 
   /**
    * Check if error is an authentication error
    */
   private static isAuthError(error: any): boolean {
-    return error.name === 'UnauthorizedError' ||
-           error.name === 'JsonWebTokenError' ||
-           error.name === 'TokenExpiredError' ||
-           error.status === 401;
+    return (
+      error.name === 'UnauthorizedError' ||
+      error.name === 'JsonWebTokenError' ||
+      error.name === 'TokenExpiredError' ||
+      error.status === 401
+    );
   }
 
   /**
    * Check if error is an authorization error
    */
   private static isAuthorizationError(error: any): boolean {
-    return error.name === 'ForbiddenError' ||
-           error.status === 403;
+    return error.name === 'ForbiddenError' || error.status === 403;
   }
 
   /**

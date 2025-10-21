@@ -2,7 +2,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import { createRoot, Root } from 'react-dom/client';
 import { ChatWidgetStandalone } from './chat-widget-standalone';
 import { WidgetMessaging, WidgetMessageTypes } from '../utils/widget-messaging';
-import { WidgetConfig, WidgetProps, WidgetState, WidgetCallbacks } from './widget-types';
+import {
+  WidgetConfig,
+  WidgetProps,
+  WidgetState,
+  WidgetCallbacks,
+} from './widget-types';
 
 export class TekAssistWidget {
   private container: HTMLElement;
@@ -27,7 +32,7 @@ export class TekAssistWidget {
     this.container = options.container;
     this.widgetId = `tekassist-widget-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     this.messaging = new WidgetMessaging();
-    
+
     this.setupMessaging();
     this.init();
   }
@@ -36,12 +41,20 @@ export class TekAssistWidget {
     // Listen for parent messages
     this.messaging.subscribe(WidgetMessageTypes.OPEN, () => this.open());
     this.messaging.subscribe(WidgetMessageTypes.CLOSE, () => this.close());
-    this.messaging.subscribe(WidgetMessageTypes.MINIMIZE, () => this.minimize());
-    this.messaging.subscribe(WidgetMessageTypes.MAXIMIZE, () => this.maximize());
-    this.messaging.subscribe(WidgetMessageTypes.MESSAGE, (data) => this.sendMessage(data.data?.message));
-    this.messaging.subscribe(WidgetMessageTypes.CONFIG_UPDATE, (data) => this.updateConfig(data.data?.config));
+    this.messaging.subscribe(WidgetMessageTypes.MINIMIZE, () =>
+      this.minimize(),
+    );
+    this.messaging.subscribe(WidgetMessageTypes.MAXIMIZE, () =>
+      this.maximize(),
+    );
+    this.messaging.subscribe(WidgetMessageTypes.MESSAGE, data =>
+      this.sendMessage(data.data?.message),
+    );
+    this.messaging.subscribe(WidgetMessageTypes.CONFIG_UPDATE, data =>
+      this.updateConfig(data.data?.config),
+    );
     // Note: No RESET type in enum, using STATUS_CHANGE for reset functionality
-    this.messaging.subscribe(WidgetMessageTypes.STATUS_CHANGE, (data) => {
+    this.messaging.subscribe(WidgetMessageTypes.STATUS_CHANGE, data => {
       if (data.data?.action === 'reset') {
         this.reset();
       }
@@ -54,44 +67,47 @@ export class TekAssistWidget {
     try {
       // Load configuration
       await this.loadConfig();
-      
+
       // Create React root
       this.root = createRoot(this.container);
-      
+
       // Render widget
       this.renderWidget();
-      
-      this.isInitialized = true;
-      
-      // Emit widget ready event
-    this.messaging.emit(WidgetMessageTypes.READY, {
-      widgetId: this.widgetId,
-      config: this.config,
-    });
 
-    // Emit widget open event
-    this.messaging.emit(WidgetMessageTypes.OPEN, {
-      widgetId: this.widgetId,
-    });
+      this.isInitialized = true;
+
+      // Emit widget ready event
+      this.messaging.emit(WidgetMessageTypes.READY, {
+        widgetId: this.widgetId,
+        config: this.config,
+      });
+
+      // Emit widget open event
+      this.messaging.emit(WidgetMessageTypes.OPEN, {
+        widgetId: this.widgetId,
+      });
 
       // Auto-open if configured
       if (this.config?.behavior?.autoOpen) {
         const delay = this.config.behavior.autoOpenDelay || 0;
         setTimeout(() => this.open(), delay);
       }
-
     } catch (error) {
       console.error('Failed to initialize widget:', error);
       this.messaging.sendToParent({
         type: WidgetMessageTypes.ERROR,
-        data: { error: error instanceof Error ? error.message : 'Unknown error' },
+        data: {
+          error: error instanceof Error ? error.message : 'Unknown error',
+        },
       });
     }
   }
 
   private async loadConfig(): Promise<void> {
     try {
-      const response = await fetch(`${this.options.apiUrl}/widget-config/public/${this.options.tenantId}`);
+      const response = await fetch(
+        `${this.options.apiUrl}/widget-config/public/${this.options.tenantId}`,
+      );
       if (response.ok) {
         this.config = await response.json();
       } else {
@@ -144,33 +160,33 @@ export class TekAssistWidget {
     if (!this.root || !this.config) return;
 
     const callbacks: WidgetCallbacks = {
-      onMessage: (message) => {
+      onMessage: message => {
         this.options.onMessage?.(message);
         this.messaging.sendToParent({
           type: WidgetMessageTypes.MESSAGE,
-          data: this.state
+          data: this.state,
         });
       },
-      onStateChange: (newState) => {
+      onStateChange: newState => {
         this.state = { ...this.state, ...newState };
         this.options.onStateChange?.(this.state);
         this.messaging.sendToParent({
           type: WidgetMessageTypes.STATUS_CHANGE,
-          data: this.state
+          data: this.state,
         });
       },
-      onError: (error) => {
+      onError: error => {
         this.options.onError?.(error);
         this.messaging.sendToParent({
           type: WidgetMessageTypes.ERROR,
-          data: error
+          data: error,
         });
       },
-      onResize: (dimensions) => {
+      onResize: dimensions => {
         this.options.onResize?.(dimensions);
         this.messaging.sendToParent({
           type: WidgetMessageTypes.RESIZE,
-          data: dimensions
+          data: dimensions,
         });
       },
     };
@@ -185,7 +201,7 @@ export class TekAssistWidget {
         metadata: this.options.metadata,
         initialState: this.state,
         callbacks,
-      })
+      }),
     );
   }
 
@@ -248,14 +264,20 @@ export class TekAssistWidget {
   /**
    * Subscribe to widget events
    */
-  public subscribe(type: WidgetMessageTypes, handler: (message: any) => void): () => void {
+  public subscribe(
+    type: WidgetMessageTypes,
+    handler: (message: any) => void,
+  ): () => void {
     return this.messaging.subscribe(type, handler);
   }
 
   /**
    * Unsubscribe from widget events
    */
-  public unsubscribe(type: WidgetMessageTypes, handler: (message: any) => void): void {
+  public unsubscribe(
+    type: WidgetMessageTypes,
+    handler: (message: any) => void,
+  ): void {
     this.messaging.unsubscribe(type, handler);
   }
 

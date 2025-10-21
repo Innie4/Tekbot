@@ -4,18 +4,18 @@ import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { GlassCard } from '@/components/ui/glass-card';
 import { Button } from '@/components/ui/button';
-import { 
-  LayoutDashboard, 
-  Users, 
-  Settings, 
-  HelpCircle, 
-  BarChart3, 
+import {
+  LayoutDashboard,
+  Users,
+  Settings,
+  HelpCircle,
+  BarChart3,
   MessageSquare,
   Puzzle,
   Menu,
   X,
   FileText,
-  LogOut
+  LogOut,
 } from 'lucide-react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -86,7 +86,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                   <X className="h-5 w-5" />
                 </Button>
               </div>
-              
+
               <nav className="flex-1 space-y-2">
                 {sidebarItems.map((item) => (
                   <Link
@@ -99,7 +99,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                   </Link>
                 ))}
               </nav>
-              
+
               <div className="mt-auto space-y-3">
                 <GlassCard className="p-4">
                   <p className="text-sm text-muted-foreground mb-2">Need help?</p>
@@ -141,7 +141,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
               </Button>
               <h1 className="text-lg font-semibold">Admin Dashboard</h1>
             </div>
-            
+
             <div className="flex items-center gap-2">
               <TenantSelector />
               <Button variant="outline" size="sm">
@@ -173,7 +173,15 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
                     <span>{item.label}</span>
                   </Link>
                 ))}
-                <Button variant="destructive" size="sm" className="w-full" onClick={() => { setMobileMenuOpen(false); handleLogout(); }}>
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  className="w-full"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    handleLogout();
+                  }}
+                >
                   <LogOut className="h-4 w-4 mr-2" /> Logout
                 </Button>
               </nav>
@@ -182,9 +190,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
         </AnimatePresence>
 
         {/* Main Content */}
-        <main className="flex-1 p-4 md:p-6 overflow-auto">
-          {children}
-        </main>
+        <main className="flex-1 p-4 md:p-6 overflow-auto">{children}</main>
       </div>
     </div>
   );

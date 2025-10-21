@@ -2,7 +2,19 @@
 
 import { motion } from 'framer-motion';
 import { GlassCard } from '@/components/ui/glass-card';
-import { Zap, Clock, MessageSquare, BrainCircuit, Sparkles, Gauge, FileText, RefreshCcw, Palette, BarChart3, Calendar } from 'lucide-react';
+import {
+  Zap,
+  Clock,
+  MessageSquare,
+  BrainCircuit,
+  Sparkles,
+  Gauge,
+  FileText,
+  RefreshCcw,
+  Palette,
+  BarChart3,
+  Calendar,
+} from 'lucide-react';
 
 const features = [
   {
@@ -44,7 +56,10 @@ export default function FeatureShowcase() {
           className="text-center mb-16"
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Powerful <span className="bg-gradient-to-r from-electric-blue to-electric-cyan bg-clip-text text-transparent">Features</span>
+            Powerful{' '}
+            <span className="bg-gradient-to-r from-electric-blue to-electric-cyan bg-clip-text text-transparent">
+              Features
+            </span>
           </h2>
           <p className="text-xl text-foreground/70 max-w-2xl mx-auto">
             Discover how our AI assistant transforms your technical support experience

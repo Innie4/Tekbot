@@ -61,7 +61,10 @@ export default function PricingSection() {
           className="text-center mb-16"
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Simple <span className="bg-gradient-to-r from-electric-blue to-electric-cyan bg-clip-text text-transparent">Pricing</span>
+            Simple{' '}
+            <span className="bg-gradient-to-r from-electric-blue to-electric-cyan bg-clip-text text-transparent">
+              Pricing
+            </span>
           </h2>
           <p className="text-xl text-foreground/70 max-w-2xl mx-auto">
             Choose the plan that fits your needs and get started with TekAssist today
@@ -78,7 +81,7 @@ export default function PricingSection() {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="flex"
             >
-              <GlassCard 
+              <GlassCard
                 className={`flex flex-col h-full p-6 ${plan.highlighted ? 'border-electric-blue' : ''}`}
                 variant={plan.highlighted ? 'default' : 'solid'}
               >
@@ -90,7 +93,7 @@ export default function PricingSection() {
                     <span className="text-foreground/70 ml-1">{plan.period}</span>
                   </div>
                 </div>
-                
+
                 <ul className="space-y-3 mb-8 flex-grow">
                   {plan.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className="flex items-start">
@@ -99,11 +102,8 @@ export default function PricingSection() {
                     </li>
                   ))}
                 </ul>
-                
-                <Button 
-                  variant={plan.highlighted ? 'glass' : 'outline'}
-                  className="w-full mt-auto"
-                >
+
+                <Button variant={plan.highlighted ? 'glass' : 'outline'} className="w-full mt-auto">
                   Get Started
                 </Button>
               </GlassCard>

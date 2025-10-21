@@ -1,5 +1,10 @@
 import { Controller, Get, Put, Body, UseGuards, Req } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -32,7 +37,10 @@ export class SettingsController {
   @Get('general')
   @Roles('tenant_admin')
   @ApiOperation({ summary: 'Get general settings for current tenant' })
-  @ApiResponse({ status: 200, description: 'General settings retrieved successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'General settings retrieved successfully',
+  })
   async getGeneral(@Req() req: any): Promise<GeneralSettingsDto> {
     const tenant = await this.tenantsService.findOne(req.tenant.id);
     const defaults: GeneralSettingsDto = {
@@ -42,14 +50,18 @@ export class SettingsController {
       darkMode: true,
       enableAnalytics: true,
     };
-    const current = (tenant.settings?.general ?? {}) as Partial<GeneralSettingsDto>;
+    const current = (tenant.settings?.general ??
+      {}) as Partial<GeneralSettingsDto>;
     return { ...defaults, ...current };
   }
 
   @Put('general')
   @Roles('tenant_admin')
   @ApiOperation({ summary: 'Update general settings for current tenant' })
-  @ApiResponse({ status: 200, description: 'General settings updated successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'General settings updated successfully',
+  })
   async updateGeneral(@Req() req: any, @Body() dto: GeneralSettingsDto) {
     await this.tenantsService.updateSettings(req.tenant.id, { general: dto });
     const updated = await this.tenantsService.findOne(req.tenant.id);
@@ -59,7 +71,10 @@ export class SettingsController {
   @Get('api')
   @Roles('tenant_admin')
   @ApiOperation({ summary: 'Get API settings for current tenant' })
-  @ApiResponse({ status: 200, description: 'API settings retrieved successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'API settings retrieved successfully',
+  })
   async getApi(@Req() req: any): Promise<ApiSettingsDto> {
     const tenant = await this.tenantsService.findOne(req.tenant.id);
     const defaults: ApiSettingsDto = {
@@ -76,7 +91,10 @@ export class SettingsController {
   @Put('api')
   @Roles('tenant_admin')
   @ApiOperation({ summary: 'Update API settings for current tenant' })
-  @ApiResponse({ status: 200, description: 'API settings updated successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'API settings updated successfully',
+  })
   async updateApi(@Req() req: any, @Body() dto: ApiSettingsDto) {
     await this.tenantsService.updateSettings(req.tenant.id, { api: dto });
     const updated = await this.tenantsService.findOne(req.tenant.id);

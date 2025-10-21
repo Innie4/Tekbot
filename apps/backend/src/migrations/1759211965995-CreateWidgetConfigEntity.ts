@@ -1,10 +1,11 @@
-import { MigrationInterface, QueryRunner } from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class CreateWidgetConfigEntity1759211965995 implements MigrationInterface {
-
-    public async up(queryRunner: QueryRunner): Promise<void> {
-        // Create widget_configs table
-        await queryRunner.query(`
+export class CreateWidgetConfigEntity1759211965995
+  implements MigrationInterface
+{
+  public async up(queryRunner: QueryRunner): Promise<void> {
+    // Create widget_configs table
+    await queryRunner.query(`
             CREATE TABLE "widget_configs" (
                 "id" uuid NOT NULL DEFAULT uuid_generate_v4(),
                 "tenantId" character varying NOT NULL,
@@ -25,32 +26,37 @@ export class CreateWidgetConfigEntity1759211965995 implements MigrationInterface
             )
         `);
 
-        // Create index for tenantId
-        await queryRunner.query(`CREATE INDEX "IDX_widget_configs_tenantId" ON "widget_configs" ("tenantId")`);
+    // Create index for tenantId
+    await queryRunner.query(
+      `CREATE INDEX "IDX_widget_configs_tenantId" ON "widget_configs" ("tenantId")`,
+    );
 
-        // Add foreign key constraint
-        await queryRunner.query(`
+    // Add foreign key constraint
+    await queryRunner.query(`
             ALTER TABLE "widget_configs" 
             ADD CONSTRAINT "FK_widget_configs_tenant" 
             FOREIGN KEY ("tenantId") REFERENCES "tenants"("id") ON DELETE CASCADE
         `);
 
-        // Create unique constraint for one config per tenant
-        await queryRunner.query(`
+    // Create unique constraint for one config per tenant
+    await queryRunner.query(`
             ALTER TABLE "widget_configs" 
             ADD CONSTRAINT "UQ_widget_configs_tenantId" 
             UNIQUE ("tenantId")
         `);
-    }
+  }
 
-    public async down(queryRunner: QueryRunner): Promise<void> {
-        // Drop constraints and indexes
-        await queryRunner.query(`ALTER TABLE "widget_configs" DROP CONSTRAINT "UQ_widget_configs_tenantId"`);
-        await queryRunner.query(`ALTER TABLE "widget_configs" DROP CONSTRAINT "FK_widget_configs_tenant"`);
-        await queryRunner.query(`DROP INDEX "IDX_widget_configs_tenantId"`);
-        
-        // Drop table
-        await queryRunner.query(`DROP TABLE "widget_configs"`);
-    }
+  public async down(queryRunner: QueryRunner): Promise<void> {
+    // Drop constraints and indexes
+    await queryRunner.query(
+      `ALTER TABLE "widget_configs" DROP CONSTRAINT "UQ_widget_configs_tenantId"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "widget_configs" DROP CONSTRAINT "FK_widget_configs_tenant"`,
+    );
+    await queryRunner.query(`DROP INDEX "IDX_widget_configs_tenantId"`);
 
+    // Drop table
+    await queryRunner.query(`DROP TABLE "widget_configs"`);
+  }
 }

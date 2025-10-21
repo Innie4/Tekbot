@@ -40,7 +40,9 @@ interface JoinRoomData {
   },
   namespace: '/chat',
 })
-export class WebSocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
+export class WebSocketGateway
+  implements OnGatewayConnection, OnGatewayDisconnect
+{
   @WebSocketServer()
   server: Server;
 
@@ -72,9 +74,9 @@ export class WebSocketGateway implements OnGatewayConnection, OnGatewayDisconnec
     try {
       const roomId = `${data.tenantId}_${data.sessionId}`;
       await client.join(roomId);
-      
+
       this.logger.log(`Client ${client.id} joined room ${roomId}`);
-      
+
       // Store client metadata
       client.data = {
         tenantId: data.tenantId,
@@ -143,7 +145,11 @@ export class WebSocketGateway implements OnGatewayConnection, OnGatewayDisconnec
         },
       };
 
-      await this.conversationsService.addMessage(conversationId, tenantId, userMessageData);
+      await this.conversationsService.addMessage(
+        conversationId,
+        tenantId,
+        userMessageData,
+      );
 
       // Broadcast user message to room
       this.server.to(roomId).emit('message_received', {
@@ -153,10 +159,20 @@ export class WebSocketGateway implements OnGatewayConnection, OnGatewayDisconnec
       });
 
       // Attempt lead capture based on message content/metadata
-      await this.captureLeadIfApplicable(message, tenantId, customerId, conversationId, roomId);
+      await this.captureLeadIfApplicable(
+        message,
+        tenantId,
+        customerId,
+        conversationId,
+        roomId,
+      );
 
       // Generate AI response
-      const aiResponse = await this.generateAIResponse(message.content, conversationId, tenantId);
+      const aiResponse = await this.generateAIResponse(
+        message.content,
+        conversationId,
+        tenantId,
+      );
 
       // Save AI response
       const aiMessageData = {
@@ -173,7 +189,11 @@ export class WebSocketGateway implements OnGatewayConnection, OnGatewayDisconnec
         },
       };
 
-      await this.conversationsService.addMessage(conversationId, tenantId, aiMessageData);
+      await this.conversationsService.addMessage(
+        conversationId,
+        tenantId,
+        aiMessageData,
+      );
 
       // Send AI response to room (both legacy and widget alias events)
       const aiMessage: ChatMessage = {
@@ -204,9 +224,11 @@ export class WebSocketGateway implements OnGatewayConnection, OnGatewayDisconnec
         message: message.content,
         timestamp: new Date(),
       });
-
     } catch (error) {
-      this.logger.error(`Error handling message: ${error.message}`, error.stack);
+      this.logger.error(
+        `Error handling message: ${error.message}`,
+        error.stack,
+      );
       client.emit('error', { message: 'Failed to send message' });
     }
   }
@@ -238,7 +260,8 @@ export class WebSocketGateway implements OnGatewayConnection, OnGatewayDisconnec
 
   @SubscribeMessage('get_conversation_history')
   async handleGetHistory(
-    @MessageBody() data: { conversationId: string; limit?: number; offset?: number },
+    @MessageBody()
+    data: { conversationId: string; limit?: number; offset?: number },
     @ConnectedSocket() client: Socket,
   ) {
     try {
@@ -257,16 +280,25 @@ export class WebSocketGateway implements OnGatewayConnection, OnGatewayDisconnec
     }
   }
 
-  private async generateAIResponse(userMessage: string, conversationId: string, tenantId: string): Promise<string> {
+  private async generateAIResponse(
+    userMessage: string,
+    conversationId: string,
+    tenantId: string,
+  ): Promise<string> {
     try {
       // Get recent conversation history for context
-      const recentMessages = await this.conversationsService.getMessages(conversationId, tenantId, 10);
-      
+      const recentMessages = await this.conversationsService.getMessages(
+        conversationId,
+        tenantId,
+        10,
+      );
+
       // Format messages for OpenAI
       const messages = [
         {
           role: 'system',
-          content: 'You are TekAssist, a helpful AI assistant. Provide concise, helpful responses to user questions.',
+          content:
+            'You are TekAssist, a helpful AI assistant. Provide concise, helpful responses to user questions.',
         },
         ...recentMessages.slice(-5).map(msg => ({
           role: msg.direction === 'outbound' ? 'user' : 'assistant',
@@ -303,16 +335,22 @@ export class WebSocketGateway implements OnGatewayConnection, OnGatewayDisconnec
     roomId: string,
   ): Promise<void> {
     try {
-      const conversation = await this.conversationsService.findOne(conversationId, tenantId);
+      const conversation = await this.conversationsService.findOne(
+        conversationId,
+        tenantId,
+      );
       const alreadyCaptured = conversation.metadata?.leadCaptured;
       if (alreadyCaptured) return;
 
       const meta = message.metadata || {};
       const content = message.content || '';
 
-      const email = meta.email || meta.contact?.email || this.extractEmail(content);
-      const phone = meta.phone || meta.contact?.phone || this.extractPhone(content);
-      const serviceInterest = meta.service_interest || meta.intent || meta.service || meta.product;
+      const email =
+        meta.email || meta.contact?.email || this.extractEmail(content);
+      const phone =
+        meta.phone || meta.contact?.phone || this.extractPhone(content);
+      const serviceInterest =
+        meta.service_interest || meta.intent || meta.service || meta.product;
 
       // Only capture if we have a signal (contact or interest)
       if (!email && !phone && !serviceInterest) {
@@ -332,12 +370,15 @@ export class WebSocketGateway implements OnGatewayConnection, OnGatewayDisconnec
 
         if (!resolvedCustomerId) {
           const name = meta.name || meta.contact?.name || 'Website Visitor';
-          const created = await this.customersService.createForTenant(tenantId, {
-            name,
-            email,
-            phone,
-            preferences: { source: 'widget', ...meta },
-          });
+          const created = await this.customersService.createForTenant(
+            tenantId,
+            {
+              name,
+              email,
+              phone,
+              preferences: { source: 'widget', ...meta },
+            },
+          );
           resolvedCustomerId = created.id;
         }
       }
@@ -351,8 +392,14 @@ export class WebSocketGateway implements OnGatewayConnection, OnGatewayDisconnec
         notes,
       });
 
-      const updatedMetadata = { ...(conversation.metadata || {}), leadCaptured: true, leadId: lead.id };
-      await this.conversationsService.update(conversationId, tenantId, { metadata: updatedMetadata });
+      const updatedMetadata = {
+        ...(conversation.metadata || {}),
+        leadCaptured: true,
+        leadId: lead.id,
+      };
+      await this.conversationsService.update(conversationId, tenantId, {
+        metadata: updatedMetadata,
+      });
 
       // Notify admin systems
       this.server.emit('admin_notification', {
@@ -382,7 +429,7 @@ export class WebSocketGateway implements OnGatewayConnection, OnGatewayDisconnec
 
   // Method to send message to specific tenant
   sendToTenant(tenantId: string, event: string, data: any) {
-    this.connectedClients.forEach((client) => {
+    this.connectedClients.forEach(client => {
       if (client.data?.tenantId === tenantId) {
         client.emit(event, data);
       }

@@ -1,4 +1,8 @@
-import { Injectable, NestMiddleware, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  NestMiddleware,
+  BadRequestException,
+} from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 
 interface TenantInfo {
@@ -45,21 +49,21 @@ export class TenantMiddleware implements NestMiddleware {
 
       // Extract tenant information from request
       const tenantInfo = await this.extractTenantInfo(req);
-      
+
       if (tenantInfo) {
         // Resolve tenant details (in a real app, this would query the database)
         const resolvedTenant = await this.resolveTenant(tenantInfo);
-        
+
         if (resolvedTenant) {
           // Attach tenant info to request
           req.tenant = resolvedTenant;
           req.tenantId = resolvedTenant.id;
           req.tenantSlug = resolvedTenant.slug;
-          
+
           // Set tenant context headers for downstream services
           res.setHeader('X-Tenant-ID', resolvedTenant.id || '');
           res.setHeader('X-Tenant-Slug', resolvedTenant.slug || '');
-          
+
           // Add tenant-specific CORS headers if needed
           this.addTenantCorsHeaders(res, resolvedTenant);
         }
@@ -72,12 +76,14 @@ export class TenantMiddleware implements NestMiddleware {
   }
 
   private shouldSkipTenantResolution(path: string): boolean {
-    return this.excludedPaths.some(excludedPath => 
-      path.startsWith(excludedPath)
+    return this.excludedPaths.some(excludedPath =>
+      path.startsWith(excludedPath),
     );
   }
 
-  private async extractTenantInfo(req: Request): Promise<Partial<TenantInfo> | null> {
+  private async extractTenantInfo(
+    req: Request,
+  ): Promise<Partial<TenantInfo> | null> {
     // Try to get tenant from subdomain
     const host = req.get('host');
     if (host) {
@@ -139,7 +145,7 @@ export class TenantMiddleware implements NestMiddleware {
 
   private extractSubdomain(host: string): string | null {
     const parts = host.split('.');
-    
+
     // For localhost development
     if (host.includes('localhost') || host.includes('127.0.0.1')) {
       return null;
@@ -153,10 +159,12 @@ export class TenantMiddleware implements NestMiddleware {
     return null;
   }
 
-  private async resolveTenant(tenantInfo: Partial<TenantInfo>): Promise<TenantInfo | null> {
+  private async resolveTenant(
+    tenantInfo: Partial<TenantInfo>,
+  ): Promise<TenantInfo | null> {
     // In a real application, this would query the database
     // For now, we'll return a mock tenant
-    
+
     try {
       // Mock tenant resolution logic
       const mockTenant: TenantInfo = {
@@ -180,7 +188,9 @@ export class TenantMiddleware implements NestMiddleware {
 
       // Validate tenant status
       if (mockTenant.status !== 'active') {
-        throw new BadRequestException(`Tenant '${tenantInfo.identifier}' is not active`);
+        throw new BadRequestException(
+          `Tenant '${tenantInfo.identifier}' is not active`,
+        );
       }
 
       return mockTenant;
@@ -198,7 +208,7 @@ export class TenantMiddleware implements NestMiddleware {
         `https://${tenant.domain}`,
         `https://www.${tenant.domain}`,
       ];
-      
+
       // In a real app, you'd check the origin against allowed origins
       res.setHeader('Access-Control-Allow-Origin', allowedOrigins.join(', '));
     }

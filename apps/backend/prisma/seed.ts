@@ -4,8 +4,16 @@ import { hash } from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 
 // Entities
-import { Tenant, TenantPlan, TenantStatus } from '../src/modules/tenants/entities/tenant.entity';
-import { User, UserRole, UserStatus } from '../src/modules/users/entities/user.entity';
+import {
+  Tenant,
+  TenantPlan,
+  TenantStatus,
+} from '../src/modules/tenants/entities/tenant.entity';
+import {
+  User,
+  UserRole,
+  UserStatus,
+} from '../src/modules/users/entities/user.entity';
 import { Customer } from '../src/modules/customers/entities/customer.entity';
 import { Conversation } from '../src/modules/conversations/entities/conversation.entity';
 import { Message } from '../src/modules/messages/entities/message.entity';
@@ -98,7 +106,11 @@ async function upsertWidgetConfig(ds: DataSource, tenantId: string) {
   return repo.save(config);
 }
 
-async function createConversationWithMessage(ds: DataSource, tenantId: string, customerId: string) {
+async function createConversationWithMessage(
+  ds: DataSource,
+  tenantId: string,
+  customerId: string,
+) {
   const convoRepo = ds.getRepository(Conversation);
   const msgRepo = ds.getRepository(Message);
 
@@ -155,7 +167,7 @@ async function main() {
 
 main()
   .then(() => process.exit(0))
-  .catch((err) => {
+  .catch(err => {
     console.error('Seeding failed:', err);
     process.exit(1);
   });

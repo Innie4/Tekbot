@@ -1,22 +1,22 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
 
 interface Message {
-  sender: "bot" | "user";
+  sender: 'bot' | 'user';
   text: string;
   timestamp?: Date;
 }
 
 export default function ChatWidget() {
   const [messages, setMessages] = useState<Message[]>([
-    { sender: "bot", text: "Hi! I'm TekAssist. How can I help you today?" }
+    { sender: 'bot', text: "Hi! I'm TekAssist. How can I help you today?" },
   ]);
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [socket, setSocket] = useState<Socket | null>(null);
   const [sessionId] = useState(`session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`);
   const [conversationId, setConversationId] = useState<string | null>(null);
-  
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -45,11 +45,15 @@ export default function ChatWidget() {
 
     socketInstance.on('message_received', (data: any) => {
       const botMessage: Message = {
-        sender: "bot",
-        text: data.content || data.message || data.response || "Sorry, I couldn't process your request.",
+        sender: 'bot',
+        text:
+          data.content ||
+          data.message ||
+          data.response ||
+          "Sorry, I couldn't process your request.",
         timestamp: new Date(data.timestamp || Date.now()),
       };
-      setMessages(prev => [...prev, botMessage]);
+      setMessages((prev) => [...prev, botMessage]);
       setIsLoading(false);
     });
 
@@ -65,11 +69,11 @@ export default function ChatWidget() {
 
     socketInstance.on('error', (error: any) => {
       console.error('WebSocket error:', error);
-      const errorMessage: Message = { 
-        sender: "bot", 
-        text: "Sorry, I encountered a connection error. Please try again." 
+      const errorMessage: Message = {
+        sender: 'bot',
+        text: 'Sorry, I encountered a connection error. Please try again.',
       };
-      setMessages(prev => [...prev, errorMessage]);
+      setMessages((prev) => [...prev, errorMessage]);
       setIsLoading(false);
     });
 
@@ -82,16 +86,16 @@ export default function ChatWidget() {
 
   const sendMessage = async () => {
     if (!input.trim() || isLoading || !socket) return;
-    
-    const userMessage: Message = { 
-      sender: "user", 
+
+    const userMessage: Message = {
+      sender: 'user',
       text: input.trim(),
-      timestamp: new Date()
+      timestamp: new Date(),
     };
-    setMessages(prev => [...prev, userMessage]);
-    
+    setMessages((prev) => [...prev, userMessage]);
+
     const messageContent = input.trim();
-    setInput("");
+    setInput('');
     setIsLoading(true);
 
     // Send message via WebSocket
@@ -108,11 +112,11 @@ export default function ChatWidget() {
     // Set a timeout to handle cases where no response is received
     setTimeout(() => {
       if (isLoading) {
-        const timeoutMessage: Message = { 
-          sender: "bot", 
-          text: "Sorry, the response is taking longer than expected. Please try again." 
+        const timeoutMessage: Message = {
+          sender: 'bot',
+          text: 'Sorry, the response is taking longer than expected. Please try again.',
         };
-        setMessages(prev => [...prev, timeoutMessage]);
+        setMessages((prev) => [...prev, timeoutMessage]);
         setIsLoading(false);
       }
     }, 30000); // 30 second timeout
@@ -127,8 +131,13 @@ export default function ChatWidget() {
         </div>
         <div className="p-6 h-64 overflow-y-auto bg-background text-foreground rounded-b-xl">
           {messages.map((msg, idx) => (
-            <div key={idx} className={`mb-3 flex ${msg.sender === "bot" ? "justify-start" : "justify-end"}`}>
-              <span className={`inline-block px-4 py-2 rounded-xl shadow ${msg.sender === "bot" ? "bg-glass text-white" : "bg-electric-cyan text-white"}`}>
+            <div
+              key={idx}
+              className={`mb-3 flex ${msg.sender === 'bot' ? 'justify-start' : 'justify-end'}`}
+            >
+              <span
+                className={`inline-block px-4 py-2 rounded-xl shadow ${msg.sender === 'bot' ? 'bg-glass text-white' : 'bg-electric-cyan text-white'}`}
+              >
                 {msg.text}
               </span>
             </div>
@@ -138,8 +147,14 @@ export default function ChatWidget() {
               <span className="inline-block px-4 py-2 rounded-xl shadow bg-glass text-white">
                 <div className="flex items-center space-x-1">
                   <div className="w-2 h-2 bg-white rounded-full animate-bounce"></div>
-                  <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                  <div className="w-2 h-2 bg-white rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                  <div
+                    className="w-2 h-2 bg-white rounded-full animate-bounce"
+                    style={{ animationDelay: '0.1s' }}
+                  ></div>
+                  <div
+                    className="w-2 h-2 bg-white rounded-full animate-bounce"
+                    style={{ animationDelay: '0.2s' }}
+                  ></div>
                 </div>
               </span>
             </div>
@@ -150,9 +165,9 @@ export default function ChatWidget() {
           <input
             className="flex-1 glass-input px-4 py-3 rounded-xl mr-3 text-foreground border border-gray-700 focus:outline-none focus:ring-2 focus:ring-electric-blue"
             value={input}
-            onChange={e => setInput(e.target.value)}
+            onChange={(e) => setInput(e.target.value)}
             placeholder="Type your message..."
-            onKeyDown={e => e.key === "Enter" && sendMessage()}
+            onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
             disabled={isLoading}
           />
           <button
@@ -160,7 +175,7 @@ export default function ChatWidget() {
             onClick={sendMessage}
             disabled={isLoading || !socket}
           >
-            {isLoading ? "..." : "Send"}
+            {isLoading ? '...' : 'Send'}
           </button>
         </div>
       </div>

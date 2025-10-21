@@ -1,4 +1,14 @@
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
+'use client';
+
+import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+} from 'recharts';
 
 const sampleData = [
   { name: 'Mon', volume: 30 },
@@ -10,7 +20,11 @@ const sampleData = [
   { name: 'Sun', volume: 20 },
 ];
 
-export default function ConversationVolumeChart({ data = sampleData }) {
+export default function ConversationVolumeChart({
+  data = sampleData,
+}: {
+  data?: { name: string; volume: number }[];
+}) {
   return (
     <ResponsiveContainer width="100%" height={250}>
       <LineChart data={data}>

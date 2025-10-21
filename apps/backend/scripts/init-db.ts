@@ -21,7 +21,7 @@ async function ensureDatabase() {
   try {
     const result = await pool.query(
       `SELECT 1 FROM pg_database WHERE datname = $1`,
-      [targetDb]
+      [targetDb],
     );
 
     if (result.rowCount === 0) {
@@ -37,7 +37,7 @@ async function ensureDatabase() {
 
 ensureDatabase()
   .then(() => process.exit(0))
-  .catch((err) => {
+  .catch(err => {
     console.error('Failed to ensure database:', err);
     process.exit(1);
   });

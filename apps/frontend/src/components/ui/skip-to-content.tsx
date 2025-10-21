@@ -2,10 +2,7 @@
 
 import { cn } from '@/lib/utils';
 
-export function SkipToContent({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLAnchorElement>) {
+export function SkipToContent({ className, ...props }: React.HTMLAttributes<HTMLAnchorElement>) {
   return (
     <a
       href="#main-content"

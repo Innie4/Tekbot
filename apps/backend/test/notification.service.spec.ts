@@ -1,4 +1,3 @@
-
 import { NotificationService } from '../src/modules/notifications/notification.service';
 
 const mockSmtpService = { sendMail: jest.fn().mockResolvedValue(true) };
@@ -12,7 +11,7 @@ describe('NotificationService', () => {
     service = new NotificationService(
       mockSmtpService as any,
       mockTwilioService as any,
-      mockSlackService as any
+      mockSlackService as any,
     );
   });
 
@@ -20,7 +19,7 @@ describe('NotificationService', () => {
     const result = await service.sendEmail({
       to: 'test@tekbot.com',
       subject: 'Subject',
-      html: '<p>Body</p>'
+      html: '<p>Body</p>',
     });
     expect(result).toBe(true);
   });
@@ -28,7 +27,7 @@ describe('NotificationService', () => {
   it('should send sms', async () => {
     const result = await service.sendSms({
       to: '+1234567890',
-      body: 'Hello'
+      body: 'Hello',
     });
     expect(result).toBe(true);
   });
@@ -36,7 +35,7 @@ describe('NotificationService', () => {
   it('should send slack', async () => {
     const result = await service.sendSlack({
       channel: 'general',
-      text: 'Hello Slack'
+      text: 'Hello Slack',
     });
     expect(result).toBe(true);
   });
@@ -47,12 +46,12 @@ describe('NotificationService', () => {
       tenantId: 'tenant1',
       title: 'Test',
       message: 'Hello In-App',
-      type: 'info'
+      type: 'info',
     });
-    expect(result).toMatchObject({ 
-      userId: 'user1', 
-      message: 'Hello In-App', 
-      delivered: true 
+    expect(result).toMatchObject({
+      userId: 'user1',
+      message: 'Hello In-App',
+      delivered: true,
     });
   });
 });

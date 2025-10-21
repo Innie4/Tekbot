@@ -1,8 +1,18 @@
-import { Injectable, Logger, BadRequestException, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, FindManyOptions, In } from 'typeorm';
 import { EventEmitter2 } from '@nestjs/event-emitter';
-import { Campaign, CampaignStatus, CampaignType, TriggerType } from './entities/campaign.entity';
+import {
+  Campaign,
+  CampaignStatus,
+  CampaignType,
+  TriggerType,
+} from './entities/campaign.entity';
 import { Customer } from '../customers/entities/customer.entity';
 import { CampaignAutomationService } from './campaign-automation.service';
 
@@ -86,7 +96,7 @@ export class CampaignsService {
       type?: CampaignType;
       limit?: number;
       offset?: number;
-    }
+    },
   ): Promise<Campaign[]> {
     // Use a loose type for options to satisfy tests expecting 'createdAt' order key
     const queryOptions: any = {
@@ -113,14 +123,21 @@ export class CampaignsService {
     return this.campaignRepository.find(queryOptions);
   }
 
-  async createForTenant(tenantId: string, dto: CreateCampaignDto, createdBy?: string): Promise<Campaign> {
+  async createForTenant(
+    tenantId: string,
+    dto: CreateCampaignDto,
+    createdBy?: string,
+  ): Promise<Campaign> {
     // Validate campaign data
     this.validateCampaignData(dto);
 
     // Estimate recipients if target audience is specified
     let estimatedRecipients = 0;
     if (dto.targetAudience) {
-      estimatedRecipients = await this.estimateRecipients(tenantId, dto.targetAudience);
+      estimatedRecipients = await this.estimateRecipients(
+        tenantId,
+        dto.targetAudience,
+      );
     }
 
     // Avoid repository.create() to align with tests' mock repository
@@ -137,12 +154,17 @@ export class CampaignsService {
     // Emit event for campaign creation
     this.eventEmitter.emit('campaign.created', savedCampaign);
 
-    this.logger.log(`Campaign created: ${savedCampaign.name} (${savedCampaign.id})`);
+    this.logger.log(
+      `Campaign created: ${savedCampaign.name} (${savedCampaign.id})`,
+    );
     return savedCampaign;
   }
 
-  async findOneForTenant(tenantId: string, id: string): Promise<Campaign | null> {
-    const campaign = await this.campaignRepository.findOne({ 
+  async findOneForTenant(
+    tenantId: string,
+    id: string,
+  ): Promise<Campaign | null> {
+    const campaign = await this.campaignRepository.findOne({
       where: { tenantId, id },
       relations: ['tenant'],
     });
@@ -153,23 +175,33 @@ export class CampaignsService {
   }
 
   async updateForTenant(
-    tenantId: string, 
-    id: string, 
+    tenantId: string,
+    id: string,
     dto: UpdateCampaignDto,
-    updatedBy?: string
+    updatedBy?: string,
   ): Promise<Campaign> {
-    const existing = await this.campaignRepository.findOne({ where: { tenantId, id } });
+    const existing = await this.campaignRepository.findOne({
+      where: { tenantId, id },
+    });
     if (!existing) {
       throw new NotFoundException('Campaign not found');
     }
 
-    if (dto.status && !this.isValidStatusTransition(existing.status, dto.status)) {
-      throw new BadRequestException(`Invalid status transition from ${existing.status} to ${dto.status}`);
+    if (
+      dto.status &&
+      !this.isValidStatusTransition(existing.status, dto.status)
+    ) {
+      throw new BadRequestException(
+        `Invalid status transition from ${existing.status} to ${dto.status}`,
+      );
     }
 
     let estimatedRecipients: number | undefined = existing.estimatedRecipients;
     if (dto.targetAudience) {
-      estimatedRecipients = await this.estimateRecipients(tenantId, dto.targetAudience);
+      estimatedRecipients = await this.estimateRecipients(
+        tenantId,
+        dto.targetAudience,
+      );
     }
 
     const updated = {
@@ -191,7 +223,9 @@ export class CampaignsService {
   }
 
   async removeForTenant(tenantId: string, id: string): Promise<void> {
-    const campaign = await this.campaignRepository.findOne({ where: { tenantId, id } });
+    const campaign = await this.campaignRepository.findOne({
+      where: { tenantId, id },
+    });
     if (!campaign) {
       throw new NotFoundException('Campaign not found');
     }
@@ -211,23 +245,35 @@ export class CampaignsService {
    */
   async launchCampaign(tenantId: string, id: string): Promise<Campaign> {
     const campaign = await this.findOneForTenant(tenantId, id);
-    
+
     if (campaign.status !== CampaignStatus.DRAFT) {
-      throw new BadRequestException(`Campaign must be in draft status to launch`);
+      throw new BadRequestException(
+        `Campaign must be in draft status to launch`,
+      );
     }
 
     let targetStatus: CampaignStatus = CampaignStatus.ACTIVE;
     let startedAt: Date | undefined;
-    
-    if (campaign.triggerType === TriggerType.SCHEDULED && campaign.scheduledAt) {
-      targetStatus = campaign.scheduledAt > new Date() ? CampaignStatus.SCHEDULED : CampaignStatus.ACTIVE;
+
+    if (
+      campaign.triggerType === TriggerType.SCHEDULED &&
+      campaign.scheduledAt
+    ) {
+      targetStatus =
+        campaign.scheduledAt > new Date()
+          ? CampaignStatus.SCHEDULED
+          : CampaignStatus.ACTIVE;
     }
 
     if (targetStatus === CampaignStatus.ACTIVE) {
       startedAt = new Date();
     }
 
-    const updated = { ...campaign, status: targetStatus, startedAt } as Campaign;
+    const updated = {
+      ...campaign,
+      status: targetStatus,
+      startedAt,
+    } as Campaign;
     return this.campaignRepository.save(updated);
   }
 
@@ -256,7 +302,7 @@ export class CampaignsService {
    */
   async getCampaignAnalytics(tenantId: string, id: string): Promise<any> {
     const campaign = await this.findOneForTenant(tenantId, id);
-    
+
     if (!campaign) {
       throw new BadRequestException(`Campaign ${id} not found`);
     }
@@ -274,7 +320,8 @@ export class CampaignsService {
     averageOpenRate: number;
     averageClickRate: number;
   }> {
-    const qb = this.campaignRepository.createQueryBuilder('campaign')
+    const qb = this.campaignRepository
+      .createQueryBuilder('campaign')
       .where('campaign.tenantId = :tenantId', { tenantId })
       .select([
         'COUNT(campaign.id) AS total',
@@ -293,7 +340,8 @@ export class CampaignsService {
     const totalClicked = parseInt(raw?.totalClicked ?? '0', 10);
 
     const averageOpenRate = sent > 0 ? (totalOpened / sent) * 100 : 0;
-    const averageClickRate = totalOpened > 0 ? (totalClicked / totalOpened) * 100 : 0;
+    const averageClickRate =
+      totalOpened > 0 ? (totalClicked / totalOpened) * 100 : 0;
 
     return {
       totalCampaigns: total,
@@ -321,22 +369,36 @@ export class CampaignsService {
     }
 
     if (dto.triggerType === TriggerType.SCHEDULED && !dto.scheduledAt) {
-      throw new BadRequestException('Scheduled campaigns require a scheduled date');
+      throw new BadRequestException(
+        'Scheduled campaigns require a scheduled date',
+      );
     }
 
     if (dto.triggerType === TriggerType.RECURRING && !dto.recurringConfig) {
-      throw new BadRequestException('Recurring campaigns require recurring configuration');
+      throw new BadRequestException(
+        'Recurring campaigns require recurring configuration',
+      );
     }
 
-    if (dto.triggerType === TriggerType.EVENT_BASED && !dto.eventTriggers?.events?.length) {
-      throw new BadRequestException('Event-based campaigns require event triggers');
+    if (
+      dto.triggerType === TriggerType.EVENT_BASED &&
+      !dto.eventTriggers?.events?.length
+    ) {
+      throw new BadRequestException(
+        'Event-based campaigns require event triggers',
+      );
     }
 
     // Validate A/B test configuration
     if (dto.abTestConfig?.enabled) {
-      const totalPercentage = dto.abTestConfig.variants.reduce((sum, v) => sum + v.percentage, 0);
+      const totalPercentage = dto.abTestConfig.variants.reduce(
+        (sum, v) => sum + v.percentage,
+        0,
+      );
       if (totalPercentage !== 100) {
-        throw new BadRequestException('A/B test variant percentages must sum to 100');
+        throw new BadRequestException(
+          'A/B test variant percentages must sum to 100',
+        );
       }
     }
   }
@@ -346,7 +408,7 @@ export class CampaignsService {
    */
   private async estimateRecipients(
     tenantId: string,
-    targetAudience: CreateCampaignDto['targetAudience']
+    targetAudience: CreateCampaignDto['targetAudience'],
   ): Promise<number> {
     if (!targetAudience) {
       return this.customerRepository.count({ where: { tenantId } });
@@ -361,11 +423,14 @@ export class CampaignsService {
 
     // Estimate by segments using query builder (tags as simple-array)
     if (targetAudience.segments?.length) {
-      const qb = this.customerRepository.createQueryBuilder('customer')
+      const qb = this.customerRepository
+        .createQueryBuilder('customer')
         .where('customer.tenantId = :tenantId', { tenantId });
 
       // Use a simple LIKE on the first segment to satisfy test expectations
-      qb.where('customer.tags LIKE :segment', { segment: `%${targetAudience.segments[0]}%` });
+      qb.where('customer.tags LIKE :segment', {
+        segment: `%${targetAudience.segments[0]}%`,
+      });
 
       return qb.getCount();
     }
@@ -382,12 +447,25 @@ export class CampaignsService {
   /**
    * Validate status transitions
    */
-  private isValidStatusTransition(currentStatus: CampaignStatus, newStatus: CampaignStatus): boolean {
+  private isValidStatusTransition(
+    currentStatus: CampaignStatus,
+    newStatus: CampaignStatus,
+  ): boolean {
     const validTransitions: Record<CampaignStatus, CampaignStatus[]> = {
       [CampaignStatus.DRAFT]: [CampaignStatus.SCHEDULED, CampaignStatus.ACTIVE],
-      [CampaignStatus.SCHEDULED]: [CampaignStatus.ACTIVE, CampaignStatus.CANCELLED],
-      [CampaignStatus.ACTIVE]: [CampaignStatus.PAUSED, CampaignStatus.COMPLETED, CampaignStatus.CANCELLED],
-      [CampaignStatus.PAUSED]: [CampaignStatus.ACTIVE, CampaignStatus.CANCELLED],
+      [CampaignStatus.SCHEDULED]: [
+        CampaignStatus.ACTIVE,
+        CampaignStatus.CANCELLED,
+      ],
+      [CampaignStatus.ACTIVE]: [
+        CampaignStatus.PAUSED,
+        CampaignStatus.COMPLETED,
+        CampaignStatus.CANCELLED,
+      ],
+      [CampaignStatus.PAUSED]: [
+        CampaignStatus.ACTIVE,
+        CampaignStatus.CANCELLED,
+      ],
       [CampaignStatus.COMPLETED]: [],
       [CampaignStatus.CANCELLED]: [],
     };
@@ -401,14 +479,19 @@ export class CampaignsService {
   private async handleStatusChange(
     campaign: Campaign,
     oldStatus: CampaignStatus,
-    newStatus: CampaignStatus
+    newStatus: CampaignStatus,
   ): Promise<void> {
     switch (newStatus) {
       case 'active':
         if (campaign.triggerType === TriggerType.MANUAL) {
           // Execute immediately for manual campaigns
-          if (typeof (this.campaignAutomationService as any).executeCampaign === 'function') {
-            await (this.campaignAutomationService as any).executeCampaign(campaign.id);
+          if (
+            typeof (this.campaignAutomationService as any).executeCampaign ===
+            'function'
+          ) {
+            await (this.campaignAutomationService as any).executeCampaign(
+              campaign.id,
+            );
           }
         }
         break;
@@ -420,6 +503,8 @@ export class CampaignsService {
         break;
     }
 
-    this.logger.log(`Campaign ${campaign.id} status changed from ${oldStatus} to ${newStatus}`);
+    this.logger.log(
+      `Campaign ${campaign.id} status changed from ${oldStatus} to ${newStatus}`,
+    );
   }
 }

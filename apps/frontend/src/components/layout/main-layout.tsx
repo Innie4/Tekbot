@@ -20,7 +20,9 @@ export default function MainLayout({ children }: MainLayoutProps) {
     <div className="flex flex-col min-h-screen">
       <SkipToContent />
       <Header />
-      <main id="main-content" className="flex-grow pt-20">{children}</main>
+      <main id="main-content" className="flex-grow pt-20">
+        {children}
+      </main>
       <Footer />
     </div>
   );

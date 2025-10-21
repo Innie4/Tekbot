@@ -31,14 +31,16 @@ export class HttpExceptionFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
-    const request = ctx.getRequest<Request & { user?: any; tenant?: any; requestId?: string }>();
-    
+    const request = ctx.getRequest<
+      Request & { user?: any; tenant?: any; requestId?: string }
+    >();
+
     const status = exception.getStatus();
     const exceptionResponse = exception.getResponse();
-    
+
     // Extract error details
     const errorDetails = this.extractErrorDetails(exceptionResponse);
-    
+
     // Build error response
     const errorResponse: ErrorResponse = {
       statusCode: status,
@@ -69,7 +71,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     // Capture with Sentry for server errors and throttling
     try {
-      if (this.sentry && (status >= 500 || exception instanceof ThrottlerException)) {
+      if (
+        this.sentry &&
+        (status >= 500 || exception instanceof ThrottlerException)
+      ) {
         this.sentry.captureException(exception);
       }
     } catch {}
@@ -78,7 +83,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
     response.status(status).json(errorResponse);
   }
 
-  private extractErrorDetails(exceptionResponse: any): { message: string | string[]; error?: string } {
+  private extractErrorDetails(exceptionResponse: any): {
+    message: string | string[];
+    error?: string;
+  } {
     if (typeof exceptionResponse === 'string') {
       return { message: exceptionResponse };
     }
@@ -93,9 +101,14 @@ export class HttpExceptionFilter implements ExceptionFilter {
     return { message: 'An error occurred' };
   }
 
-  private logError(exception: HttpException, request: Request, errorResponse: ErrorResponse): void {
-    const { statusCode, message, path, requestId, tenantId, userId } = errorResponse;
-    
+  private logError(
+    exception: HttpException,
+    request: Request,
+    errorResponse: ErrorResponse,
+  ): void {
+    const { statusCode, message, path, requestId, tenantId, userId } =
+      errorResponse;
+
     const logContext = {
       statusCode,
       message,
@@ -140,7 +153,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
   private sanitizeHeaders(headers: any): any {
     const sensitiveHeaders = ['authorization', 'cookie', 'x-api-key'];
     const sanitized = { ...headers };
-    
+
     sensitiveHeaders.forEach(header => {
       if (sanitized[header]) {
         sanitized[header] = '[REDACTED]';
@@ -168,7 +181,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     ];
 
     const sanitized = { ...body };
-    
+
     sensitiveFields.forEach(field => {
       if (sanitized[field]) {
         sanitized[field] = '[REDACTED]';

@@ -9,11 +9,12 @@ export class AppService {
 
   getAppInfo() {
     const packageJson = require('../package.json');
-    
+
     return {
       name: packageJson.name || 'TekBot Platform API',
       version: packageJson.version || '1.0.0',
-      description: packageJson.description || 'Multi-tenant AI assistant engine',
+      description:
+        packageJson.description || 'Multi-tenant AI assistant engine',
       environment: this.configService.get('NODE_ENV', 'development'),
       timestamp: new Date().toISOString(),
       uptime: this.getUptime(),
@@ -22,7 +23,7 @@ export class AppService {
 
   getHealth() {
     const memoryUsage = process.memoryUsage();
-    
+
     return {
       status: 'ok',
       timestamp: new Date().toISOString(),
@@ -38,7 +39,7 @@ export class AppService {
 
   getVersion() {
     const packageJson = require('../package.json');
-    
+
     return {
       version: packageJson.version || '1.0.0',
       apiVersion: 'v1',

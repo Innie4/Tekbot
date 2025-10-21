@@ -7,7 +7,7 @@ import { Staff } from './entities/staff.entity';
 export class StaffService {
   constructor(
     @InjectRepository(Staff)
-    private readonly staffRepository: Repository<Staff>
+    private readonly staffRepository: Repository<Staff>,
   ) {}
 
   async findAllForTenant(tenantId: string) {

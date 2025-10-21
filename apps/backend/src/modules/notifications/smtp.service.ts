@@ -17,7 +17,10 @@ export class SmtpService {
     });
   }
 
-  getTemplate(type: string, params: Record<string, any>): { subject: string; html: string } {
+  getTemplate(
+    type: string,
+    params: Record<string, any>,
+  ): { subject: string; html: string } {
     switch (type) {
       case 'welcome':
         return {

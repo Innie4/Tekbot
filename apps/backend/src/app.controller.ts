@@ -21,7 +21,10 @@ export class AppController {
       properties: {
         name: { type: 'string', example: 'TekBot Platform API' },
         version: { type: 'string', example: '1.0.0' },
-        description: { type: 'string', example: 'Multi-tenant AI assistant engine' },
+        description: {
+          type: 'string',
+          example: 'Multi-tenant AI assistant engine',
+        },
         environment: { type: 'string', example: 'development' },
         timestamp: { type: 'string', format: 'date-time' },
         uptime: { type: 'number', example: 12345 },

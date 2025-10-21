@@ -1,7 +1,6 @@
 import { FileUploadController } from '../src/modules/files/file-upload.controller';
 import { FileUploadService } from '../src/modules/files/file-upload.service';
 
-
 import { ConfigService } from '@nestjs/config';
 
 describe('FileUploadController', () => {
@@ -23,7 +22,11 @@ describe('FileUploadController', () => {
   });
 
   it('should upload file', async () => {
-    const file = { originalname: 'test.png', buffer: Buffer.from('data'), mimetype: 'image/png' } as any;
+    const file = {
+      originalname: 'test.png',
+      buffer: Buffer.from('data'),
+      mimetype: 'image/png',
+    } as any;
     const result = await controller.uploadFile(file);
     expect(result.uploaded).toBe(true);
     expect(result.filename).toBe('test.png');

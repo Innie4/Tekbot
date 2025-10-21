@@ -6,7 +6,12 @@ import { Queue } from 'bull';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
 import { ConfigType } from '@nestjs/config';
-import { Campaign, CampaignStatus, CampaignType, TriggerType } from './entities/campaign.entity';
+import {
+  Campaign,
+  CampaignStatus,
+  CampaignType,
+  TriggerType,
+} from './entities/campaign.entity';
 import { Appointment } from '../appointments/entities/appointment.entity';
 import { Customer } from '../customers/entities/customer.entity';
 import { NotificationService } from '../notifications/notification.service';
@@ -128,10 +133,10 @@ export class CampaignAutomationService {
     try {
       // Get target recipients
       const recipients = await this.getTargetRecipients(campaign);
-      
+
       // Handle A/B testing
       const variants = this.prepareVariants(campaign, recipients);
-      
+
       let totalSent = 0;
       let totalFailed = 0;
       const errors: string[] = [];
@@ -169,10 +174,9 @@ export class CampaignAutomationService {
 
       this.eventEmitter.emit('campaign.executed', result);
       return result;
-
     } catch (error) {
       this.logger.error(`Campaign execution failed: ${error.message}`, error);
-      
+
       await this.campaignRepository.update(campaignId, {
         status: CampaignStatus.CANCELLED,
         executionLog: [
@@ -209,32 +213,45 @@ export class CampaignAutomationService {
   /**
    * Prepare A/B test variants
    */
-  private prepareVariants(campaign: Campaign, recipients: Customer[]): Array<{
+  private prepareVariants(
+    campaign: Campaign,
+    recipients: Customer[],
+  ): Array<{
     id: string;
     name: string;
     recipients: Customer[];
     content: any;
   }> {
-    if (!campaign.abTestConfig?.enabled || !campaign.abTestConfig.variants?.length) {
-      return [{
-        id: 'default',
-        name: 'Default',
-        recipients,
-        content: {
-          subject: campaign.subject,
-          content: campaign.content,
-          htmlContent: campaign.htmlContent,
+    if (
+      !campaign.abTestConfig?.enabled ||
+      !campaign.abTestConfig.variants?.length
+    ) {
+      return [
+        {
+          id: 'default',
+          name: 'Default',
+          recipients,
+          content: {
+            subject: campaign.subject,
+            content: campaign.content,
+            htmlContent: campaign.htmlContent,
+          },
         },
-      }];
+      ];
     }
 
     const variants = [];
     let recipientIndex = 0;
 
     for (const variant of campaign.abTestConfig.variants) {
-      const variantRecipientCount = Math.floor(recipients.length * (variant.percentage / 100));
-      const variantRecipients = recipients.slice(recipientIndex, recipientIndex + variantRecipientCount);
-      
+      const variantRecipientCount = Math.floor(
+        recipients.length * (variant.percentage / 100),
+      );
+      const variantRecipients = recipients.slice(
+        recipientIndex,
+        recipientIndex + variantRecipientCount,
+      );
+
       variants.push({
         id: variant.id,
         name: variant.name,
@@ -257,7 +274,7 @@ export class CampaignAutomationService {
    */
   private async executeVariant(
     campaign: Campaign,
-    variant: { id: string; name: string; recipients: Customer[]; content: any }
+    variant: { id: string; name: string; recipients: Customer[]; content: any },
   ): Promise<{ sentCount: number; failedCount: number; errors: string[] }> {
     let sentCount = 0;
     let failedCount = 0;
@@ -282,7 +299,7 @@ export class CampaignAutomationService {
 
         // Apply throttling if configured
         const delay = this.calculateThrottlingDelay(campaign);
-        
+
         await this.campaignQueue.add('send-campaign-message', jobData, {
           delay,
           attempts: 3,
@@ -295,8 +312,13 @@ export class CampaignAutomationService {
         sentCount++;
       } catch (error) {
         failedCount++;
-        errors.push(`Failed to queue message for ${recipient.email}: ${error.message}`);
-        this.logger.error(`Failed to queue campaign message for recipient ${recipient.id}:`, error);
+        errors.push(
+          `Failed to queue message for ${recipient.email}: ${error.message}`,
+        );
+        this.logger.error(
+          `Failed to queue campaign message for recipient ${recipient.id}:`,
+          error,
+        );
       }
     }
 
@@ -308,7 +330,7 @@ export class CampaignAutomationService {
    */
   private calculateThrottlingDelay(campaign: Campaign): number {
     const throttling = campaign.settings?.throttling;
-    
+
     if (!throttling?.enabled) {
       return 0;
     }
@@ -333,7 +355,7 @@ export class CampaignAutomationService {
       clickedCount: number;
       failedCount: number;
       estimatedRecipients: number;
-    }>
+    }>,
   ): Promise<void> {
     await this.campaignRepository.update(campaignId, metrics);
   }
@@ -346,7 +368,8 @@ export class CampaignAutomationService {
       return false;
     }
 
-    const { frequency, interval, endDate, maxOccurrences } = campaign.recurringConfig;
+    const { frequency, interval, endDate, maxOccurrences } =
+      campaign.recurringConfig;
     const now = new Date();
     const lastExecution = campaign.completedAt || campaign.created_at;
 
@@ -362,13 +385,13 @@ export class CampaignAutomationService {
 
     // Calculate next execution time based on frequency
     const nextExecution = new Date(lastExecution);
-    
+
     switch (frequency) {
       case 'daily':
         nextExecution.setDate(nextExecution.getDate() + interval);
         break;
       case 'weekly':
-        nextExecution.setDate(nextExecution.getDate() + (interval * 7));
+        nextExecution.setDate(nextExecution.getDate() + interval * 7);
         break;
       case 'monthly':
         nextExecution.setMonth(nextExecution.getMonth() + interval);
@@ -416,7 +439,7 @@ export class CampaignAutomationService {
    */
   private async triggerEventBasedCampaigns(
     eventType: string,
-    eventData: Record<string, any>
+    eventData: Record<string, any>,
   ): Promise<void> {
     try {
       const campaigns = await this.campaignRepository.find({
@@ -431,18 +454,24 @@ export class CampaignAutomationService {
         if (this.matchesEventTrigger(campaign, eventType, eventData)) {
           // Apply delay if configured
           const delay = campaign.eventTriggers?.delay || 0;
-          
+
           if (delay > 0) {
-            setTimeout(() => {
-              this.executeCampaign(campaign.id);
-            }, delay * 60 * 1000); // delay is in minutes
+            setTimeout(
+              () => {
+                this.executeCampaign(campaign.id);
+              },
+              delay * 60 * 1000,
+            ); // delay is in minutes
           } else {
             await this.executeCampaign(campaign.id);
           }
         }
       }
     } catch (error) {
-      this.logger.error(`Error triggering event-based campaigns for ${eventType}:`, error);
+      this.logger.error(
+        `Error triggering event-based campaigns for ${eventType}:`,
+        error,
+      );
     }
   }
 
@@ -452,10 +481,10 @@ export class CampaignAutomationService {
   private matchesEventTrigger(
     campaign: Campaign,
     eventType: string,
-    eventData: Record<string, any>
+    eventData: Record<string, any>,
   ): boolean {
     const { eventTriggers } = campaign;
-    
+
     if (!eventTriggers?.events?.includes(eventType)) {
       return false;
     }
@@ -482,8 +511,10 @@ export class CampaignAutomationService {
     });
 
     const jobs = await this.campaignQueue.getJobs(['waiting', 'delayed']);
-    const campaignJobs = jobs.filter(job => job.data?.campaignId === campaignId);
-    
+    const campaignJobs = jobs.filter(
+      job => job.data?.campaignId === campaignId,
+    );
+
     for (const job of campaignJobs) {
       await job.remove();
     }
@@ -536,11 +567,26 @@ export class CampaignAutomationService {
     const round2 = (v: number) => Math.round(v * 100) / 100;
 
     const performance = {
-      deliveryRate: campaign.sentCount > 0 ? round2((campaign.deliveredCount / campaign.sentCount) * 100) : 0,
-      openRate: campaign.deliveredCount > 0 ? round2((campaign.openedCount / campaign.deliveredCount) * 100) : 0,
-      clickRate: campaign.openedCount > 0 ? round2((campaign.clickedCount / campaign.openedCount) * 100) : 0,
-      unsubscribeRate: campaign.deliveredCount > 0 ? round2((campaign.unsubscribedCount / campaign.deliveredCount) * 100) : 0,
-      bounceRate: campaign.deliveredCount > 0 ? round2((campaign.bouncedCount / campaign.deliveredCount) * 100) : 0,
+      deliveryRate:
+        campaign.sentCount > 0
+          ? round2((campaign.deliveredCount / campaign.sentCount) * 100)
+          : 0,
+      openRate:
+        campaign.deliveredCount > 0
+          ? round2((campaign.openedCount / campaign.deliveredCount) * 100)
+          : 0,
+      clickRate:
+        campaign.openedCount > 0
+          ? round2((campaign.clickedCount / campaign.openedCount) * 100)
+          : 0,
+      unsubscribeRate:
+        campaign.deliveredCount > 0
+          ? round2((campaign.unsubscribedCount / campaign.deliveredCount) * 100)
+          : 0,
+      bounceRate:
+        campaign.deliveredCount > 0
+          ? round2((campaign.bouncedCount / campaign.deliveredCount) * 100)
+          : 0,
     };
 
     const timeline = {

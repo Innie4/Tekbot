@@ -38,19 +38,19 @@ export class AppointmentsService {
 
   async findAllForTenant(tenantId: string, includeRelations = false) {
     const relations = includeRelations ? ['customer', 'service', 'staff'] : [];
-    return this.appointmentRepository.find({ 
+    return this.appointmentRepository.find({
       where: { tenantId },
       relations,
-      order: { start_time: 'ASC' }
+      order: { start_time: 'ASC' },
     });
   }
 
   async createForTenant(tenantId: string, dto: CreateAppointmentDto) {
     try {
-      const appointment = await this.appointmentRepository.save({ 
-        ...dto, 
+      const appointment = await this.appointmentRepository.save({
+        ...dto,
         tenantId,
-        status: dto.status || 'scheduled'
+        status: dto.status || 'scheduled',
       });
 
       // Schedule reminders for new appointment
@@ -66,23 +66,36 @@ export class AppointmentsService {
         start_time: dto.start_time,
       });
 
-      this.logger.log(`Created appointment ${appointment.id} for tenant ${tenantId}`);
+      this.logger.log(
+        `Created appointment ${appointment.id} for tenant ${tenantId}`,
+      );
       return appointment;
     } catch (error) {
-      this.logger.error(`Error creating appointment for tenant ${tenantId}:`, error);
+      this.logger.error(
+        `Error creating appointment for tenant ${tenantId}:`,
+        error,
+      );
       throw error;
     }
   }
 
-  async findOneForTenant(tenantId: string, id: string, includeRelations = false) {
+  async findOneForTenant(
+    tenantId: string,
+    id: string,
+    includeRelations = false,
+  ) {
     const relations = includeRelations ? ['customer', 'service', 'staff'] : [];
-    return this.appointmentRepository.findOne({ 
+    return this.appointmentRepository.findOne({
       where: { tenantId, id },
-      relations
+      relations,
     });
   }
 
-  async updateForTenant(tenantId: string, id: string, dto: UpdateAppointmentDto) {
+  async updateForTenant(
+    tenantId: string,
+    id: string,
+    dto: UpdateAppointmentDto,
+  ) {
     try {
       const existingAppointment = await this.findOneForTenant(tenantId, id);
       if (!existingAppointment) {
@@ -90,8 +103,11 @@ export class AppointmentsService {
       }
 
       const wasScheduled = existingAppointment.status === 'scheduled';
-      const timeChanged = dto.start_time && dto.start_time.getTime() !== existingAppointment.start_time.getTime();
-      const statusChanged = dto.status && dto.status !== existingAppointment.status;
+      const timeChanged =
+        dto.start_time &&
+        dto.start_time.getTime() !== existingAppointment.start_time.getTime();
+      const statusChanged =
+        dto.status && dto.status !== existingAppointment.status;
 
       await this.appointmentRepository.update({ tenantId, id }, dto);
       const updatedAppointment = await this.findOneForTenant(tenantId, id);
@@ -134,7 +150,10 @@ export class AppointmentsService {
       this.logger.log(`Updated appointment ${id} for tenant ${tenantId}`);
       return updatedAppointment;
     } catch (error) {
-      this.logger.error(`Error updating appointment ${id} for tenant ${tenantId}:`, error);
+      this.logger.error(
+        `Error updating appointment ${id} for tenant ${tenantId}:`,
+        error,
+      );
       throw error;
     }
   }
@@ -144,7 +163,10 @@ export class AppointmentsService {
       // Cancel reminders before removing appointment
       await this.reminderService.cancelReminders(id);
 
-      const result = await this.appointmentRepository.softDelete({ tenantId, id });
+      const result = await this.appointmentRepository.softDelete({
+        tenantId,
+        id,
+      });
 
       // Emit appointment cancelled event
       this.eventEmitter.emit('appointment.cancelled', {
@@ -155,7 +177,10 @@ export class AppointmentsService {
       this.logger.log(`Removed appointment ${id} for tenant ${tenantId}`);
       return result;
     } catch (error) {
-      this.logger.error(`Error removing appointment ${id} for tenant ${tenantId}:`, error);
+      this.logger.error(
+        `Error removing appointment ${id} for tenant ${tenantId}:`,
+        error,
+      );
       throw error;
     }
   }
@@ -199,27 +224,37 @@ export class AppointmentsService {
       }
 
       const reminderIntervals = [1440, 60, 15]; // 24 hours, 1 hour, 15 minutes
-      
+
       for (const interval of reminderIntervals) {
         await this.reminderService.scheduleReminderJob(appointment, interval);
       }
 
       this.logger.log(`Scheduled reminders for appointment ${appointmentId}`);
     } catch (error) {
-      this.logger.error(`Error scheduling reminders for appointment ${appointmentId}:`, error);
+      this.logger.error(
+        `Error scheduling reminders for appointment ${appointmentId}:`,
+        error,
+      );
     }
   }
 
   /**
    * Send immediate reminder for an appointment
    */
-  async sendImmediateReminder(tenantId: string, appointmentId: string, reminderType: 'email' | 'sms' | 'both' = 'both'): Promise<void> {
+  async sendImmediateReminder(
+    tenantId: string,
+    appointmentId: string,
+    reminderType: 'email' | 'sms' | 'both' = 'both',
+  ): Promise<void> {
     const appointment = await this.findOneForTenant(tenantId, appointmentId);
     if (!appointment) {
       throw new Error(`Appointment ${appointmentId} not found`);
     }
 
-    return this.reminderService.sendImmediateReminder(appointmentId, reminderType);
+    return this.reminderService.sendImmediateReminder(
+      appointmentId,
+      reminderType,
+    );
   }
 
   /**
@@ -227,22 +262,33 @@ export class AppointmentsService {
    */
   async getAppointmentStats(tenantId: string) {
     const today = new Date();
-    const startOfDay = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const startOfDay = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+    );
     const endOfDay = new Date(startOfDay);
     endOfDay.setDate(endOfDay.getDate() + 1);
 
-    const [total, scheduled, completed, cancelled, todayCount] = await Promise.all([
-      this.appointmentRepository.count({ where: { tenantId } }),
-      this.appointmentRepository.count({ where: { tenantId, status: 'scheduled' } }),
-      this.appointmentRepository.count({ where: { tenantId, status: 'completed' } }),
-      this.appointmentRepository.count({ where: { tenantId, status: 'cancelled' } }),
-      this.appointmentRepository.count({
-        where: {
-          tenantId,
-          start_time: MoreThan(startOfDay) && MoreThan(endOfDay),
-        },
-      }),
-    ]);
+    const [total, scheduled, completed, cancelled, todayCount] =
+      await Promise.all([
+        this.appointmentRepository.count({ where: { tenantId } }),
+        this.appointmentRepository.count({
+          where: { tenantId, status: 'scheduled' },
+        }),
+        this.appointmentRepository.count({
+          where: { tenantId, status: 'completed' },
+        }),
+        this.appointmentRepository.count({
+          where: { tenantId, status: 'cancelled' },
+        }),
+        this.appointmentRepository.count({
+          where: {
+            tenantId,
+            start_time: MoreThan(startOfDay) && MoreThan(endOfDay),
+          },
+        }),
+      ]);
 
     return {
       total,

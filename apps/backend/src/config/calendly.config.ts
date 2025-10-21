@@ -5,23 +5,26 @@ export const calendlyConfig = registerAs('calendly', () => ({
   apiKey: process.env.CALENDLY_API_KEY,
   personalAccessToken: process.env.CALENDLY_PERSONAL_ACCESS_TOKEN,
   baseUrl: process.env.CALENDLY_BASE_URL || 'https://api.calendly.com',
-  
+
   // OAuth configuration
   oauth: {
     enabled: process.env.CALENDLY_OAUTH_ENABLED === 'true',
     clientId: process.env.CALENDLY_CLIENT_ID,
     clientSecret: process.env.CALENDLY_CLIENT_SECRET,
-    redirectUri: process.env.CALENDLY_REDIRECT_URI || 'https://app.tekbot.com/auth/calendly/callback',
-    scopes: process.env.CALENDLY_SCOPES ? 
-      process.env.CALENDLY_SCOPES.split(',') : [
-        'default',
-        'read_events',
-        'write_events',
-        'read_event_types',
-        'write_event_types',
-      ],
+    redirectUri:
+      process.env.CALENDLY_REDIRECT_URI ||
+      'https://app.tekbot.com/auth/calendly/callback',
+    scopes: process.env.CALENDLY_SCOPES
+      ? process.env.CALENDLY_SCOPES.split(',')
+      : [
+          'default',
+          'read_events',
+          'write_events',
+          'read_event_types',
+          'write_event_types',
+        ],
   },
-  
+
   // User configuration
   user: {
     uuid: process.env.CALENDLY_USER_UUID,
@@ -29,13 +32,13 @@ export const calendlyConfig = registerAs('calendly', () => ({
     schedulingUrl: process.env.CALENDLY_SCHEDULING_URL,
     timezone: process.env.CALENDLY_TIMEZONE || 'America/New_York',
   },
-  
+
   // Organization configuration
   organization: {
     uuid: process.env.CALENDLY_ORGANIZATION_UUID,
     uri: process.env.CALENDLY_ORGANIZATION_URI,
   },
-  
+
   // Event types configuration
   eventTypes: {
     default: {
@@ -58,34 +61,47 @@ export const calendlyConfig = registerAs('calendly', () => ({
       duration: parseInt(process.env.CALENDLY_DEMO_DURATION, 10) || 45,
     },
   },
-  
+
   // Webhook configuration
   webhooks: {
     enabled: process.env.CALENDLY_WEBHOOKS_ENABLED !== 'false',
     signingKey: process.env.CALENDLY_WEBHOOK_SIGNING_KEY,
     endpoints: {
-      inviteeCreated: process.env.CALENDLY_WEBHOOK_INVITEE_CREATED || '/api/v1/webhooks/calendly/invitee.created',
-      inviteeCanceled: process.env.CALENDLY_WEBHOOK_INVITEE_CANCELED || '/api/v1/webhooks/calendly/invitee.canceled',
-      inviteeNoShow: process.env.CALENDLY_WEBHOOK_INVITEE_NO_SHOW || '/api/v1/webhooks/calendly/invitee.no_show',
-      inviteeRescheduled: process.env.CALENDLY_WEBHOOK_INVITEE_RESCHEDULED || '/api/v1/webhooks/calendly/invitee.rescheduled',
+      inviteeCreated:
+        process.env.CALENDLY_WEBHOOK_INVITEE_CREATED ||
+        '/api/v1/webhooks/calendly/invitee.created',
+      inviteeCanceled:
+        process.env.CALENDLY_WEBHOOK_INVITEE_CANCELED ||
+        '/api/v1/webhooks/calendly/invitee.canceled',
+      inviteeNoShow:
+        process.env.CALENDLY_WEBHOOK_INVITEE_NO_SHOW ||
+        '/api/v1/webhooks/calendly/invitee.no_show',
+      inviteeRescheduled:
+        process.env.CALENDLY_WEBHOOK_INVITEE_RESCHEDULED ||
+        '/api/v1/webhooks/calendly/invitee.rescheduled',
     },
-    events: process.env.CALENDLY_WEBHOOK_EVENTS ? 
-      process.env.CALENDLY_WEBHOOK_EVENTS.split(',') : [
-        'invitee.created',
-        'invitee.canceled',
-        'invitee.no_show',
-        'invitee.rescheduled',
-      ],
+    events: process.env.CALENDLY_WEBHOOK_EVENTS
+      ? process.env.CALENDLY_WEBHOOK_EVENTS.split(',')
+      : [
+          'invitee.created',
+          'invitee.canceled',
+          'invitee.no_show',
+          'invitee.rescheduled',
+        ],
     scope: process.env.CALENDLY_WEBHOOK_SCOPE || 'organization', // 'user' or 'organization'
   },
-  
+
   // Scheduling preferences
   scheduling: {
-    defaultDuration: parseInt(process.env.CALENDLY_DEFAULT_SCHEDULING_DURATION, 10) || 30,
-    minimumNotice: parseInt(process.env.CALENDLY_MINIMUM_NOTICE_HOURS, 10) || 24, // hours
-    maximumAdvance: parseInt(process.env.CALENDLY_MAXIMUM_ADVANCE_DAYS, 10) || 60, // days
-    timeSlotInterval: parseInt(process.env.CALENDLY_TIME_SLOT_INTERVAL, 10) || 15, // minutes
-    
+    defaultDuration:
+      parseInt(process.env.CALENDLY_DEFAULT_SCHEDULING_DURATION, 10) || 30,
+    minimumNotice:
+      parseInt(process.env.CALENDLY_MINIMUM_NOTICE_HOURS, 10) || 24, // hours
+    maximumAdvance:
+      parseInt(process.env.CALENDLY_MAXIMUM_ADVANCE_DAYS, 10) || 60, // days
+    timeSlotInterval:
+      parseInt(process.env.CALENDLY_TIME_SLOT_INTERVAL, 10) || 15, // minutes
+
     // Working hours
     workingHours: {
       monday: {
@@ -125,26 +141,28 @@ export const calendlyConfig = registerAs('calendly', () => ({
       },
     },
   },
-  
+
   // Notification settings
   notifications: {
     email: {
       enabled: process.env.CALENDLY_EMAIL_NOTIFICATIONS_ENABLED !== 'false',
-      confirmationEnabled: process.env.CALENDLY_EMAIL_CONFIRMATION_ENABLED !== 'false',
+      confirmationEnabled:
+        process.env.CALENDLY_EMAIL_CONFIRMATION_ENABLED !== 'false',
       reminderEnabled: process.env.CALENDLY_EMAIL_REMINDER_ENABLED !== 'false',
       followUpEnabled: process.env.CALENDLY_EMAIL_FOLLOW_UP_ENABLED === 'true',
     },
     sms: {
       enabled: process.env.CALENDLY_SMS_NOTIFICATIONS_ENABLED === 'true',
       reminderEnabled: process.env.CALENDLY_SMS_REMINDER_ENABLED === 'true',
-      reminderMinutes: parseInt(process.env.CALENDLY_SMS_REMINDER_MINUTES, 10) || 60,
+      reminderMinutes:
+        parseInt(process.env.CALENDLY_SMS_REMINDER_MINUTES, 10) || 60,
     },
     slack: {
       enabled: process.env.CALENDLY_SLACK_NOTIFICATIONS_ENABLED === 'true',
       channel: process.env.CALENDLY_SLACK_CHANNEL || '#appointments',
     },
   },
-  
+
   // Integration settings
   integrations: {
     googleCalendar: {
@@ -164,7 +182,7 @@ export const calendlyConfig = registerAs('calendly', () => ({
       autoCreateMeetings: process.env.CALENDLY_TEAMS_AUTO_CREATE === 'true',
     },
   },
-  
+
   // Custom questions
   customQuestions: {
     enabled: process.env.CALENDLY_CUSTOM_QUESTIONS_ENABLED === 'true',
@@ -189,22 +207,26 @@ export const calendlyConfig = registerAs('calendly', () => ({
       },
     ],
   },
-  
+
   // Rate limiting
   rateLimit: {
     enabled: process.env.CALENDLY_RATE_LIMIT_ENABLED !== 'false',
-    requestsPerMinute: parseInt(process.env.CALENDLY_REQUESTS_PER_MINUTE, 10) || 100,
-    requestsPerHour: parseInt(process.env.CALENDLY_REQUESTS_PER_HOUR, 10) || 1000,
+    requestsPerMinute:
+      parseInt(process.env.CALENDLY_REQUESTS_PER_MINUTE, 10) || 100,
+    requestsPerHour:
+      parseInt(process.env.CALENDLY_REQUESTS_PER_HOUR, 10) || 1000,
   },
-  
+
   // Caching
   cache: {
     enabled: process.env.CALENDLY_CACHE_ENABLED !== 'false',
     ttl: parseInt(process.env.CALENDLY_CACHE_TTL, 10) || 300, // 5 minutes
-    eventTypesTtl: parseInt(process.env.CALENDLY_EVENT_TYPES_CACHE_TTL, 10) || 3600, // 1 hour
-    availabilityTtl: parseInt(process.env.CALENDLY_AVAILABILITY_CACHE_TTL, 10) || 900, // 15 minutes
+    eventTypesTtl:
+      parseInt(process.env.CALENDLY_EVENT_TYPES_CACHE_TTL, 10) || 3600, // 1 hour
+    availabilityTtl:
+      parseInt(process.env.CALENDLY_AVAILABILITY_CACHE_TTL, 10) || 900, // 15 minutes
   },
-  
+
   // Error handling
   errorHandling: {
     retryAttempts: parseInt(process.env.CALENDLY_RETRY_ATTEMPTS, 10) || 3,
@@ -212,7 +234,7 @@ export const calendlyConfig = registerAs('calendly', () => ({
     exponentialBackoff: process.env.CALENDLY_EXPONENTIAL_BACKOFF !== 'false',
     timeout: parseInt(process.env.CALENDLY_TIMEOUT, 10) || 30000, // 30 seconds
   },
-  
+
   // Logging
   logging: {
     enabled: process.env.CALENDLY_LOGGING_ENABLED === 'true',
@@ -221,7 +243,7 @@ export const calendlyConfig = registerAs('calendly', () => ({
     logErrors: process.env.CALENDLY_LOG_ERRORS !== 'false',
     logWebhooks: process.env.CALENDLY_LOG_WEBHOOKS === 'true',
   },
-  
+
   // Testing
   testing: {
     enabled: process.env.NODE_ENV !== 'production',

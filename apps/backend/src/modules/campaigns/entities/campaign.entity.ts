@@ -14,7 +14,7 @@ export enum CampaignType {
   EMAIL = 'email',
   SMS = 'sms',
   PUSH = 'push',
-  IN_APP = 'in_app'
+  IN_APP = 'in_app',
 }
 
 export enum CampaignStatus {
@@ -23,14 +23,14 @@ export enum CampaignStatus {
   ACTIVE = 'active',
   PAUSED = 'paused',
   COMPLETED = 'completed',
-  CANCELLED = 'cancelled'
+  CANCELLED = 'cancelled',
 }
 
 export enum TriggerType {
   MANUAL = 'manual',
   SCHEDULED = 'scheduled',
   EVENT_BASED = 'event_based',
-  RECURRING = 'recurring'
+  RECURRING = 'recurring',
 }
 
 @Entity('campaigns')

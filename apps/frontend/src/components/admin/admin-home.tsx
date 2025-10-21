@@ -32,9 +32,24 @@ export default function AdminHome() {
   useEffect(() => {
     // Placeholder data until real bots API is available
     const sample: BotSummary[] = [
-      { name: 'Support Assistant', trainedOn: new Date().toISOString(), status: 'active', performance: '92% satisfaction' },
-      { name: 'Sales Guide', trainedOn: new Date(Date.now() - 86400000).toISOString(), status: 'training', performance: 'Training in progress' },
-      { name: 'Docs Helper', trainedOn: new Date(Date.now() - 3 * 86400000).toISOString(), status: 'active', performance: 'Avg. 2.3s response' },
+      {
+        name: 'Support Assistant',
+        trainedOn: new Date().toISOString(),
+        status: 'active',
+        performance: '92% satisfaction',
+      },
+      {
+        name: 'Sales Guide',
+        trainedOn: new Date(Date.now() - 86400000).toISOString(),
+        status: 'training',
+        performance: 'Training in progress',
+      },
+      {
+        name: 'Docs Helper',
+        trainedOn: new Date(Date.now() - 3 * 86400000).toISOString(),
+        status: 'active',
+        performance: 'Avg. 2.3s response',
+      },
     ];
     setRecentBots(sample);
   }, []);
@@ -50,8 +65,10 @@ export default function AdminHome() {
 
   const statusBadge = (status: BotSummary['status']) => {
     const base = 'px-2 py-1 rounded-full text-xs font-semibold';
-    if (status === 'active') return <span className={`${base} bg-green-100 text-green-700`}>Active</span>;
-    if (status === 'training') return <span className={`${base} bg-yellow-100 text-yellow-800`}>Training</span>;
+    if (status === 'active')
+      return <span className={`${base} bg-green-100 text-green-700`}>Active</span>;
+    if (status === 'training')
+      return <span className={`${base} bg-yellow-100 text-yellow-800`}>Training</span>;
     return <span className={`${base} bg-red-100 text-red-700`}>Error</span>;
   };
 
@@ -62,7 +79,9 @@ export default function AdminHome() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-2xl font-bold">Hey {userName}, Ready to train your next Tekbot?</h1>
-            <p className="text-sm text-muted-foreground mt-1">Kickstart by uploading data or managing your existing bots.</p>
+            <p className="text-sm text-muted-foreground mt-1">
+              Kickstart by uploading data or managing your existing bots.
+            </p>
           </div>
           <Button asChild>
             <Link href="/onboarding">
@@ -73,7 +92,12 @@ export default function AdminHome() {
       </GlassCard>
 
       {/* Quick Action Cards */}
-      <motion.div variants={container} initial="hidden" animate="show" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <motion.div
+        variants={container}
+        initial="hidden"
+        animate="show"
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+      >
         <motion.div variants={item}>
           <Link href="/admin/training" className="block">
             <GlassCard className="p-6 hover:bg-white/5 transition-colors">

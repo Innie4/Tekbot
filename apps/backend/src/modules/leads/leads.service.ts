@@ -7,7 +7,7 @@ import { Lead } from './entities/lead.entity';
 export class LeadsService {
   constructor(
     @InjectRepository(Lead)
-    private readonly leadRepository: Repository<Lead>
+    private readonly leadRepository: Repository<Lead>,
   ) {}
 
   async findAllForTenant(tenantId: string) {

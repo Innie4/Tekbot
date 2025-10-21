@@ -9,7 +9,11 @@ export { ThemeEngine } from './utils/theme-engine';
 export * from './types';
 
 // Hook exports
-export { useTekAssistWidget, useTekAssistWidgetState as useWidgetState, useTekAssistWidgetSimple as useSimpleWidget } from './hooks/use-tekassist-widget';
+export {
+  useTekAssistWidget,
+  useTekAssistWidgetState as useWidgetState,
+  useTekAssistWidgetSimple as useSimpleWidget,
+} from './hooks/use-tekassist-widget';
 
 // Embed script
 export { default as EmbedManager } from './embed';

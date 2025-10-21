@@ -1,7 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Twilio from 'twilio';
-import { ErrorHandlerUtil, ErrorContext } from '../../common/utils/error-handler.util';
+import {
+  ErrorHandlerUtil,
+  ErrorContext,
+} from '../../common/utils/error-handler.util';
 
 export interface SendSmsOptions {
   to: string;
@@ -23,11 +26,11 @@ export interface SendWhatsAppOptions {
 export class TwilioService {
   private readonly logger = new Logger(TwilioService.name);
   private client: Twilio.Twilio;
-  
+
   constructor(private readonly configService: ConfigService) {
     this.client = Twilio(
       configService.get<string>('TWILIO_ACCOUNT_SID'),
-      configService.get<string>('TWILIO_AUTH_TOKEN')
+      configService.get<string>('TWILIO_AUTH_TOKEN'),
     );
   }
 
@@ -41,17 +44,21 @@ export class TwilioService {
 
     return ErrorHandlerUtil.handleExternalApiCall(
       async () => {
-        this.logger.log(`Sending SMS to ${options.to}`, { context: errorContext });
-        
+        this.logger.log(`Sending SMS to ${options.to}`, {
+          context: errorContext,
+        });
+
         const message = await this.client.messages.create({
           to: options.to,
-          from: options.from || this.configService.get<string>('TWILIO_PHONE_NUMBER'),
+          from:
+            options.from ||
+            this.configService.get<string>('TWILIO_PHONE_NUMBER'),
           body: options.body,
           mediaUrl: options.mediaUrl,
           statusCallback: options.statusCallback,
         });
 
-        this.logger.log(`SMS sent successfully: ${message.sid}`, { 
+        this.logger.log(`SMS sent successfully: ${message.sid}`, {
           context: errorContext,
           messageSid: message.sid,
           status: message.status,
@@ -65,11 +72,14 @@ export class TwilioService {
         maxAttempts: 3,
         delay: 1000,
         exponentialBackoff: true,
-      }
+      },
     );
   }
 
-  async sendWhatsApp(options: SendWhatsAppOptions, context?: Partial<ErrorContext>) {
+  async sendWhatsApp(
+    options: SendWhatsAppOptions,
+    context?: Partial<ErrorContext>,
+  ) {
     const errorContext: ErrorContext = {
       service: 'TwilioService',
       method: 'sendWhatsApp',
@@ -79,13 +89,17 @@ export class TwilioService {
 
     return ErrorHandlerUtil.handleExternalApiCall(
       async () => {
-        this.logger.log(`Sending WhatsApp message to ${options.to}`, { context: errorContext });
-        
-        const whatsappNumber = options.to.startsWith('whatsapp:') 
-          ? options.to 
+        this.logger.log(`Sending WhatsApp message to ${options.to}`, {
+          context: errorContext,
+        });
+
+        const whatsappNumber = options.to.startsWith('whatsapp:')
+          ? options.to
           : `whatsapp:${options.to}`;
-        
-        const fromNumber = this.configService.get<string>('TWILIO_WHATSAPP_NUMBER');
+
+        const fromNumber = this.configService.get<string>(
+          'TWILIO_WHATSAPP_NUMBER',
+        );
         if (!fromNumber) {
           throw new Error('TWILIO_WHATSAPP_NUMBER not configured');
         }
@@ -97,7 +111,9 @@ export class TwilioService {
 
         if (options.contentSid) {
           messageData.contentSid = options.contentSid;
-          messageData.contentVariables = JSON.stringify(options.contentVariables || {});
+          messageData.contentVariables = JSON.stringify(
+            options.contentVariables || {},
+          );
         } else {
           messageData.body = options.body;
           messageData.mediaUrl = options.mediaUrl;
@@ -105,7 +121,7 @@ export class TwilioService {
 
         const message = await this.client.messages.create(messageData);
 
-        this.logger.log(`WhatsApp message sent successfully: ${message.sid}`, { 
+        this.logger.log(`WhatsApp message sent successfully: ${message.sid}`, {
           context: errorContext,
           messageSid: message.sid,
           status: message.status,
@@ -119,11 +135,14 @@ export class TwilioService {
         maxAttempts: 3,
         delay: 1000,
         exponentialBackoff: true,
-      }
+      },
     );
   }
 
-  async sendVerificationCode(phoneNumber: string, context?: Partial<ErrorContext>) {
+  async sendVerificationCode(
+    phoneNumber: string,
+    context?: Partial<ErrorContext>,
+  ) {
     const errorContext: ErrorContext = {
       service: 'TwilioService',
       method: 'sendVerificationCode',
@@ -131,21 +150,24 @@ export class TwilioService {
       metadata: { phoneNumber, ...context?.metadata },
     };
 
-    const verifyServiceSid = this.configService.get<string>('TWILIO_VERIFY_SERVICE_SID');
+    const verifyServiceSid = this.configService.get<string>(
+      'TWILIO_VERIFY_SERVICE_SID',
+    );
     if (!verifyServiceSid) {
       throw new Error('TWILIO_VERIFY_SERVICE_SID not configured');
     }
 
     return ErrorHandlerUtil.handleExternalApiCall(
       async () => {
-        this.logger.log(`Sending verification code to ${phoneNumber}`, { context: errorContext });
-        
+        this.logger.log(`Sending verification code to ${phoneNumber}`, {
+          context: errorContext,
+        });
+
         const verification = await this.client.verify.v2
           .services(verifyServiceSid)
-          .verifications
-          .create({ to: phoneNumber, channel: 'sms' });
+          .verifications.create({ to: phoneNumber, channel: 'sms' });
 
-        this.logger.log(`Verification code sent: ${verification.sid}`, { 
+        this.logger.log(`Verification code sent: ${verification.sid}`, {
           context: errorContext,
           verificationSid: verification.sid,
           status: verification.status,
@@ -158,11 +180,15 @@ export class TwilioService {
       {
         maxAttempts: 2,
         delay: 2000,
-      }
+      },
     );
   }
 
-  async verifyCode(phoneNumber: string, code: string, context?: Partial<ErrorContext>) {
+  async verifyCode(
+    phoneNumber: string,
+    code: string,
+    context?: Partial<ErrorContext>,
+  ) {
     const errorContext: ErrorContext = {
       service: 'TwilioService',
       method: 'verifyCode',
@@ -170,25 +196,31 @@ export class TwilioService {
       metadata: { phoneNumber, ...context?.metadata },
     };
 
-    const verifyServiceSid = this.configService.get<string>('TWILIO_VERIFY_SERVICE_SID');
+    const verifyServiceSid = this.configService.get<string>(
+      'TWILIO_VERIFY_SERVICE_SID',
+    );
     if (!verifyServiceSid) {
       throw new Error('TWILIO_VERIFY_SERVICE_SID not configured');
     }
 
     return ErrorHandlerUtil.handleExternalApiCall(
       async () => {
-        this.logger.log(`Verifying code for ${phoneNumber}`, { context: errorContext });
-        
+        this.logger.log(`Verifying code for ${phoneNumber}`, {
+          context: errorContext,
+        });
+
         const verificationCheck = await this.client.verify.v2
           .services(verifyServiceSid)
-          .verificationChecks
-          .create({ to: phoneNumber, code });
+          .verificationChecks.create({ to: phoneNumber, code });
 
-        this.logger.log(`Code verification result: ${verificationCheck.status}`, { 
-          context: errorContext,
-          status: verificationCheck.status,
-          valid: verificationCheck.valid,
-        });
+        this.logger.log(
+          `Code verification result: ${verificationCheck.status}`,
+          {
+            context: errorContext,
+            status: verificationCheck.status,
+            valid: verificationCheck.valid,
+          },
+        );
 
         return verificationCheck;
       },
@@ -196,7 +228,7 @@ export class TwilioService {
       15000,
       {
         maxAttempts: 1, // Don't retry verification checks
-      }
+      },
     );
   }
 
@@ -210,19 +242,26 @@ export class TwilioService {
       async () => {
         const twilioSignature = req.headers['x-twilio-signature'];
         if (!twilioSignature) {
-          this.logger.warn('Missing Twilio signature header', { context: errorContext });
+          this.logger.warn('Missing Twilio signature header', {
+            context: errorContext,
+          });
           return false;
         }
 
         const url = req.protocol + '://' + req.get('host') + req.originalUrl;
         const authToken = this.configService.get<string>('TWILIO_AUTH_TOKEN');
         const params = req.body;
-        
+
         const twilio = require('twilio');
-        const isValid = twilio.validateRequest(authToken, twilioSignature, url, params);
-        
+        const isValid = twilio.validateRequest(
+          authToken,
+          twilioSignature,
+          url,
+          params,
+        );
+
         if (!isValid) {
-          this.logger.warn('Invalid Twilio webhook signature', { 
+          this.logger.warn('Invalid Twilio webhook signature', {
             context: errorContext,
             url,
             signature: twilioSignature,
@@ -232,7 +271,7 @@ export class TwilioService {
         return isValid;
       },
       errorContext,
-      false // Return false if verification fails
+      false, // Return false if verification fails
     );
   }
 
@@ -247,8 +286,8 @@ export class TwilioService {
     return ErrorHandlerUtil.handleExternalApiCall(
       async () => {
         const message = await this.client.messages(messageSid).fetch();
-        
-        this.logger.log(`Retrieved message status: ${message.status}`, { 
+
+        this.logger.log(`Retrieved message status: ${message.status}`, {
           context: errorContext,
           messageSid,
           status: message.status,
@@ -263,11 +302,14 @@ export class TwilioService {
       {
         maxAttempts: 2,
         delay: 1000,
-      }
+      },
     );
   }
 
-  async lookupPhoneNumber(phoneNumber: string, context?: Partial<ErrorContext>) {
+  async lookupPhoneNumber(
+    phoneNumber: string,
+    context?: Partial<ErrorContext>,
+  ) {
     const errorContext: ErrorContext = {
       service: 'TwilioService',
       method: 'lookupPhoneNumber',
@@ -281,7 +323,7 @@ export class TwilioService {
           .phoneNumbers(phoneNumber)
           .fetch({ fields: 'line_type_intelligence' });
 
-        this.logger.log(`Phone number lookup completed`, { 
+        this.logger.log(`Phone number lookup completed`, {
           context: errorContext,
           phoneNumber,
           valid: lookup.valid,
@@ -295,7 +337,7 @@ export class TwilioService {
       {
         maxAttempts: 2,
         delay: 1000,
-      }
+      },
     );
   }
 }

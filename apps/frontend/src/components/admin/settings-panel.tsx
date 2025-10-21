@@ -54,12 +54,13 @@ export default function SettingsPanel() {
       setError(null);
       const [generalData, apiData] = await Promise.all([
         api.get<GeneralSettings>('/settings/general'),
-        api.get<ApiSettings>('/settings/api')
+        api.get<ApiSettings>('/settings/api'),
       ]);
       setGeneralSettings(generalData);
       setApiSettings(apiData);
-    } catch (err: any) {
-      setError(err.message || 'Failed to fetch settings');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Failed to fetch settings';
+      setError(message);
       console.error('Error fetching settings:', err);
     } finally {
       setLoading(false);
@@ -71,11 +72,11 @@ export default function SettingsPanel() {
   }, []);
 
   const handleGeneralChange = (key: string, value: string | boolean) => {
-    setGeneralSettings(prev => ({ ...prev, [key]: value }));
+    setGeneralSettings((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleApiChange = (key: string, value: string | boolean) => {
-    setApiSettings(prev => ({ ...prev, [key]: value }));
+    setApiSettings((prev) => ({ ...prev, [key]: value }));
   };
 
   const saveGeneralSettings = async () => {
@@ -85,8 +86,9 @@ export default function SettingsPanel() {
       await api.put('/settings/general', generalSettings);
       setSuccess('General settings saved successfully');
       setTimeout(() => setSuccess(null), 3000);
-    } catch (err: any) {
-      setError(err.message || 'Failed to save general settings');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Failed to save general settings';
+      setError(message);
     } finally {
       setSaving(false);
     }
@@ -99,8 +101,9 @@ export default function SettingsPanel() {
       await api.put('/settings/api', apiSettings);
       setSuccess('API settings saved successfully');
       setTimeout(() => setSuccess(null), 3000);
-    } catch (err: any) {
-      setError(err.message || 'Failed to save API settings');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Failed to save API settings';
+      setError(message);
     } finally {
       setSaving(false);
     }
@@ -139,9 +142,9 @@ export default function SettingsPanel() {
         >
           <AlertCircle className="w-5 h-5 text-red-400" />
           <p className="text-red-400">{error}</p>
-          <Button 
-            variant="ghost" 
-            size="sm" 
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={() => setError(null)}
             className="ml-auto text-red-400 hover:text-red-300"
           >
@@ -172,7 +175,7 @@ export default function SettingsPanel() {
           <TabsTrigger value="appearance">Appearance</TabsTrigger>
           <TabsTrigger value="security">Security</TabsTrigger>
         </TabsList>
-        
+
         <TabsContent value="general">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -182,8 +185,8 @@ export default function SettingsPanel() {
             <GlassCard className="p-6">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-lg font-medium">General Settings</h3>
-                <Button 
-                  onClick={saveGeneralSettings} 
+                <Button
+                  onClick={saveGeneralSettings}
                   disabled={saving}
                   className="glass-button-effect"
                 >
@@ -200,29 +203,35 @@ export default function SettingsPanel() {
                   )}
                 </Button>
               </div>
-              
+
               <div className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Site Name</label>
+                    <label htmlFor="site-name" className="text-sm font-medium">
+                      Site Name
+                    </label>
                     <GlassInput
+                      id="site-name"
                       value={generalSettings.siteName}
                       onChange={(e) => handleGeneralChange('siteName', e.target.value)}
                     />
                   </div>
-                  
+
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Site Description</label>
+                    <label htmlFor="site-description" className="text-sm font-medium">
+                      Site Description
+                    </label>
                     <GlassInput
+                      id="site-description"
                       value={generalSettings.siteDescription}
                       onChange={(e) => handleGeneralChange('siteDescription', e.target.value)}
                     />
                   </div>
                 </div>
-                
+
                 <div className="space-y-4">
                   <h4 className="text-sm font-medium">Preferences</h4>
-                  
+
                   <div className="flex items-center justify-between py-2 border-b border-border/10">
                     <div>
                       <p className="font-medium">Enable Notifications</p>
@@ -230,10 +239,12 @@ export default function SettingsPanel() {
                     </div>
                     <Switch
                       checked={generalSettings.enableNotifications}
-                      onCheckedChange={(checked) => handleGeneralChange('enableNotifications', checked)}
+                      onCheckedChange={(checked) =>
+                        handleGeneralChange('enableNotifications', checked)
+                      }
                     />
                   </div>
-                  
+
                   <div className="flex items-center justify-between py-2 border-b border-border/10">
                     <div>
                       <p className="font-medium">Dark Mode</p>
@@ -244,7 +255,7 @@ export default function SettingsPanel() {
                       onCheckedChange={(checked) => handleGeneralChange('darkMode', checked)}
                     />
                   </div>
-                  
+
                   <div className="flex items-center justify-between py-2 border-b border-border/10">
                     <div>
                       <p className="font-medium">Enable Analytics</p>
@@ -256,7 +267,7 @@ export default function SettingsPanel() {
                     />
                   </div>
                 </div>
-                
+
                 <div className="flex justify-end gap-2">
                   <Button variant="outline">Cancel</Button>
                   <Button>Save Changes</Button>
@@ -265,7 +276,7 @@ export default function SettingsPanel() {
             </GlassCard>
           </motion.div>
         </TabsContent>
-        
+
         <TabsContent value="api">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -274,12 +285,15 @@ export default function SettingsPanel() {
           >
             <GlassCard className="p-6">
               <h3 className="text-lg font-medium mb-6">API Configuration</h3>
-              
+
               <div className="space-y-6">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">API Key</label>
+                  <label htmlFor="api-key" className="text-sm font-medium">
+                    API Key
+                  </label>
                   <div className="flex gap-2">
                     <GlassInput
+                      id="api-key"
                       value={apiSettings.apiKey}
                       onChange={(e) => handleApiChange('apiKey', e.target.value)}
                       className="flex-1"
@@ -287,22 +301,30 @@ export default function SettingsPanel() {
                     />
                     <Button variant="outline">Regenerate</Button>
                   </div>
-                  <p className="text-xs text-muted-foreground mt-1">Your API key is secret. Never share it publicly.</p>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Your API key is secret. Never share it publicly.
+                  </p>
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Max Tokens</label>
+                    <label htmlFor="max-tokens" className="text-sm font-medium">
+                      Max Tokens
+                    </label>
                     <GlassInput
+                      id="max-tokens"
                       value={apiSettings.maxTokens}
                       onChange={(e) => handleApiChange('maxTokens', e.target.value)}
                       type="number"
                     />
                   </div>
-                  
+
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Temperature</label>
+                    <label htmlFor="temperature" className="text-sm font-medium">
+                      Temperature
+                    </label>
                     <GlassInput
+                      id="temperature"
                       value={apiSettings.temperature}
                       onChange={(e) => handleApiChange('temperature', e.target.value)}
                       type="number"
@@ -312,7 +334,7 @@ export default function SettingsPanel() {
                     />
                   </div>
                 </div>
-                
+
                 <div className="flex items-center justify-between py-2 border-b border-border/10">
                   <div>
                     <p className="font-medium">Enable Rate Limiting</p>
@@ -323,33 +345,36 @@ export default function SettingsPanel() {
                     onCheckedChange={(checked) => handleApiChange('enableRateLimiting', checked)}
                   />
                 </div>
-                
+
                 {apiSettings.enableRateLimiting && (
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Rate Limit (requests per minute)</label>
+                    <label htmlFor="rate-limit" className="text-sm font-medium">
+                      Rate Limit (requests per minute)
+                    </label>
                     <GlassInput
+                      id="rate-limit"
                       value={apiSettings.rateLimitPerMinute}
                       onChange={(e) => handleApiChange('rateLimitPerMinute', e.target.value)}
                       type="number"
                     />
                   </div>
                 )}
-                
+
                 <div className="flex justify-end gap-2">
                   <Button variant="outline">Cancel</Button>
-                  <Button>Save Changes</Button>
+                  <Button onClick={saveApiSettings}>Save Changes</Button>
                 </div>
               </div>
             </GlassCard>
           </motion.div>
         </TabsContent>
-        
+
         <TabsContent value="appearance">
           <GlassCard className="p-6 flex items-center justify-center h-64">
             <p className="text-muted-foreground">Appearance settings coming soon</p>
           </GlassCard>
         </TabsContent>
-        
+
         <TabsContent value="security">
           <GlassCard className="p-6 flex items-center justify-center h-64">
             <p className="text-muted-foreground">Security settings coming soon</p>

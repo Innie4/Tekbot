@@ -7,7 +7,7 @@ import { Payment } from './entities/payment.entity';
 export class PaymentsService {
   constructor(
     @InjectRepository(Payment)
-    private readonly paymentRepository: Repository<Payment>
+    private readonly paymentRepository: Repository<Payment>,
   ) {}
 
   async findAllForTenant(tenantId: string) {

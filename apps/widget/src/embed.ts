@@ -39,19 +39,21 @@ class EmbedManager implements TekAssistEmbed {
 
       // Create React root
       this.root = createRoot(this.container);
-      
+
       // Create widget instance with proper props
       const widgetProps = {
         container: this.container,
         tenantId: this.config.tenantId || '',
-         apiUrl: this.config.apiUrl || '',
-         ...(this.config.sessionId && { sessionId: this.config.sessionId }),
-         ...(this.config.customerId && { customerId: this.config.customerId }),
-         ...(this.config.metadata && { metadata: this.config.metadata }),
-         ...(this.config.onMessage && { onMessage: this.config.onMessage }),
-         ...(this.config.onStateChange && { onStateChange: this.config.onStateChange }),
-         ...(this.config.onError && { onError: this.config.onError }),
-         ...(this.config.onResize && { onResize: this.config.onResize }),
+        apiUrl: this.config.apiUrl || '',
+        ...(this.config.sessionId && { sessionId: this.config.sessionId }),
+        ...(this.config.customerId && { customerId: this.config.customerId }),
+        ...(this.config.metadata && { metadata: this.config.metadata }),
+        ...(this.config.onMessage && { onMessage: this.config.onMessage }),
+        ...(this.config.onStateChange && {
+          onStateChange: this.config.onStateChange,
+        }),
+        ...(this.config.onError && { onError: this.config.onError }),
+        ...(this.config.onResize && { onResize: this.config.onResize }),
       };
 
       this.widget = new TekAssistWidget(widgetProps);

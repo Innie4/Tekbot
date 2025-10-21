@@ -30,10 +30,12 @@ async function bootstrap() {
   app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
 
   // Security middleware
-  app.use(helmet({
-    contentSecurityPolicy: nodeEnv === 'production' ? undefined : false,
-    crossOriginEmbedderPolicy: false,
-  }));
+  app.use(
+    helmet({
+      contentSecurityPolicy: nodeEnv === 'production' ? undefined : false,
+      crossOriginEmbedderPolicy: false,
+    }),
+  );
 
   // Compression middleware
   app.use(compression());
@@ -97,7 +99,10 @@ async function bootstrap() {
   );
 
   // Swagger documentation (only in development)
-  if (nodeEnv === 'development' || configService.get<boolean>('ENABLE_SWAGGER', false)) {
+  if (
+    nodeEnv === 'development' ||
+    configService.get<boolean>('ENABLE_SWAGGER', false)
+  ) {
     const config = new DocumentBuilder()
       .setTitle('TekBot Platform API')
       .setDescription('Multi-tenant AI assistant engine API documentation')
@@ -154,13 +159,15 @@ async function bootstrap() {
 
   await app.listen(port);
 
-  console.log(`🚀 TekBot Platform API is running on: http://localhost:${port}/api`);
+  console.log(
+    `🚀 TekBot Platform API is running on: http://localhost:${port}/api`,
+  );
   if (nodeEnv === 'development') {
     console.log(`📚 API Documentation: http://localhost:${port}/api/docs`);
   }
 }
 
-bootstrap().catch((error) => {
+bootstrap().catch(error => {
   console.error('❌ Error starting server:', error);
   process.exit(1);
 });

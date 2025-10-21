@@ -19,7 +19,7 @@ export class TimeoutInterceptor implements NestInterceptor {
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const request = context.switchToHttp().getRequest<Request>();
-    
+
     // Get custom timeout from metadata
     const customTimeout = this.reflector.getAllAndOverride<number>('timeout', [
       context.getHandler(),
@@ -31,13 +31,13 @@ export class TimeoutInterceptor implements NestInterceptor {
 
     return next.handle().pipe(
       timeout(timeoutValue),
-      catchError((error) => {
+      catchError(error => {
         if (error instanceof TimeoutError) {
           const timeoutMessage = this.getTimeoutMessage(request, timeoutValue);
           return throwError(() => new RequestTimeoutException(timeoutMessage));
         }
         return throwError(() => error);
-      })
+      }),
     );
   }
 
@@ -46,7 +46,7 @@ export class TimeoutInterceptor implements NestInterceptor {
     const path = request.path;
 
     // Different timeouts for different types of operations
-    
+
     // File upload/download operations - longer timeout
     if (this.isFileOperation(path)) {
       return 300000; // 5 minutes
@@ -102,7 +102,7 @@ export class TimeoutInterceptor implements NestInterceptor {
       '/export',
       '/import',
     ];
-    
+
     return filePatterns.some(pattern => path.includes(pattern));
   }
 
@@ -114,18 +114,13 @@ export class TimeoutInterceptor implements NestInterceptor {
       '/statistics',
       '/metrics',
     ];
-    
+
     return reportPatterns.some(pattern => path.includes(pattern));
   }
 
   private isBulkOperation(path: string): boolean {
-    const bulkPatterns = [
-      '/bulk',
-      '/batch',
-      '/mass',
-      '/multiple',
-    ];
-    
+    const bulkPatterns = ['/bulk', '/batch', '/mass', '/multiple'];
+
     return bulkPatterns.some(pattern => path.includes(pattern));
   }
 
@@ -140,7 +135,7 @@ export class TimeoutInterceptor implements NestInterceptor {
       '/completion',
       '/embedding',
     ];
-    
+
     return aiPatterns.some(pattern => path.includes(pattern));
   }
 
@@ -154,18 +149,13 @@ export class TimeoutInterceptor implements NestInterceptor {
       '/paystack',
       '/transactions',
     ];
-    
+
     return paymentPatterns.some(pattern => path.includes(pattern));
   }
 
   private isEmailOperation(path: string): boolean {
-    const emailPatterns = [
-      '/email',
-      '/mail',
-      '/notifications',
-      '/send',
-    ];
-    
+    const emailPatterns = ['/email', '/mail', '/notifications', '/send'];
+
     return emailPatterns.some(pattern => path.includes(pattern));
   }
 
@@ -178,7 +168,7 @@ export class TimeoutInterceptor implements NestInterceptor {
       '/complex',
       '/join',
     ];
-    
+
     // POST/PUT/PATCH operations with complex data
     if (['POST', 'PUT', 'PATCH'].includes(method)) {
       return heavyPatterns.some(pattern => path.includes(pattern));
@@ -197,7 +187,7 @@ export class TimeoutInterceptor implements NestInterceptor {
         '/version',
         '/info',
       ];
-      
+
       return quickPatterns.some(pattern => path.includes(pattern));
     }
 
@@ -208,11 +198,14 @@ export class TimeoutInterceptor implements NestInterceptor {
     const method = request.method;
     const path = request.path;
     const timeoutSeconds = Math.round(timeoutValue / 1000);
-    
-    return `Request ${method} ${path} timed out after ${timeoutSeconds} seconds. ` +
-           'Please try again or contact support if the issue persists.';
+
+    return (
+      `Request ${method} ${path} timed out after ${timeoutSeconds} seconds. ` +
+      'Please try again or contact support if the issue persists.'
+    );
   }
 }
 
 // Decorator to set custom timeout
-export const Timeout = (milliseconds: number) => SetMetadata('timeout', milliseconds);
+export const Timeout = (milliseconds: number) =>
+  SetMetadata('timeout', milliseconds);

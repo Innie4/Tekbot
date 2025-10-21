@@ -1,5 +1,4 @@
-
-"use client";
+'use client';
 import HeroSection from '@/components/landing/hero-section';
 import HowItWorks from '@/components/landing/how-it-works';
 import UseCases from '@/components/landing/use-cases';

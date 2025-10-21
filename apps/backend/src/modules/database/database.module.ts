@@ -18,7 +18,10 @@ import { DatabaseService } from './database.service';
           migrations: [__dirname + '/../../migrations/*{.ts,.js}'],
           synchronize: configService.get('NODE_ENV') === 'development',
           logging: configService.get('DB_LOGGING', false),
-          ssl: configService.get('NODE_ENV') === 'production' ? { rejectUnauthorized: false } : false,
+          ssl:
+            configService.get('NODE_ENV') === 'production'
+              ? { rejectUnauthorized: false }
+              : false,
           retryAttempts: 3,
           retryDelay: 3000,
           autoLoadEntities: true,
@@ -37,7 +40,7 @@ import { DatabaseService } from './database.service';
           database: configService.get<string>('DATABASE_NAME', 'tekassist'),
         };
       },
-      dataSourceFactory: async (options) => {
+      dataSourceFactory: async options => {
         const dataSource = await new DataSource(options).initialize();
         return dataSource;
       },

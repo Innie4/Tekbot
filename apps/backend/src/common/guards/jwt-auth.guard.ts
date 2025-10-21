@@ -38,7 +38,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     context: ExecutionContext,
   ): any {
     const request = context.switchToHttp().getRequest<Request>();
-    
+
     // Check if route is marked as public
     const isPublic = this.reflector.getAllAndOverride<boolean>('isPublic', [
       context.getHandler(),
@@ -59,7 +59,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       if (info?.name === 'NotBeforeError') {
         throw new UnauthorizedException('Token not active');
       }
-      
+
       throw new UnauthorizedException('Authentication required');
     }
 
@@ -69,13 +69,16 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     }
 
     // Check if user is verified (if email verification is required)
-    if (user.emailVerified === false && this.isEmailVerificationRequired(request)) {
+    if (
+      user.emailVerified === false &&
+      this.isEmailVerificationRequired(request)
+    ) {
       throw new ForbiddenException('Email verification required');
     }
 
     // Attach user to request
     request.user = user;
-    
+
     return user;
   }
 
@@ -88,8 +91,8 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
       '/api/v1/admin',
     ];
 
-    return verificationRequiredRoutes.some(route => 
-      request.path.startsWith(route)
+    return verificationRequiredRoutes.some(route =>
+      request.path.startsWith(route),
     );
   }
 }

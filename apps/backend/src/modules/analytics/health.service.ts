@@ -17,7 +17,7 @@ export class HealthService {
   async getDatabaseHealth() {
     const isConnected = await this.databaseService.testConnection();
     const connectionInfo = await this.databaseService.getConnectionInfo();
-    
+
     return {
       status: isConnected ? 'healthy' : 'unhealthy',
       database: connectionInfo,
@@ -28,7 +28,7 @@ export class HealthService {
   async getDetailedHealth() {
     const basicHealth = this.getStatus();
     const databaseHealth = await this.getDatabaseHealth();
-    
+
     return {
       ...basicHealth,
       database: databaseHealth,

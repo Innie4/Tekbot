@@ -52,7 +52,7 @@ const PaymentsPanel: React.FC = () => {
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD'
+      currency: 'USD',
     }).format(amount);
   };
 
@@ -165,7 +165,9 @@ const PaymentsPanel: React.FC = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(payment.status)}`}>
+                    <span
+                      className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(payment.status)}`}
+                    >
                       {payment.status}
                     </span>
                   </td>
@@ -178,18 +180,12 @@ const PaymentsPanel: React.FC = () => {
                     {new Date(payment.created_at).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button className="text-blue-600 hover:text-blue-900 mr-3">
-                      View
-                    </button>
+                    <button className="text-blue-600 hover:text-blue-900 mr-3">View</button>
                     {payment.status === 'succeeded' && (
-                      <button className="text-purple-600 hover:text-purple-900 mr-3">
-                        Refund
-                      </button>
+                      <button className="text-purple-600 hover:text-purple-900 mr-3">Refund</button>
                     )}
                     {payment.status === 'failed' && (
-                      <button className="text-green-600 hover:text-green-900">
-                        Retry
-                      </button>
+                      <button className="text-green-600 hover:text-green-900">Retry</button>
                     )}
                   </td>
                 </tr>

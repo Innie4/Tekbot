@@ -40,8 +40,12 @@ describe('CampaignExecutionProcessor', () => {
       ],
     }).compile();
 
-    processor = module.get<CampaignExecutionProcessor>(CampaignExecutionProcessor);
-    campaignRepository = module.get<Repository<Campaign>>(getRepositoryToken(Campaign));
+    processor = module.get<CampaignExecutionProcessor>(
+      CampaignExecutionProcessor,
+    );
+    campaignRepository = module.get<Repository<Campaign>>(
+      getRepositoryToken(Campaign),
+    );
     notificationService = module.get<NotificationService>(NotificationService);
   });
 
@@ -80,13 +84,15 @@ describe('CampaignExecutionProcessor', () => {
         to: 'test@example.com',
         subject: 'Hello John',
         html: expect.stringContaining('Welcome John to our service!'),
-        trackingPixel: expect.stringContaining('/campaigns/track/open/1/customer1'),
+        trackingPixel: expect.stringContaining(
+          '/campaigns/track/open/1/customer1',
+        ),
       });
 
       expect(mockCampaignRepository.increment).toHaveBeenCalledWith(
         { id: '1' },
         'deliveredCount',
-        1
+        1,
       );
     });
 
@@ -115,7 +121,7 @@ describe('CampaignExecutionProcessor', () => {
       expect(mockCampaignRepository.increment).toHaveBeenCalledWith(
         { id: '1' },
         'deliveredCount',
-        1
+        1,
       );
     });
 
@@ -132,20 +138,24 @@ describe('CampaignExecutionProcessor', () => {
         },
       } as Job<CampaignJobData>;
 
-      mockNotificationService.sendPushNotification.mockResolvedValue({ success: true });
+      mockNotificationService.sendPushNotification.mockResolvedValue({
+        success: true,
+      });
 
       await processor.handleCampaignMessage(pushJob);
 
-      expect(mockNotificationService.sendPushNotification).toHaveBeenCalledWith({
-        to: 'device123',
-        title: 'Hello John',
-        body: 'Welcome John to our service!',
-      });
+      expect(mockNotificationService.sendPushNotification).toHaveBeenCalledWith(
+        {
+          to: 'device123',
+          title: 'Hello John',
+          body: 'Welcome John to our service!',
+        },
+      );
 
       expect(mockCampaignRepository.increment).toHaveBeenCalledWith(
         { id: '1' },
         'deliveredCount',
-        1
+        1,
       );
     });
 
@@ -158,11 +168,15 @@ describe('CampaignExecutionProcessor', () => {
         },
       } as Job<CampaignJobData>;
 
-      mockNotificationService.sendInAppNotification.mockResolvedValue({ success: true });
+      mockNotificationService.sendInAppNotification.mockResolvedValue({
+        success: true,
+      });
 
       await processor.handleCampaignMessage(inAppJob);
 
-      expect(mockNotificationService.sendInAppNotification).toHaveBeenCalledWith({
+      expect(
+        mockNotificationService.sendInAppNotification,
+      ).toHaveBeenCalledWith({
         userId: 'customer1',
         title: 'Hello John',
         message: 'Welcome John to our service!',
@@ -171,38 +185,44 @@ describe('CampaignExecutionProcessor', () => {
       expect(mockCampaignRepository.increment).toHaveBeenCalledWith(
         { id: '1' },
         'deliveredCount',
-        1
+        1,
       );
     });
 
     it('should handle failed message delivery', async () => {
-      mockNotificationService.sendEmail.mockResolvedValue({ success: false, error: 'Failed to send' });
+      mockNotificationService.sendEmail.mockResolvedValue({
+        success: false,
+        error: 'Failed to send',
+      });
 
       await processor.handleCampaignMessage(mockJob);
 
       expect(mockCampaignRepository.increment).toHaveBeenCalledWith(
         { id: '1' },
         'failedCount',
-        1
+        1,
       );
     });
 
     it('should handle exceptions during message processing', async () => {
-      mockNotificationService.sendEmail.mockRejectedValue(new Error('Network error'));
+      mockNotificationService.sendEmail.mockRejectedValue(
+        new Error('Network error'),
+      );
 
       await processor.handleCampaignMessage(mockJob);
 
       expect(mockCampaignRepository.increment).toHaveBeenCalledWith(
         { id: '1' },
         'failedCount',
-        1
+        1,
       );
     });
   });
 
   describe('substituteTemplate', () => {
     it('should substitute template variables correctly', () => {
-      const template = 'Hello {{firstName}} {{lastName}}, welcome to {{companyName}}!';
+      const template =
+        'Hello {{firstName}} {{lastName}}, welcome to {{companyName}}!';
       const data = {
         firstName: 'John',
         lastName: 'Doe',
@@ -271,7 +291,7 @@ describe('CampaignExecutionProcessor', () => {
       expect(mockCampaignRepository.increment).toHaveBeenCalledWith(
         { id: '1' },
         'openedCount',
-        1
+        1,
       );
     });
 
@@ -281,7 +301,7 @@ describe('CampaignExecutionProcessor', () => {
       expect(mockCampaignRepository.increment).toHaveBeenCalledWith(
         { id: '1' },
         'clickedCount',
-        1
+        1,
       );
     });
 
@@ -291,7 +311,7 @@ describe('CampaignExecutionProcessor', () => {
       expect(mockCampaignRepository.increment).toHaveBeenCalledWith(
         { id: '1' },
         'unsubscribedCount',
-        1
+        1,
       );
     });
 

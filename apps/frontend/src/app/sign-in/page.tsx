@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import React, { useState } from 'react';
 import { GlassCard } from '@/components/ui/glass-card';
 import { GlassInput } from '@/components/ui/glass-input';
@@ -98,37 +98,46 @@ export default function SignInPage() {
         )}
         <form onSubmit={onSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm mb-1">Email</label>
+            <label htmlFor="sign-in-email" className="block text-sm mb-1">
+              Email
+            </label>
             <GlassInput
+              id="sign-in-email"
               type="email"
               value={email}
               onChange={(e) => onEmailChange(e.target.value)}
               placeholder="you@example.com"
               required
             />
-            {emailError && (
-              <p className="mt-1 text-xs text-red-600">{emailError}</p>
-            )}
+            {emailError && <p className="mt-1 text-xs text-red-600">{emailError}</p>}
           </div>
           <div>
-            <label className="block text-sm mb-1">Password</label>
+            <label htmlFor="sign-in-password" className="block text-sm mb-1">
+              Password
+            </label>
             <GlassInput
+              id="sign-in-password"
               type="password"
               value={password}
               onChange={(e) => onPasswordChange(e.target.value)}
               placeholder="••••••••"
               required
             />
-            {passwordError && (
-              <p className="mt-1 text-xs text-red-600">{passwordError}</p>
-            )}
+            {passwordError && <p className="mt-1 text-xs text-red-600">{passwordError}</p>}
           </div>
-          <Button type="submit" className="w-full" disabled={loading || !!emailError || !!passwordError}>
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={loading || !!emailError || !!passwordError}
+          >
             {loading ? 'Signing in…' : 'Log In'}
           </Button>
         </form>
         <div className="text-sm mt-4 text-center">
-          Don’t have an account? <a href="/sign-up" className="text-primary">Sign up</a>
+          Don’t have an account?{' '}
+          <a href="/sign-up" className="text-primary">
+            Sign up
+          </a>
         </div>
       </GlassCard>
     </div>

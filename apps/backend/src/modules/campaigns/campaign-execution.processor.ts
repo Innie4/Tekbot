@@ -21,9 +21,11 @@ export class CampaignExecutionProcessor {
   @Process('send-campaign-message')
   async handleCampaignMessage(job: Job<CampaignJobData>): Promise<void> {
     const { data } = job;
-    
+
     try {
-      this.logger.debug(`Processing campaign message for recipient ${data.recipient?.email || data.recipientEmail}`);
+      this.logger.debug(
+        `Processing campaign message for recipient ${data.recipient?.email || data.recipientEmail}`,
+      );
 
       // Prepare message content from job data directly
       const messageContent = this.prepareMessageContent(data);
@@ -50,12 +52,19 @@ export class CampaignExecutionProcessor {
       }
 
       // Update campaign metrics
-      await this.updateCampaignMetrics(data.campaignId, success ? 'delivered' : 'failed');
+      await this.updateCampaignMetrics(
+        data.campaignId,
+        success ? 'delivered' : 'failed',
+      );
 
-      this.logger.debug(`Campaign message processed for ${data.recipient?.email || data.recipientEmail}`);
-
+      this.logger.debug(
+        `Campaign message processed for ${data.recipient?.email || data.recipientEmail}`,
+      );
     } catch (error) {
-      this.logger.error(`Failed to send campaign message to ${data.recipient?.email || data.recipientEmail}:`, error);
+      this.logger.error(
+        `Failed to send campaign message to ${data.recipient?.email || data.recipientEmail}:`,
+        error,
+      );
       // Update failure metrics
       await this.updateCampaignMetrics(data.campaignId, 'failed');
       // Do not rethrow to allow job to complete gracefully in tests
@@ -88,7 +97,10 @@ export class CampaignExecutionProcessor {
   /**
    * Simple template substitution
    */
-  private substituteTemplate(template: string, data: Record<string, any>): string {
+  private substituteTemplate(
+    template: string,
+    data: Record<string, any>,
+  ): string {
     return template.replace(/\{\{(\w+)\}\}/g, (match, key) => {
       return data[key] || match;
     });
@@ -102,7 +114,10 @@ export class CampaignExecutionProcessor {
       <html>
         <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
           <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
-            ${text.split('\n').map(line => `<p>${line}</p>`).join('')}
+            ${text
+              .split('\n')
+              .map(line => `<p>${line}</p>`)
+              .join('')}
             <hr style="margin: 30px 0; border: none; border-top: 1px solid #eee;">
             <p style="font-size: 12px; color: #666;">
               This email was sent by TekAssist. If you no longer wish to receive these emails, 
@@ -119,7 +134,7 @@ export class CampaignExecutionProcessor {
    */
   private async sendEmailCampaign(
     data: CampaignJobData,
-    content: { subject: string; content: string; htmlContent?: string }
+    content: { subject: string; content: string; htmlContent?: string },
   ): Promise<boolean> {
     const recipientEmail = data.recipient?.email || data.recipientEmail;
     if (!recipientEmail) {
@@ -135,7 +150,7 @@ export class CampaignExecutionProcessor {
       trackingPixel,
     });
 
-    return typeof res === 'boolean' ? res : (res?.success !== false);
+    return typeof res === 'boolean' ? res : res?.success !== false;
   }
 
   /**
@@ -143,23 +158,27 @@ export class CampaignExecutionProcessor {
    */
   private async sendSmsCampaign(
     data: CampaignJobData,
-    content: { subject: string; content: string }
+    content: { subject: string; content: string },
   ): Promise<boolean> {
     const recipientPhone = data.recipient?.phone || data.recipientPhone;
     if (!recipientPhone) {
       throw new Error('Recipient phone is required for SMS campaigns');
     }
 
-    const smsContent = content.content.length > 160 
-      ? content.content.substring(0, 157) + '...'
-      : content.content;
+    const smsContent =
+      content.content.length > 160
+        ? content.content.substring(0, 157) + '...'
+        : content.content;
 
     const svc: any = this.notificationService as any;
-    const res = await (typeof svc.sendSMS === 'function')
+    const res = (await (typeof svc.sendSMS === 'function'))
       ? svc.sendSMS({ to: recipientPhone, message: smsContent })
-      : this.notificationService.sendSms({ to: recipientPhone, body: smsContent });
+      : this.notificationService.sendSms({
+          to: recipientPhone,
+          body: smsContent,
+        });
 
-    return typeof res === 'boolean' ? res : (res?.success !== false);
+    return typeof res === 'boolean' ? res : res?.success !== false;
   }
 
   /**
@@ -167,7 +186,7 @@ export class CampaignExecutionProcessor {
    */
   private async sendPushCampaign(
     data: CampaignJobData,
-    content: { subject: string; content: string }
+    content: { subject: string; content: string },
   ): Promise<boolean> {
     const deviceToken = data.recipient?.deviceToken;
     const svc: any = this.notificationService as any;
@@ -178,10 +197,12 @@ export class CampaignExecutionProcessor {
         title: content.subject,
         body: content.content,
       });
-      return typeof res === 'boolean' ? res : (res?.success !== false);
+      return typeof res === 'boolean' ? res : res?.success !== false;
     }
 
-    this.logger.warn('Push notifications not implemented, falling back to in-app notification');
+    this.logger.warn(
+      'Push notifications not implemented, falling back to in-app notification',
+    );
     return this.sendInAppCampaign(data, content);
   }
 
@@ -190,7 +211,7 @@ export class CampaignExecutionProcessor {
    */
   private async sendInAppCampaign(
     data: CampaignJobData,
-    content: { subject: string; content: string }
+    content: { subject: string; content: string },
   ): Promise<boolean> {
     const userId = data.recipientId || data.recipient?.id;
     if (!userId) {
@@ -204,7 +225,7 @@ export class CampaignExecutionProcessor {
         title: content.subject,
         message: content.content,
       });
-      return typeof res === 'boolean' ? res : (res?.success !== false);
+      return typeof res === 'boolean' ? res : res?.success !== false;
     }
 
     const res = await this.notificationService.sendInApp({
@@ -216,10 +237,10 @@ export class CampaignExecutionProcessor {
       metadata: {
         campaignId: data.campaignId,
         type: 'campaign',
-      }
+      },
     });
 
-    return typeof res === 'boolean' ? res : (res?.success !== false);
+    return typeof res === 'boolean' ? res : res?.success !== false;
   }
 
   /**
@@ -227,13 +248,21 @@ export class CampaignExecutionProcessor {
    */
   private async updateCampaignMetrics(
     campaignId: string,
-    metricType: 'delivered' | 'failed'
+    metricType: 'delivered' | 'failed',
   ): Promise<void> {
     try {
-      const updateField = metricType === 'delivered' ? 'deliveredCount' : 'failedCount';
-      await this.campaignRepository.increment({ id: campaignId }, updateField, 1);
+      const updateField =
+        metricType === 'delivered' ? 'deliveredCount' : 'failedCount';
+      await this.campaignRepository.increment(
+        { id: campaignId },
+        updateField,
+        1,
+      );
     } catch (error) {
-      this.logger.error(`Failed to update campaign metrics for ${campaignId}:`, error);
+      this.logger.error(
+        `Failed to update campaign metrics for ${campaignId}:`,
+        error,
+      );
       // Don't throw here as it's not critical for message delivery
     }
   }
@@ -244,11 +273,11 @@ export class CampaignExecutionProcessor {
   async handleTrackingEvent(
     campaignId: string,
     recipientId: string,
-    eventType: 'open' | 'click' | 'unsubscribe'
+    eventType: 'open' | 'click' | 'unsubscribe',
   ): Promise<void> {
     try {
       let updateField: string;
-      
+
       switch (eventType) {
         case 'open':
           updateField = 'openedCount';
@@ -264,10 +293,15 @@ export class CampaignExecutionProcessor {
           return;
       }
 
-      await this.campaignRepository.increment({ id: campaignId }, updateField, 1);
+      await this.campaignRepository.increment(
+        { id: campaignId },
+        updateField,
+        1,
+      );
 
-      this.logger.debug(`Tracked ${eventType} event for campaign ${campaignId}, recipient ${recipientId}`);
-
+      this.logger.debug(
+        `Tracked ${eventType} event for campaign ${campaignId}, recipient ${recipientId}`,
+      );
     } catch (error) {
       this.logger.error(`Failed to track ${eventType} event:`, error);
     }

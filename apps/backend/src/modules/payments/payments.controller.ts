@@ -1,4 +1,15 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, Request, UseGuards, Headers } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Param,
+  Request,
+  UseGuards,
+  Headers,
+} from '@nestjs/common';
 import { PaymentsService } from './payments.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { Public } from '../auth/decorators/public.decorator';
@@ -43,8 +54,11 @@ export class PaymentsController {
     },
     @Headers('x-tenant-id') tenantId?: string,
   ) {
-    const frontendUrl = this.configService.get<string>('FRONTEND_URL') || 'http://localhost:3001';
-    const currency = (dto.currency || (dto.provider === 'paystack' ? 'NGN' : 'USD')).toUpperCase();
+    const frontendUrl =
+      this.configService.get<string>('FRONTEND_URL') || 'http://localhost:3001';
+    const currency = (
+      dto.currency || (dto.provider === 'paystack' ? 'NGN' : 'USD')
+    ).toUpperCase();
 
     if (dto.provider === 'stripe') {
       const session = await this.stripeService.createCheckoutSession({
@@ -60,9 +74,16 @@ export class PaymentsController {
     }
 
     // Default to Paystack
-    const res = await this.paystackService.initializeTransaction(dto.amount, dto.email || 'customer@example.com');
+    const res = await this.paystackService.initializeTransaction(
+      dto.amount,
+      dto.email || 'customer@example.com',
+    );
     const data = res.data?.data || {};
-    return { provider: 'paystack', url: data.authorization_url, reference: data.reference };
+    return {
+      provider: 'paystack',
+      url: data.authorization_url,
+      reference: data.reference,
+    };
   }
 
   @Get(':id')

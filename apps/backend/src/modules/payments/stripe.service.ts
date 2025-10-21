@@ -1,7 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import Stripe from 'stripe';
 import { ConfigService } from '@nestjs/config';
-import { ErrorHandlerUtil, ErrorContext } from '../../common/utils/error-handler.util';
+import {
+  ErrorHandlerUtil,
+  ErrorContext,
+} from '../../common/utils/error-handler.util';
 
 export interface CreatePaymentIntentOptions {
   amount: number;
@@ -19,7 +22,10 @@ export interface CreateSubscriptionOptions {
   priceId: string;
   trialPeriodDays?: number;
   metadata?: Record<string, string>;
-  paymentBehavior?: 'default_incomplete' | 'error_if_incomplete' | 'allow_incomplete';
+  paymentBehavior?:
+    | 'default_incomplete'
+    | 'error_if_incomplete'
+    | 'allow_incomplete';
 }
 
 export interface CreateCustomerOptions {
@@ -47,11 +53,14 @@ export class StripeService {
 
   constructor(private readonly configService: ConfigService) {
     const config = this.configService.get('stripe');
-    this.stripe = new Stripe(this.configService.get<string>('STRIPE_SECRET_KEY'), {
-      apiVersion: '2023-10-16',
-      timeout: config?.timeout || 80000,
-      maxNetworkRetries: config?.maxNetworkRetries || 3,
-    });
+    this.stripe = new Stripe(
+      this.configService.get<string>('STRIPE_SECRET_KEY'),
+      {
+        apiVersion: '2023-10-16',
+        timeout: config?.timeout || 80000,
+        maxNetworkRetries: config?.maxNetworkRetries || 3,
+      },
+    );
   }
 
   async createPaymentIntent(
@@ -275,7 +284,9 @@ export class StripeService {
   ): Promise<Stripe.Customer> {
     return ErrorHandlerUtil.handleExternalApiCall(
       async () => {
-        return this.stripe.customers.retrieve(customerId) as Promise<Stripe.Customer>;
+        return this.stripe.customers.retrieve(
+          customerId,
+        ) as Promise<Stripe.Customer>;
       },
       {
         service: 'StripeService',
@@ -294,8 +305,10 @@ export class StripeService {
   async verifyWebhook(payload: any, signature: string): Promise<Stripe.Event> {
     return ErrorHandlerUtil.handleAsync(
       async () => {
-        const endpointSecret = this.configService.get<string>('STRIPE_WEBHOOK_SECRET');
-        
+        const endpointSecret = this.configService.get<string>(
+          'STRIPE_WEBHOOK_SECRET',
+        );
+
         if (!endpointSecret) {
           throw new Error('Stripe webhook secret not configured');
         }

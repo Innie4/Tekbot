@@ -7,8 +7,18 @@ import {
   Get,
   Patch,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
-import { AuthService, LoginDto, RegisterDto, AuthResponse } from './auth.service';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
+import {
+  AuthService,
+  LoginDto,
+  RegisterDto,
+  AuthResponse,
+} from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { Public } from '../../common/decorators/roles.decorator';
@@ -102,7 +112,9 @@ export class AuthController {
     status: 401,
     description: 'Invalid refresh token',
   })
-  async refresh(@Body() body: { refreshToken: string }): Promise<{ accessToken: string }> {
+  async refresh(
+    @Body() body: { refreshToken: string },
+  ): Promise<{ accessToken: string }> {
     return this.authService.refreshToken(body.refreshToken);
   }
 
@@ -123,7 +135,9 @@ export class AuthController {
     status: 400,
     description: 'Invalid verification token',
   })
-  async verifyEmail(@Body() body: { token: string }): Promise<{ message: string }> {
+  async verifyEmail(
+    @Body() body: { token: string },
+  ): Promise<{ message: string }> {
     return this.authService.verifyEmail(body.token);
   }
 
@@ -140,7 +154,9 @@ export class AuthController {
       },
     },
   })
-  async forgotPassword(@Body() body: { email: string }): Promise<{ message: string }> {
+  async forgotPassword(
+    @Body() body: { email: string },
+  ): Promise<{ message: string }> {
     return this.authService.forgotPassword(body.email);
   }
 

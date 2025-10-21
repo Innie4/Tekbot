@@ -1,4 +1,11 @@
-import { Controller, Post, Get, Req, Inject, SetMetadata } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Get,
+  Req,
+  Inject,
+  SetMetadata,
+} from '@nestjs/common';
 import { MetaService } from '../messaging/meta.service';
 
 @Controller('webhooks/meta')

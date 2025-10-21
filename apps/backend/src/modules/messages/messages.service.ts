@@ -7,7 +7,7 @@ import { Message } from './entities/message.entity';
 export class MessagesService {
   constructor(
     @InjectRepository(Message)
-    private readonly messageRepository: Repository<Message>
+    private readonly messageRepository: Repository<Message>,
   ) {}
 
   async findAllForTenant(tenantId: string) {

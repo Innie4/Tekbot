@@ -8,11 +8,15 @@ export default function ChatbotsPage() {
     <DashboardLayout>
       <div className="space-y-4">
         <h2 className="text-xl font-semibold">My Chatbots</h2>
-        <p className="text-sm text-muted-foreground">Manage your assistants and configure their behavior.</p>
+        <p className="text-sm text-muted-foreground">
+          Manage your assistants and configure their behavior.
+        </p>
         <GlassCard className="p-4 flex items-center justify-between">
           <div>
             <p className="text-sm">No chatbots yet.</p>
-            <p className="text-xs text-muted-foreground">Create your first assistant to start engaging users.</p>
+            <p className="text-xs text-muted-foreground">
+              Create your first assistant to start engaging users.
+            </p>
           </div>
           <Button>
             <Plus className="h-4 w-4 mr-2" /> Create Chatbot

@@ -1,4 +1,14 @@
-import { Controller, Post, Req, Inject, Logger, HttpStatus, HttpException, RawBodyRequest, SetMetadata } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Req,
+  Inject,
+  Logger,
+  HttpStatus,
+  HttpException,
+  RawBodyRequest,
+  SetMetadata,
+} from '@nestjs/common';
 import { PaystackService } from '../payments/paystack.service';
 import { PaymentsService } from '../payments/payments.service';
 import { AppointmentsService } from '../appointments/appointments.service';
@@ -27,7 +37,7 @@ export class PaystackWebhookController {
       }
 
       const event = req.body;
-      
+
       switch (event.event) {
         case 'charge.success':
           await this.handleChargeSuccess(event.data);
@@ -74,8 +84,14 @@ export class PaystackWebhookController {
 
       return { received: true };
     } catch (error) {
-      this.logger.error(`Paystack webhook error: ${error.message}`, error.stack);
-      throw new HttpException('Webhook processing failed', HttpStatus.BAD_REQUEST);
+      this.logger.error(
+        `Paystack webhook error: ${error.message}`,
+        error.stack,
+      );
+      throw new HttpException(
+        'Webhook processing failed',
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 
@@ -90,7 +106,10 @@ export class PaystackWebhookController {
     }
 
     // Update or create payment record
-    const existingPayment = await this.paymentsService.findOneForTenant(tenantId, reference);
+    const existingPayment = await this.paymentsService.findOneForTenant(
+      tenantId,
+      reference,
+    );
     if (existingPayment) {
       await this.paymentsService.updateForTenant(tenantId, existingPayment.id, {
         status: 'completed',
@@ -113,9 +132,15 @@ export class PaystackWebhookController {
     });
 
     // Send notifications
-    await this.notificationService.sendPaymentConfirmation(tenantId, appointmentId, amount / 100);
-    
-    this.logger.log(`Paystack charge succeeded for appointment ${appointmentId}, tenant ${tenantId}`);
+    await this.notificationService.sendPaymentConfirmation(
+      tenantId,
+      appointmentId,
+      amount / 100,
+    );
+
+    this.logger.log(
+      `Paystack charge succeeded for appointment ${appointmentId}, tenant ${tenantId}`,
+    );
   }
 
   private async handleChargeFailed(data: any) {
@@ -145,25 +170,33 @@ export class PaystackWebhookController {
 
     // Send failure notification
     await this.notificationService.sendPaymentFailure(tenantId, appointmentId);
-    
-    this.logger.warn(`Paystack charge failed for appointment ${appointmentId}, tenant ${tenantId}`);
+
+    this.logger.warn(
+      `Paystack charge failed for appointment ${appointmentId}, tenant ${tenantId}`,
+    );
   }
 
   private async handleTransferSuccess(data: any) {
     const { reference, amount, recipient } = data;
-    this.logger.log(`Transfer successful: ${reference}, Amount: ${amount / 100}`);
-    
+    this.logger.log(
+      `Transfer successful: ${reference}, Amount: ${amount / 100}`,
+    );
+
     // Handle successful transfer logic (payouts, refunds, etc.)
     // This could involve updating payout records, notifying recipients, etc.
   }
 
   private async handleTransferFailed(data: any) {
     const { reference, amount, recipient, failure_reason } = data;
-    this.logger.error(`Transfer failed: ${reference}, Amount: ${amount / 100}, Reason: ${failure_reason}`);
-    
+    this.logger.error(
+      `Transfer failed: ${reference}, Amount: ${amount / 100}, Reason: ${failure_reason}`,
+    );
+
     // Handle failed transfer logic
-    await this.notificationService.sendAdminAlert('Transfer Failed', 
-      `Transfer ${reference} failed. Amount: ₦${amount / 100}. Reason: ${failure_reason}`);
+    await this.notificationService.sendAdminAlert(
+      'Transfer Failed',
+      `Transfer ${reference} failed. Amount: ₦${amount / 100}. Reason: ${failure_reason}`,
+    );
   }
 
   private async handleSubscriptionCreated(data: any) {
@@ -201,7 +234,9 @@ export class PaystackWebhookController {
       return;
     }
 
-    this.logger.log(`Invoice created for tenant ${tenantId}, Amount: ₦${amount / 100}`);
+    this.logger.log(
+      `Invoice created for tenant ${tenantId}, Amount: ₦${amount / 100}`,
+    );
     // Handle invoice creation logic
   }
 
@@ -214,7 +249,9 @@ export class PaystackWebhookController {
       return;
     }
 
-    this.logger.log(`Invoice updated for tenant ${tenantId}, Status: ${status}`);
+    this.logger.log(
+      `Invoice updated for tenant ${tenantId}, Status: ${status}`,
+    );
     // Handle invoice update logic
   }
 
@@ -228,8 +265,10 @@ export class PaystackWebhookController {
     }
 
     this.logger.warn(`Invoice payment failed for tenant ${tenantId}`);
-    await this.notificationService.sendAdminAlert('Invoice Payment Failed', 
-      `Invoice payment failed for tenant ${tenantId}. Amount: ₦${amount / 100}`);
+    await this.notificationService.sendAdminAlert(
+      'Invoice Payment Failed',
+      `Invoice payment failed for tenant ${tenantId}. Amount: ₦${amount / 100}`,
+    );
   }
 
   private async handleCustomerVerificationSuccess(data: any) {
@@ -240,31 +279,42 @@ export class PaystackWebhookController {
 
   private async handleCustomerVerificationFailed(data: any) {
     const { customer_id, customer_code, reason } = data;
-    this.logger.warn(`Customer verification failed: ${customer_code}, Reason: ${reason}`);
+    this.logger.warn(
+      `Customer verification failed: ${customer_code}, Reason: ${reason}`,
+    );
     // Handle failed customer verification
   }
 
   private async handleDisputeCreated(data: any) {
     const { transaction, amount, currency, reason } = data;
-    
-    this.logger.error(`Dispute created for transaction: ${transaction.reference}`, {
-      amount: amount / 100,
-      currency,
-      reason,
-    });
+
+    this.logger.error(
+      `Dispute created for transaction: ${transaction.reference}`,
+      {
+        amount: amount / 100,
+        currency,
+        reason,
+      },
+    );
 
     // Send alert to admin
-    await this.notificationService.sendAdminAlert('Payment Dispute', 
-      `A dispute has been created for transaction ${transaction.reference}. Amount: ₦${amount / 100}. Reason: ${reason}`);
+    await this.notificationService.sendAdminAlert(
+      'Payment Dispute',
+      `A dispute has been created for transaction ${transaction.reference}. Amount: ₦${amount / 100}. Reason: ${reason}`,
+    );
   }
 
   private async handleDisputeResolved(data: any) {
     const { transaction, resolution } = data;
-    
-    this.logger.log(`Dispute resolved for transaction: ${transaction.reference}, Resolution: ${resolution}`);
-    
+
+    this.logger.log(
+      `Dispute resolved for transaction: ${transaction.reference}, Resolution: ${resolution}`,
+    );
+
     // Handle dispute resolution logic
-    await this.notificationService.sendAdminAlert('Dispute Resolved', 
-      `Dispute for transaction ${transaction.reference} has been resolved: ${resolution}`);
+    await this.notificationService.sendAdminAlert(
+      'Dispute Resolved',
+      `Dispute for transaction ${transaction.reference} has been resolved: ${resolution}`,
+    );
   }
 }

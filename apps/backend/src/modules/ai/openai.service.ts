@@ -6,9 +6,13 @@ import fetch from 'node-fetch';
 export class OpenAIService {
   constructor(private readonly configService: ConfigService) {}
 
-  async getChatResponse(messages: Array<{ role: string; content: string }>): Promise<string> {
+  async getChatResponse(
+    messages: Array<{ role: string; content: string }>,
+  ): Promise<string> {
     const apiKey = this.configService.get<string>('OPENAI_API_KEY');
-    const baseURL = this.configService.get<string>('OPENAI_BASE_URL') || 'https://api.openai.com/v1';
+    const baseURL =
+      this.configService.get<string>('OPENAI_BASE_URL') ||
+      'https://api.openai.com/v1';
     const model =
       this.configService.get<string>('OPENAI_MODEL') ||
       this.configService.get<string>('openai.models.chat.default') ||
@@ -18,7 +22,7 @@ export class OpenAIService {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
+        Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
         model,

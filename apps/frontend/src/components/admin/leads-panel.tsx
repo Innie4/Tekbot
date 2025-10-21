@@ -135,7 +135,9 @@ const LeadsPanel: React.FC = () => {
                     <div className="text-sm font-medium text-gray-900">{lead.source}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(lead.status)}`}>
+                    <span
+                      className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(lead.status)}`}
+                    >
                       {lead.status}
                     </span>
                   </td>
@@ -156,15 +158,9 @@ const LeadsPanel: React.FC = () => {
                     {new Date(lead.created_at).toLocaleDateString()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button className="text-blue-600 hover:text-blue-900 mr-3">
-                      Edit
-                    </button>
-                    <button className="text-green-600 hover:text-green-900 mr-3">
-                      Convert
-                    </button>
-                    <button className="text-red-600 hover:text-red-900">
-                      Delete
-                    </button>
+                    <button className="text-blue-600 hover:text-blue-900 mr-3">Edit</button>
+                    <button className="text-green-600 hover:text-green-900 mr-3">Convert</button>
+                    <button className="text-red-600 hover:text-red-900">Delete</button>
                   </td>
                 </tr>
               ))}

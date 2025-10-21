@@ -37,7 +37,7 @@ export class ConversationsController {
         status: 'active' as const,
         channel: 'widget',
       };
-      
+
       return await this.conversationsService.create(conversationData);
     } catch (error) {
       console.error('Widget conversation creation error:', error);
@@ -57,7 +57,10 @@ export class ConversationsController {
     @Headers('x-tenant-id') tenantId?: string,
   ) {
     try {
-      return await this.conversationsService.findBySessionId(sessionId, tenantId || 'default');
+      return await this.conversationsService.findBySessionId(
+        sessionId,
+        tenantId || 'default',
+      );
     } catch (error) {
       console.error('Widget conversation retrieval error:', error);
       return null;
@@ -66,7 +69,10 @@ export class ConversationsController {
 
   @Post()
   @UseGuards(JwtAuthGuard, TenantGuard)
-  create(@Body() createConversationDto: CreateConversationDto, @Req() req: any) {
+  create(
+    @Body() createConversationDto: CreateConversationDto,
+    @Req() req: any,
+  ) {
     return this.conversationsService.create({
       ...createConversationDto,
       tenantId: req.tenant.id,
@@ -82,7 +88,10 @@ export class ConversationsController {
   @Get('stats')
   @UseGuards(JwtAuthGuard, TenantGuard)
   async getStats(@Req() req: any) {
-    const activeCount = await this.conversationsService.getActiveConversationsCount(req.tenant.id);
+    const activeCount =
+      await this.conversationsService.getActiveConversationsCount(
+        req.tenant.id,
+      );
     return { activeConversations: activeCount };
   }
 
@@ -124,7 +133,11 @@ export class ConversationsController {
     @Body() updateConversationDto: UpdateConversationDto,
     @Req() req: any,
   ) {
-    return this.conversationsService.update(id, req.tenant.id, updateConversationDto);
+    return this.conversationsService.update(
+      id,
+      req.tenant.id,
+      updateConversationDto,
+    );
   }
 
   @Patch(':id/close')
@@ -144,6 +157,9 @@ export class ConversationsController {
 
   @Get('customer/:customerId')
   getByCustomer(@Param('customerId') customerId: string, @Req() req: any) {
-    return this.conversationsService.getConversationsByCustomer(customerId, req.tenant.id);
+    return this.conversationsService.getConversationsByCustomer(
+      customerId,
+      req.tenant.id,
+    );
   }
 }

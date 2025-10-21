@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import React, { useState } from 'react';
 import { GlassCard } from '@/components/ui/glass-card';
 import { GlassInput } from '@/components/ui/glass-input';
@@ -143,66 +143,77 @@ export default function SignUpPage() {
         <form onSubmit={onSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm mb-1">First Name</label>
-            <GlassInput
-              type="text"
-              value={firstName}
-              onChange={(e) => onFirstNameChange(e.target.value)}
-              placeholder="John"
-              required
-            />
-            {firstNameError && (
-              <p className="mt-1 text-xs text-red-600">{firstNameError}</p>
-            )}
+              <label htmlFor="first-name" className="block text-sm mb-1">
+                First Name
+              </label>
+              <GlassInput
+                id="first-name"
+                type="text"
+                value={firstName}
+                onChange={(e) => onFirstNameChange(e.target.value)}
+                placeholder="John"
+                required
+              />
+              {firstNameError && <p className="mt-1 text-xs text-red-600">{firstNameError}</p>}
             </div>
             <div>
-              <label className="block text-sm mb-1">Last Name</label>
-            <GlassInput
-              type="text"
-              value={lastName}
-              onChange={(e) => onLastNameChange(e.target.value)}
-              placeholder="Doe"
-              required
-            />
-            {lastNameError && (
-              <p className="mt-1 text-xs text-red-600">{lastNameError}</p>
-            )}
+              <label htmlFor="last-name" className="block text-sm mb-1">
+                Last Name
+              </label>
+              <GlassInput
+                id="last-name"
+                type="text"
+                value={lastName}
+                onChange={(e) => onLastNameChange(e.target.value)}
+                placeholder="Doe"
+                required
+              />
+              {lastNameError && <p className="mt-1 text-xs text-red-600">{lastNameError}</p>}
             </div>
           </div>
           <div>
-            <label className="block text-sm mb-1">Email</label>
+            <label htmlFor="email" className="block text-sm mb-1">
+              Email
+            </label>
             <GlassInput
+              id="email"
               type="email"
               value={email}
               onChange={(e) => onEmailChange(e.target.value)}
               placeholder="you@example.com"
               required
             />
-            {emailError && (
-              <p className="mt-1 text-xs text-red-600">{emailError}</p>
-            )}
+            {emailError && <p className="mt-1 text-xs text-red-600">{emailError}</p>}
           </div>
           <div>
-            <label className="block text-sm mb-1">Password</label>
+            <label htmlFor="password" className="block text-sm mb-1">
+              Password
+            </label>
             <GlassInput
+              id="password"
               type="password"
               value={password}
               onChange={(e) => onPasswordChange(e.target.value)}
               placeholder="••••••••"
               required
             />
-            {passwordError && (
-              <p className="mt-1 text-xs text-red-600">{passwordError}</p>
-            )}
+            {passwordError && <p className="mt-1 text-xs text-red-600">{passwordError}</p>}
           </div>
-          <Button type="submit" className="w-full" disabled={
-            loading || !!firstNameError || !!lastNameError || !!emailError || !!passwordError
-          }>
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={
+              loading || !!firstNameError || !!lastNameError || !!emailError || !!passwordError
+            }
+          >
             {loading ? 'Creating account…' : 'Create Account'}
           </Button>
         </form>
         <div className="text-sm mt-4 text-center">
-          Already have an account? <a href="/sign-in" className="text-primary">Sign in</a>
+          Already have an account?{' '}
+          <a href="/sign-in" className="text-primary">
+            Sign in
+          </a>
         </div>
       </GlassCard>
     </div>

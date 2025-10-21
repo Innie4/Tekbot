@@ -31,9 +31,7 @@ const StaffPanel: React.FC = () => {
   };
 
   const getStatusColor = (isActive: boolean) => {
-    return isActive 
-      ? 'bg-green-100 text-green-800' 
-      : 'bg-red-100 text-red-800';
+    return isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
   };
 
   const getRoleColor = (role: Staff['role']) => {
@@ -151,7 +149,9 @@ const StaffPanel: React.FC = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getRoleColor(member.role)}`}>
+                    <span
+                      className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getRoleColor(member.role)}`}
+                    >
                       {member.role.charAt(0).toUpperCase() + member.role.slice(1)}
                     </span>
                   </td>
@@ -159,7 +159,9 @@ const StaffPanel: React.FC = () => {
                     <div className="text-sm text-gray-900">{member.department || 'General'}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(member.is_active)}`}>
+                    <span
+                      className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(member.is_active)}`}
+                    >
                       {member.is_active ? 'Active' : 'Inactive'}
                     </span>
                   </td>
@@ -169,21 +171,15 @@ const StaffPanel: React.FC = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button className="text-blue-600 hover:text-blue-900 mr-3">
-                      Edit
-                    </button>
+                    <button className="text-blue-600 hover:text-blue-900 mr-3">Edit</button>
                     {member.is_active ? (
                       <button className="text-yellow-600 hover:text-yellow-900 mr-3">
                         Deactivate
                       </button>
                     ) : (
-                      <button className="text-green-600 hover:text-green-900 mr-3">
-                        Activate
-                      </button>
+                      <button className="text-green-600 hover:text-green-900 mr-3">Activate</button>
                     )}
-                    <button className="text-red-600 hover:text-red-900">
-                      Remove
-                    </button>
+                    <button className="text-red-600 hover:text-red-900">Remove</button>
                   </td>
                 </tr>
               ))}

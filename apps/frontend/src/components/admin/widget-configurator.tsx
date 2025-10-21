@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { Save, Eye, Copy, RefreshCw, Palette, Settings, Code, Monitor } from 'lucide-react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Save, Eye, RefreshCw, Palette, Settings, Code, Monitor } from 'lucide-react';
 import { api } from '@/lib/api/api-client';
 
 interface WidgetTheme {
@@ -45,7 +45,7 @@ interface WidgetConfig {
   behavior: WidgetBehavior;
   isActive: boolean;
   version?: string;
-  customFields?: Record<string, any>;
+  customFields?: Record<string, unknown>;
 }
 
 interface WidgetConfiguratorProps {
@@ -56,7 +56,7 @@ interface WidgetConfiguratorProps {
 
 export default function WidgetConfigurator({
   tenantId,
-  apiUrl,
+  apiUrl: _apiUrl,
   onConfigSave,
 }: WidgetConfiguratorProps) {
   const [config, setConfig] = useState<WidgetConfig>({
@@ -96,21 +96,17 @@ export default function WidgetConfigurator({
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [previewMode, setPreviewMode] = useState(false);
-  const [embedCode, setEmbedCode] = useState('');
+  // removed unused embedCode state
   const [activeTab, setActiveTab] = useState('general');
+  type EmbedTab = 'html' | 'vanilla' | 'react' | 'nextjs' | 'php' | 'python';
+  const [embedTab, setEmbedTab] = useState<EmbedTab>('html');
 
-  useEffect(() => {
-    loadConfig();
-  }, [tenantId]);
-
-  useEffect(() => {
-    generateEmbedCode();
-  }, [config]);
-
-  const loadConfig = async () => {
+  const loadConfig = useCallback(async () => {
     setIsLoading(true);
     try {
-      const existingConfig = await api.get<WidgetConfig>(`/widget/widget-config/tenant/${tenantId}`);
+      const existingConfig = await api.get<WidgetConfig>(
+        `/widget/widget-config/tenant/${tenantId}`
+      );
       if (existingConfig) {
         setConfig(existingConfig);
       }
@@ -119,7 +115,11 @@ export default function WidgetConfigurator({
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [tenantId]);
+
+  useEffect(() => {
+    void loadConfig();
+  }, [loadConfig]);
 
   const saveConfig = async () => {
     setIsSaving(true);
@@ -141,39 +141,97 @@ export default function WidgetConfigurator({
     }
   };
 
-  const generateEmbedCode = () => {
-    const apiBase = `${(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api').replace(/\/$/, '')}/v${process.env.NEXT_PUBLIC_API_VERSION || '1'}/widget`;
-    const code = `<!-- TekAssist Widget -->
+  // removed obsolete generateEmbedCode function
+
+  const getEmbedCode = (stack: EmbedTab) => {
+    const baseApi = `${(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api').replace(/\/$/, '')}`;
+    const tId = tenantId;
+    const html = `<!-- TekAssist Widget (HTML) -->
+<div id="tekassist-widget-container"></div>
 <script>
-  (function() {
-    var script = document.createElement('script');
-    script.src = '${window.location.origin}/widget/embed.js';
-    script.async = true;
-    script.onload = function() {
-      TekAssistWidget.init({
-        tenantId: '${tenantId}',
-        apiUrl: '${apiBase}',
-        containerId: 'tekassist-widget'
-      });
-    };
-    document.head.appendChild(script);
-  })();
+  window.TekAssistConfig = {
+    tenantId: '${tId}',
+    apiUrl: '${baseApi}',
+  };
 </script>
-<div id="tekassist-widget"></div>`;
-    setEmbedCode(code);
+<script src="https://unpkg.com/@tekassist/widget@latest/dist/embed.js" defer></script>`;
+    const vanilla = `<!-- Vanilla JS -->
+<script src="https://unpkg.com/@tekassist/widget@latest/dist/embed.js"></script>
+<script>
+  window.TekAssistEmbed.init({
+    tenantId: '${tId}',
+    apiUrl: '${baseApi}',
+  });
+</script>`;
+    const react = `// React (functional component)\nimport { useEffect } from 'react';\nimport { TekAssistWidget } from '@tekassist/widget';\n\nexport default function SupportWidget() {\n  useEffect(() => {\n    const container = document.getElementById('tekassist-widget');\n    const widget = new TekAssistWidget({
+      container,
+      tenantId: '${tId}',
+      apiUrl: '${baseApi}',
+    });\n    widget.init();
+    return () => widget.destroy();
+  }, []);
+  return <div id="tekassist-widget" />;
+}`;
+    const nextjs = `'use client';
+import { useEffect } from 'react';
+import { TekAssistWidget } from '@tekassist/widget';
+
+export default function SupportWidget() {
+  useEffect(() => {
+    const container = document.getElementById('tekassist-widget');
+    const widget = new TekAssistWidget({
+      container,
+      tenantId: '${tId}',
+      apiUrl: '${baseApi}',
+    });
+    widget.init();
+    return () => widget.destroy();
+  }, []);
+  return <div id="tekassist-widget" />;
+}`;
+    const php = `<?php $tenantId = '${tId}'; $apiUrl='${baseApi}'; ?>
+<div id="tekassist-widget-container"></div>
+<script>
+  window.TekAssistConfig = { tenantId: '<?php echo $tenantId; ?>', apiUrl: '<?php echo $apiUrl; ?>' };
+</script>
+<script src="https://unpkg.com/@tekassist/widget@latest/dist/embed.js" defer></script>`;
+    const python = `{% set tenant_id = '${tId}' %}
+{% set api_url = '${baseApi}' %}
+<div id="tekassist-widget-container"></div>
+<script>
+  window.TekAssistConfig = { tenantId: '{{ tenant_id }}', apiUrl: '{{ api_url }}' };
+</script>
+<script src="https://unpkg.com/@tekassist/widget@latest/dist/embed.js" defer></script>`;
+    switch (stack) {
+      case 'html':
+        return html;
+      case 'vanilla':
+        return vanilla;
+      case 'react':
+        return react;
+      case 'nextjs':
+        return nextjs;
+      case 'php':
+        return php;
+      case 'python':
+        return python;
+      default:
+        return html;
+    }
   };
 
   const copyEmbedCode = () => {
-    navigator.clipboard.writeText(embedCode);
+    const code = getEmbedCode(embedTab);
+    navigator.clipboard.writeText(code);
     alert('Embed code copied to clipboard');
   };
 
-  const updateConfig = (path: string, value: any) => {
-    setConfig(prev => {
+  const updateConfig = (path: string, value: unknown) => {
+    setConfig((prev) => {
       const keys = path.split('.');
       const newConfig = { ...prev };
       let current: any = newConfig;
-      
+
       for (let i = 0; i < keys.length - 1; i++) {
         const key = keys[i];
         if (key) {
@@ -181,7 +239,7 @@ export default function WidgetConfigurator({
           current = current[key];
         }
       }
-      
+
       const lastKey = keys[keys.length - 1];
       if (lastKey) {
         current[lastKey] = value;
@@ -191,7 +249,7 @@ export default function WidgetConfigurator({
   };
 
   const resetToDefaults = () => {
-    setConfig(prev => ({
+    setConfig((prev) => ({
       ...prev,
       theme: {
         primaryColor: '#3B82F6',
@@ -229,7 +287,7 @@ export default function WidgetConfigurator({
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Widget Configurator</h1>
-          <p className="text-gray-600">Customize your chat widget appearance and behavior</p>
+          <p className="text-gray-800">Customize your chat widget appearance and behavior</p>
         </div>
         <div className="flex items-center space-x-3">
           <button
@@ -280,10 +338,14 @@ export default function WidgetConfigurator({
               {activeTab === 'general' && (
                 <div className="space-y-6">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label
+                      htmlFor="widget-title"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
                       Widget Title
                     </label>
                     <input
+                      id="widget-title"
                       type="text"
                       value={config.title}
                       onChange={(e) => updateConfig('title', e.target.value)}
@@ -292,10 +354,14 @@ export default function WidgetConfigurator({
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label
+                      htmlFor="welcome-message"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
                       Welcome Message
                     </label>
                     <textarea
+                      id="welcome-message"
                       value={config.welcomeMessage || ''}
                       onChange={(e) => updateConfig('welcomeMessage', e.target.value)}
                       rows={3}
@@ -304,10 +370,14 @@ export default function WidgetConfigurator({
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label
+                      htmlFor="input-placeholder"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
                       Input Placeholder
                     </label>
                     <input
+                      id="input-placeholder"
                       type="text"
                       value={config.placeholder || ''}
                       onChange={(e) => updateConfig('placeholder', e.target.value)}
@@ -316,10 +386,14 @@ export default function WidgetConfigurator({
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label
+                      htmlFor="widget-position"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
                       Widget Position
                     </label>
                     <select
+                      id="widget-position"
                       value={config.position}
                       onChange={(e) => updateConfig('position', e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -332,10 +406,14 @@ export default function WidgetConfigurator({
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label
+                      htmlFor="company-name"
+                      className="block text-sm font-medium text-gray-800 mb-2"
+                    >
                       Company Name
                     </label>
                     <input
+                      id="company-name"
                       type="text"
                       value={config.branding.companyName || ''}
                       onChange={(e) => updateConfig('branding.companyName', e.target.value)}
@@ -345,32 +423,45 @@ export default function WidgetConfigurator({
 
                   <div className="flex items-center justify-between">
                     <div>
-                      <label className="text-sm font-medium text-gray-700">Widget Active</label>
-                      <p className="text-sm text-gray-500">Enable or disable the widget</p>
+                      <label htmlFor="widget-active" className="text-sm font-medium text-gray-800">
+                        Widget Active
+                      </label>
+                      <p className="text-sm text-gray-800">Enable or disable the widget</p>
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
+                        id="widget-active"
                         type="checkbox"
                         checked={config.isActive}
                         onChange={(e) => updateConfig('isActive', e.target.checked)}
                         className="sr-only peer"
+                        aria-label="Widget Active"
                       />
+                      <span className="sr-only">Widget Active</span>
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                     </label>
                   </div>
 
                   <div className="flex items-center justify-between">
                     <div>
-                      <label className="text-sm font-medium text-gray-700">Show "Powered by TekAssist"</label>
-                      <p className="text-sm text-gray-500">Display branding in the widget</p>
+                      <label
+                        htmlFor="branding-powered-by"
+                        className="text-sm font-medium text-gray-800"
+                      >
+                        Show &quot;Powered by TekAssist&quot;
+                      </label>
+                      <p className="text-sm text-gray-800">Display branding in the widget</p>
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
+                        id="branding-powered-by"
                         type="checkbox"
                         checked={config.branding.showPoweredBy || false}
                         onChange={(e) => updateConfig('branding.showPoweredBy', e.target.checked)}
                         className="sr-only peer"
+                        aria-label="Show Powered by TekAssist"
                       />
+                      <span className="sr-only">Show Powered by TekAssist</span>
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                     </label>
                   </div>
@@ -392,17 +483,23 @@ export default function WidgetConfigurator({
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label
+                        htmlFor="theme-primary-color-text"
+                        className="block text-sm font-medium text-gray-800 mb-2"
+                      >
                         Primary Color
                       </label>
                       <div className="flex items-center space-x-2">
                         <input
+                          id="theme-primary-color"
                           type="color"
+                          aria-label="Primary Color"
                           value={config.theme.primaryColor || '#3B82F6'}
                           onChange={(e) => updateConfig('theme.primaryColor', e.target.value)}
                           className="w-12 h-10 border border-gray-300 rounded cursor-pointer"
                         />
                         <input
+                          id="theme-primary-color-text"
                           type="text"
                           value={config.theme.primaryColor || '#3B82F6'}
                           onChange={(e) => updateConfig('theme.primaryColor', e.target.value)}
@@ -412,17 +509,23 @@ export default function WidgetConfigurator({
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label
+                        htmlFor="theme-secondary-color-text"
+                        className="block text-sm font-medium text-gray-800 mb-2"
+                      >
                         Secondary Color
                       </label>
                       <div className="flex items-center space-x-2">
                         <input
+                          id="theme-secondary-color"
                           type="color"
+                          aria-label="Secondary Color"
                           value={config.theme.secondaryColor || '#EFF6FF'}
                           onChange={(e) => updateConfig('theme.secondaryColor', e.target.value)}
                           className="w-12 h-10 border border-gray-300 rounded cursor-pointer"
                         />
                         <input
+                          id="theme-secondary-color-text"
                           type="text"
                           value={config.theme.secondaryColor || '#EFF6FF'}
                           onChange={(e) => updateConfig('theme.secondaryColor', e.target.value)}
@@ -432,17 +535,23 @@ export default function WidgetConfigurator({
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label
+                        htmlFor="theme-text-color-text"
+                        className="block text-sm font-medium text-gray-800 mb-2"
+                      >
                         Text Color
                       </label>
                       <div className="flex items-center space-x-2">
                         <input
+                          id="theme-text-color"
                           type="color"
+                          aria-label="Text Color"
                           value={config.theme.textColor || '#1F2937'}
                           onChange={(e) => updateConfig('theme.textColor', e.target.value)}
                           className="w-12 h-10 border border-gray-300 rounded cursor-pointer"
                         />
                         <input
+                          id="theme-text-color-text"
                           type="text"
                           value={config.theme.textColor || '#1F2937'}
                           onChange={(e) => updateConfig('theme.textColor', e.target.value)}
@@ -452,17 +561,23 @@ export default function WidgetConfigurator({
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label
+                        htmlFor="theme-background-color-text"
+                        className="block text-sm font-medium text-gray-800 mb-2"
+                      >
                         Background Color
                       </label>
                       <div className="flex items-center space-x-2">
                         <input
+                          id="theme-background-color"
                           type="color"
+                          aria-label="Background Color"
                           value={config.theme.backgroundColor || '#FFFFFF'}
                           onChange={(e) => updateConfig('theme.backgroundColor', e.target.value)}
                           className="w-12 h-10 border border-gray-300 rounded cursor-pointer"
                         />
                         <input
+                          id="theme-background-color-text"
                           type="text"
                           value={config.theme.backgroundColor || '#FFFFFF'}
                           onChange={(e) => updateConfig('theme.backgroundColor', e.target.value)}
@@ -474,10 +589,14 @@ export default function WidgetConfigurator({
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label
+                        htmlFor="theme-border-radius"
+                        className="block text-sm font-medium text-gray-800 mb-2"
+                      >
                         Border Radius
                       </label>
                       <input
+                        id="theme-border-radius"
                         type="text"
                         value={config.theme.borderRadius || '8px'}
                         onChange={(e) => updateConfig('theme.borderRadius', e.target.value)}
@@ -487,10 +606,14 @@ export default function WidgetConfigurator({
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label
+                        htmlFor="theme-font-size"
+                        className="block text-sm font-medium text-gray-800 mb-2"
+                      >
                         Font Size
                       </label>
                       <input
+                        id="theme-font-size"
                         type="text"
                         value={config.theme.fontSize || '14px'}
                         onChange={(e) => updateConfig('theme.fontSize', e.target.value)}
@@ -501,10 +624,14 @@ export default function WidgetConfigurator({
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label
+                      htmlFor="theme-font-family"
+                      className="block text-sm font-medium text-gray-800 mb-2"
+                    >
                       Font Family
                     </label>
                     <select
+                      id="theme-font-family"
                       value={config.theme.fontFamily || 'system-ui, -apple-system, sans-serif'}
                       onChange={(e) => updateConfig('theme.fontFamily', e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -524,29 +651,42 @@ export default function WidgetConfigurator({
                 <div className="space-y-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <label className="text-sm font-medium text-gray-700">Auto Open Widget</label>
-                      <p className="text-sm text-gray-500">Automatically open the widget when page loads</p>
+                      <label htmlFor="auto-open" className="text-sm font-medium text-gray-800">
+                        Auto Open Widget
+                      </label>
+                      <p className="text-sm text-gray-800">
+                        Automatically open the widget when page loads
+                      </p>
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
+                        id="auto-open"
                         type="checkbox"
                         checked={config.behavior.autoOpen || false}
                         onChange={(e) => updateConfig('behavior.autoOpen', e.target.checked)}
                         className="sr-only peer"
+                        aria-label="Auto Open Widget"
                       />
+                      <span className="sr-only">Auto Open Widget</span>
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                     </label>
                   </div>
 
                   {config.behavior.autoOpen && (
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label
+                        htmlFor="auto-open-delay"
+                        className="block text-sm font-medium text-gray-800 mb-2"
+                      >
                         Auto Open Delay (ms)
                       </label>
                       <input
+                        id="auto-open-delay"
                         type="number"
                         value={config.behavior.autoOpenDelay || 3000}
-                        onChange={(e) => updateConfig('behavior.autoOpenDelay', parseInt(e.target.value))}
+                        onChange={(e) =>
+                          updateConfig('behavior.autoOpenDelay', parseInt(e.target.value))
+                        }
                         className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
@@ -554,42 +694,65 @@ export default function WidgetConfigurator({
 
                   <div className="flex items-center justify-between">
                     <div>
-                      <label className="text-sm font-medium text-gray-700">Enable Sound</label>
-                      <p className="text-sm text-gray-500">Play notification sounds for new messages</p>
+                      <label htmlFor="enable-sound" className="text-sm font-medium text-gray-800">
+                        Enable Sound
+                      </label>
+                      <p className="text-sm text-gray-800">
+                        Play notification sounds for new messages
+                      </p>
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
+                        id="enable-sound"
                         type="checkbox"
                         checked={config.behavior.enableSound || false}
                         onChange={(e) => updateConfig('behavior.enableSound', e.target.checked)}
                         className="sr-only peer"
+                        aria-label="Enable Sound"
                       />
+                      <span className="sr-only">Enable Sound</span>
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                     </label>
                   </div>
 
                   <div className="flex items-center justify-between">
                     <div>
-                      <label className="text-sm font-medium text-gray-700">Typing Indicator</label>
-                      <p className="text-sm text-gray-500">Show typing indicator when bot is responding</p>
+                      <label
+                        htmlFor="typing-indicator"
+                        className="text-sm font-medium text-gray-800"
+                      >
+                        Typing Indicator
+                      </label>
+                      <p className="text-sm text-gray-800">
+                        Show typing indicator when bot is responding
+                      </p>
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
+                        id="typing-indicator"
                         type="checkbox"
                         checked={config.behavior.enableTypingIndicator !== false}
-                        onChange={(e) => updateConfig('behavior.enableTypingIndicator', e.target.checked)}
+                        onChange={(e) =>
+                          updateConfig('behavior.enableTypingIndicator', e.target.checked)
+                        }
                         className="sr-only peer"
+                        aria-label="Typing Indicator"
                       />
+                      <span className="sr-only">Typing Indicator</span>
                       <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
                     </label>
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label
+                        htmlFor="max-height"
+                        className="block text-sm font-medium text-gray-800 mb-2"
+                      >
                         Max Height
                       </label>
                       <input
+                        id="max-height"
                         type="text"
                         value={config.behavior.maxHeight || '600px'}
                         onChange={(e) => updateConfig('behavior.maxHeight', e.target.value)}
@@ -599,10 +762,14 @@ export default function WidgetConfigurator({
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label
+                        htmlFor="max-width"
+                        className="block text-sm font-medium text-gray-800 mb-2"
+                      >
                         Max Width
                       </label>
                       <input
+                        id="max-width"
                         type="text"
                         value={config.behavior.maxWidth || '400px'}
                         onChange={(e) => updateConfig('behavior.maxWidth', e.target.value)}
@@ -621,18 +788,36 @@ export default function WidgetConfigurator({
                       <h3 className="text-lg font-medium">Embed Code</h3>
                       <button
                         onClick={copyEmbedCode}
-                        className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                        className="px-3 py-1.5 rounded-md bg-blue-600 text-white hover:bg-blue-700"
                       >
-                        <Copy size={16} />
-                        <span>Copy Code</span>
+                        Copy Code
                       </button>
                     </div>
-                    <p className="text-sm text-gray-600 mb-4">
-                      Copy and paste this code into your website's HTML to embed the chat widget.
+                    <p className="text-sm text-gray-800 mb-4">
+                      Choose a stack below and copy the tailored snippet.
                     </p>
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      {[
+                        { id: 'html', label: 'HTML' },
+                        { id: 'vanilla', label: 'Vanilla JS' },
+                        { id: 'react', label: 'React' },
+                        { id: 'nextjs', label: 'Next.js' },
+                        { id: 'php', label: 'PHP' },
+                        { id: 'python', label: 'Python' },
+                      ].map((t) => (
+                        <button
+                          key={t.id}
+                          onClick={() => setEmbedTab(t.id as EmbedTab)}
+                          className={`px-3 py-1 rounded-md border ${embedTab === t.id ? 'bg-blue-600 text-white border-blue-600' : 'bg-white text-gray-700 hover:bg-gray-50'}`}
+                          aria-pressed={embedTab === t.id}
+                        >
+                          {t.label}
+                        </button>
+                      ))}
+                    </div>
                     <div className="bg-gray-50 border rounded-lg p-4">
                       <pre className="text-sm text-gray-800 whitespace-pre-wrap overflow-x-auto">
-                        {embedCode}
+                        {getEmbedCode(embedTab)}
                       </pre>
                     </div>
                   </div>
@@ -640,10 +825,11 @@ export default function WidgetConfigurator({
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                     <h4 className="font-medium text-blue-900 mb-2">Installation Instructions</h4>
                     <ol className="text-sm text-blue-800 space-y-1 list-decimal list-inside">
-                      <li>Copy the embed code above</li>
-                      <li>Paste it into your website's HTML, preferably before the closing &lt;/body&gt; tag</li>
-                      <li>The widget will automatically load and be positioned according to your settings</li>
-                      <li>Test the widget to ensure it's working correctly</li>
+                      <li>Copy the embed code for your stack from above.</li>
+                      <li>Paste it into your website&apos;s HTML or client page.</li>
+                      <li>Replace the placeholder values (like tenantId) with your real values.</li>
+                      <li>Deploy or run your app and verify the widget renders.</li>
+                      <li>Test the widget to ensure it is working correctly.</li>
                     </ol>
                   </div>
                 </div>
@@ -658,7 +844,7 @@ export default function WidgetConfigurator({
             <div className="bg-white rounded-lg shadow-sm border p-6 sticky top-6">
               <h3 className="text-lg font-medium mb-4">Live Preview</h3>
               <div className="bg-gray-100 rounded-lg p-4 min-h-[400px] relative">
-                <p className="text-sm text-gray-600 text-center">
+                <p className="text-sm text-gray-800 text-center">
                   Widget preview will be displayed here
                 </p>
                 <div className="absolute bottom-4 right-4">

@@ -1,6 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Send, X, Minimize2, MessageCircle, Bot, User } from 'lucide-react';
-import { WidgetConfig, WidgetState, WidgetCallbacks, ChatMessage } from './widget-types';
+import {
+  WidgetConfig,
+  WidgetState,
+  WidgetCallbacks,
+  ChatMessage,
+} from './widget-types';
 import { io, Socket } from 'socket.io-client';
 
 interface ChatWidgetStandaloneProps {
@@ -25,15 +30,23 @@ export function ChatWidgetStandalone({
   callbacks,
 }: ChatWidgetStandaloneProps) {
   const [isOpen, setIsOpen] = useState(initialState?.isOpen || false);
-  const [isMinimized, setIsMinimized] = useState(initialState?.isMinimized || false);
-  const [messages, setMessages] = useState<ChatMessage[]>(initialState?.messages || []);
+  const [isMinimized, setIsMinimized] = useState(
+    initialState?.isMinimized || false,
+  );
+  const [messages, setMessages] = useState<ChatMessage[]>(
+    initialState?.messages || [],
+  );
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
-  const [conversationId, setConversationId] = useState<string | null>(initialState?.conversationId || null);
-  const [currentSessionId, setCurrentSessionId] = useState(sessionId || generateSessionId());
+  const [conversationId, setConversationId] = useState<string | null>(
+    initialState?.conversationId || null,
+  );
+  const [currentSessionId, setCurrentSessionId] = useState(
+    sessionId || generateSessionId(),
+  );
   const [socket, setSocket] = useState<Socket | null>(null);
-  
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -58,7 +71,10 @@ export function ChatWidgetStandalone({
     socketInstance.on('connect', () => {
       console.log('Connected to WebSocket');
       // Join tenant room for receiving messages
-      socketInstance.emit('joinRoom', { tenantId, sessionId: currentSessionId });
+      socketInstance.emit('joinRoom', {
+        tenantId,
+        sessionId: currentSessionId,
+      });
     });
 
     socketInstance.on('message', (data: any) => {
@@ -168,7 +184,7 @@ export function ChatWidgetStandalone({
     const newIsOpen = !isOpen;
     setIsOpen(newIsOpen);
     setIsMinimized(false);
-    
+
     callbacks.onStateChange?.({
       isOpen: newIsOpen,
       isMinimized: false,
@@ -182,7 +198,7 @@ export function ChatWidgetStandalone({
 
   const minimizeWidget = () => {
     setIsMinimized(true);
-    
+
     callbacks.onStateChange?.({
       isOpen,
       isMinimized: true,
@@ -197,7 +213,7 @@ export function ChatWidgetStandalone({
   const closeWidget = () => {
     setIsOpen(false);
     setIsMinimized(false);
-    
+
     callbacks.onStateChange?.({
       isOpen: false,
       isMinimized: false,
@@ -236,8 +252,8 @@ export function ChatWidgetStandalone({
   } as React.CSSProperties;
 
   return (
-    <div 
-      id="tekassist-widget-root"
+    <div
+      id='tekassist-widget-root'
       className={`tw-fixed tw-z-50 ${positionClasses[position]}`}
       style={widgetStyles}
     >
@@ -245,12 +261,12 @@ export function ChatWidgetStandalone({
       {!isOpen && (
         <button
           onClick={toggleWidget}
-          className="tw-w-14 tw-h-14 tw-rounded-full tw-shadow-lg tw-flex tw-items-center tw-justify-center tw-transition-all tw-duration-200 hover:tw-scale-110"
+          className='tw-w-14 tw-h-14 tw-rounded-full tw-shadow-lg tw-flex tw-items-center tw-justify-center tw-transition-all tw-duration-200 hover:tw-scale-110'
           style={{
             backgroundColor: 'var(--button-color)',
             color: 'var(--button-text-color)',
           }}
-          aria-label="Open chat widget"
+          aria-label='Open chat widget'
         >
           <MessageCircle size={24} />
         </button>
@@ -259,7 +275,7 @@ export function ChatWidgetStandalone({
       {/* Chat Window */}
       {isOpen && (
         <div
-          className="tw-bg-white tw-rounded-lg tw-shadow-xl tw-border tw-flex tw-flex-col tw-overflow-hidden"
+          className='tw-bg-white tw-rounded-lg tw-shadow-xl tw-border tw-flex tw-flex-col tw-overflow-hidden'
           style={{
             width: maxWidth,
             height: isMinimized ? '60px' : maxHeight,
@@ -271,28 +287,28 @@ export function ChatWidgetStandalone({
         >
           {/* Header */}
           <div
-            className="tw-p-4 tw-flex tw-items-center tw-justify-between"
+            className='tw-p-4 tw-flex tw-items-center tw-justify-between'
             style={{
               backgroundColor: 'var(--header-color)',
               color: 'var(--header-text-color)',
             }}
           >
-            <div className="tw-flex tw-items-center tw-space-x-2">
+            <div className='tw-flex tw-items-center tw-space-x-2'>
               <MessageCircle size={20} />
-              <span className="tw-font-medium">{config.title}</span>
+              <span className='tw-font-medium'>{config.title}</span>
             </div>
-            <div className="tw-flex tw-items-center tw-space-x-1">
+            <div className='tw-flex tw-items-center tw-space-x-1'>
               <button
                 onClick={minimizeWidget}
-                className="tw-p-1 hover:tw-bg-black/10 tw-rounded tw-transition-colors"
-                aria-label="Minimize widget"
+                className='tw-p-1 hover:tw-bg-black/10 tw-rounded tw-transition-colors'
+                aria-label='Minimize widget'
               >
                 <Minimize2 size={16} />
               </button>
               <button
                 onClick={closeWidget}
-                className="tw-p-1 hover:tw-bg-black/10 tw-rounded tw-transition-colors"
-                aria-label="Close widget"
+                className='tw-p-1 hover:tw-bg-black/10 tw-rounded tw-transition-colors'
+                aria-label='Close widget'
               >
                 <X size={16} />
               </button>
@@ -302,19 +318,25 @@ export function ChatWidgetStandalone({
           {/* Messages */}
           {!isMinimized && (
             <>
-              <div className="tw-flex-1 tw-overflow-y-auto tw-p-4 tw-space-y-3" style={{ height: 'calc(100% - 120px)' }}>
-                {messages.map((message) => (
+              <div
+                className='tw-flex-1 tw-overflow-y-auto tw-p-4 tw-space-y-3'
+                style={{ height: 'calc(100% - 120px)' }}
+              >
+                {messages.map(message => (
                   <div
                     key={message.id}
                     className={`tw-flex ${message.direction === 'outbound' ? 'tw-justify-end' : 'tw-justify-start'}`}
                   >
-                    <div className="tw-flex tw-items-start tw-space-x-2 tw-max-w-[80%]">
+                    <div className='tw-flex tw-items-start tw-space-x-2 tw-max-w-[80%]'>
                       {message.direction === 'inbound' && (
                         <div
-                          className="tw-w-6 tw-h-6 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-flex-shrink-0"
+                          className='tw-w-6 tw-h-6 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-flex-shrink-0'
                           style={{ backgroundColor: 'var(--secondary-color)' }}
                         >
-                          <Bot size={14} style={{ color: 'var(--primary-color)' }} />
+                          <Bot
+                            size={14}
+                            style={{ color: 'var(--primary-color)' }}
+                          />
                         </div>
                       )}
                       <div
@@ -341,38 +363,50 @@ export function ChatWidgetStandalone({
                       </div>
                       {message.direction === 'outbound' && (
                         <div
-                          className="tw-w-6 tw-h-6 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-flex-shrink-0"
+                          className='tw-w-6 tw-h-6 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-flex-shrink-0'
                           style={{ backgroundColor: 'var(--secondary-color)' }}
                         >
-                          <User size={14} style={{ color: 'var(--primary-color)' }} />
+                          <User
+                            size={14}
+                            style={{ color: 'var(--primary-color)' }}
+                          />
                         </div>
                       )}
                     </div>
                   </div>
                 ))}
-                
+
                 {/* Typing indicator */}
                 {isTyping && (
-                  <div className="tw-flex tw-justify-start">
-                    <div className="tw-flex tw-items-start tw-space-x-2 tw-max-w-[80%]">
+                  <div className='tw-flex tw-justify-start'>
+                    <div className='tw-flex tw-items-start tw-space-x-2 tw-max-w-[80%]'>
                       <div
-                        className="tw-w-6 tw-h-6 tw-rounded-full tw-flex tw-items-center tw-justify-center"
+                        className='tw-w-6 tw-h-6 tw-rounded-full tw-flex tw-items-center tw-justify-center'
                         style={{ backgroundColor: 'var(--secondary-color)' }}
                       >
-                        <Bot size={14} style={{ color: 'var(--primary-color)' }} />
+                        <Bot
+                          size={14}
+                          style={{ color: 'var(--primary-color)' }}
+                        />
                       </div>
                       <div
-                        className="tw-px-3 tw-py-2 tw-rounded-lg tw-border"
+                        className='tw-px-3 tw-py-2 tw-rounded-lg tw-border'
                         style={{
                           backgroundColor: 'var(--background-color)',
                           borderColor: 'var(--secondary-color)',
                           borderRadius: 'var(--border-radius)',
                         }}
                       >
-                        <div className="tw-flex tw-space-x-1">
-                          <div className="tw-w-2 tw-h-2 tw-bg-gray-400 tw-rounded-full tw-animate-bounce"></div>
-                          <div className="tw-w-2 tw-h-2 tw-bg-gray-400 tw-rounded-full tw-animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                          <div className="tw-w-2 tw-h-2 tw-bg-gray-400 tw-rounded-full tw-animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                        <div className='tw-flex tw-space-x-1'>
+                          <div className='tw-w-2 tw-h-2 tw-bg-gray-400 tw-rounded-full tw-animate-bounce'></div>
+                          <div
+                            className='tw-w-2 tw-h-2 tw-bg-gray-400 tw-rounded-full tw-animate-bounce'
+                            style={{ animationDelay: '0.1s' }}
+                          ></div>
+                          <div
+                            className='tw-w-2 tw-h-2 tw-bg-gray-400 tw-rounded-full tw-animate-bounce'
+                            style={{ animationDelay: '0.2s' }}
+                          ></div>
                         </div>
                       </div>
                     </div>
@@ -382,17 +416,17 @@ export function ChatWidgetStandalone({
               </div>
 
               {/* Input */}
-              <div className="tw-p-4 tw-border-t">
-                <div className="tw-flex tw-space-x-2">
+              <div className='tw-p-4 tw-border-t'>
+                <div className='tw-flex tw-space-x-2'>
                   <input
                     ref={inputRef}
-                    type="text"
+                    type='text'
                     value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
+                    onChange={e => setInputValue(e.target.value)}
                     onKeyPress={handleKeyPress}
                     placeholder={config.placeholder || 'Type your message...'}
                     disabled={isLoading}
-                    className="tw-flex-1 tw-px-3 tw-py-2 tw-border tw-rounded-md tw-text-sm tw-outline-none focus:tw-ring-2 focus:tw-ring-opacity-50"
+                    className='tw-flex-1 tw-px-3 tw-py-2 tw-border tw-rounded-md tw-text-sm tw-outline-none focus:tw-ring-2 focus:tw-ring-opacity-50'
                     style={{
                       borderColor: 'var(--secondary-color)',
                       borderRadius: 'var(--border-radius)',
@@ -403,7 +437,7 @@ export function ChatWidgetStandalone({
                   <button
                     onClick={sendMessage}
                     disabled={!inputValue.trim() || isLoading}
-                    className="tw-px-4 tw-py-2 tw-rounded-md tw-text-sm tw-font-medium tw-transition-colors disabled:tw-opacity-50 disabled:tw-cursor-not-allowed"
+                    className='tw-px-4 tw-py-2 tw-rounded-md tw-text-sm tw-font-medium tw-transition-colors disabled:tw-opacity-50 disabled:tw-cursor-not-allowed'
                     style={{
                       backgroundColor: 'var(--button-color)',
                       color: 'var(--button-text-color)',
@@ -416,14 +450,14 @@ export function ChatWidgetStandalone({
 
                 {/* Powered by */}
                 {config.branding?.showPoweredBy && (
-                  <div className="tw-mt-2 tw-text-center">
-                    <span className="tw-text-xs tw-text-gray-500">
+                  <div className='tw-mt-2 tw-text-center'>
+                    <span className='tw-text-xs tw-text-gray-500'>
                       Powered by{' '}
                       <a
-                        href="https://tekassist.com"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="hover:tw-underline"
+                        href='https://tekassist.com'
+                        target='_blank'
+                        rel='noopener noreferrer'
+                        className='hover:tw-underline'
                         style={{ color: 'var(--primary-color)' }}
                       >
                         {config.branding?.companyName || 'TekAssist'}

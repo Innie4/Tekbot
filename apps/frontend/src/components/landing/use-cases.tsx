@@ -44,7 +44,10 @@ export default function UseCases() {
           className="text-center mb-16"
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Use <span className="bg-gradient-to-r from-electric-blue to-electric-cyan bg-clip-text text-transparent">Cases</span>
+            Use{' '}
+            <span className="bg-gradient-to-r from-electric-blue to-electric-cyan bg-clip-text text-transparent">
+              Cases
+            </span>
           </h2>
           <p className="text-xl text-foreground/70 max-w-2xl mx-auto">
             Proven scenarios where your AI assistant adds immediate value

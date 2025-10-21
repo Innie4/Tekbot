@@ -15,7 +15,9 @@ export class ConversationsService {
     private messageRepository: Repository<Message>,
   ) {}
 
-  async create(createConversationDto: CreateConversationDto): Promise<Conversation> {
+  async create(
+    createConversationDto: CreateConversationDto,
+  ): Promise<Conversation> {
     const conversation = this.conversationRepository.create({
       ...createConversationDto,
       last_activity_at: new Date(),
@@ -44,7 +46,10 @@ export class ConversationsService {
     return conversation;
   }
 
-  async findBySessionId(sessionId: string, tenantId: string): Promise<Conversation | null> {
+  async findBySessionId(
+    sessionId: string,
+    tenantId: string,
+  ): Promise<Conversation | null> {
     return this.conversationRepository.findOne({
       where: { sessionId, tenantId },
       relations: ['messages'],
@@ -54,10 +59,10 @@ export class ConversationsService {
   async findOrCreateBySessionId(
     sessionId: string,
     tenantId: string,
-    metadata?: Record<string, any>
+    metadata?: Record<string, any>,
   ): Promise<Conversation> {
     let conversation = await this.findBySessionId(sessionId, tenantId);
-    
+
     if (!conversation) {
       conversation = await this.create({
         tenantId,
@@ -74,25 +79,33 @@ export class ConversationsService {
     return conversation;
   }
 
-  async update(id: string, tenantId: string, updateConversationDto: UpdateConversationDto): Promise<Conversation> {
+  async update(
+    id: string,
+    tenantId: string,
+    updateConversationDto: UpdateConversationDto,
+  ): Promise<Conversation> {
     const conversation = await this.findOne(id, tenantId);
-    
+
     Object.assign(conversation, updateConversationDto);
     conversation.updated_at = new Date();
-    
+
     return this.conversationRepository.save(conversation);
   }
 
   async updateLastActivity(id: string, tenantId: string): Promise<void> {
     await this.conversationRepository.update(
       { id, tenantId },
-      { last_activity_at: new Date() }
+      { last_activity_at: new Date() },
     );
   }
 
-  async addMessage(conversationId: string, tenantId: string, messageData: any): Promise<Message> {
+  async addMessage(
+    conversationId: string,
+    tenantId: string,
+    messageData: any,
+  ): Promise<Message> {
     const conversation = await this.findOne(conversationId, tenantId);
-    
+
     const message = this.messageRepository.create({
       ...messageData,
       conversationId,
@@ -100,23 +113,28 @@ export class ConversationsService {
     });
 
     const savedMessage = await this.messageRepository.save(message);
-    
+
     // Update conversation's last activity
     await this.updateLastActivity(conversationId, tenantId);
-    
+
     return savedMessage as unknown as Message;
   }
 
-  async getMessages(conversationId: string, tenantId: string, limit = 50, offset = 0): Promise<Message[]> {
+  async getMessages(
+    conversationId: string,
+    tenantId: string,
+    limit = 50,
+    offset = 0,
+  ): Promise<Message[]> {
     await this.findOne(conversationId, tenantId); // Verify conversation exists
-    
+
     const messages = await this.messageRepository.find({
       where: { conversationId, tenantId },
       order: { created_at: 'ASC' },
       take: limit,
       skip: offset,
     });
-    
+
     return messages;
   }
 
@@ -124,7 +142,10 @@ export class ConversationsService {
     return this.update(id, tenantId, { status: 'closed' });
   }
 
-  async archiveConversation(id: string, tenantId: string): Promise<Conversation> {
+  async archiveConversation(
+    id: string,
+    tenantId: string,
+  ): Promise<Conversation> {
     return this.update(id, tenantId, { status: 'archived' });
   }
 
@@ -139,7 +160,10 @@ export class ConversationsService {
     });
   }
 
-  async getConversationsByCustomer(customerId: string, tenantId: string): Promise<Conversation[]> {
+  async getConversationsByCustomer(
+    customerId: string,
+    tenantId: string,
+  ): Promise<Conversation[]> {
     return this.conversationRepository.find({
       where: { customerId, tenantId },
       relations: ['messages'],

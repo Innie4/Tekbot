@@ -14,25 +14,25 @@ export class AnalyticsController {
       totalConversations: {
         value: '12,543',
         change: '+18.2%',
-        trend: 'up'
+        trend: 'up',
       },
       avgResponseTime: {
         value: '1.2s',
         change: '-0.3s',
-        trend: 'up'
+        trend: 'up',
       },
       userSatisfaction: {
         value: '94%',
         change: '+2.4%',
-        trend: 'up'
+        trend: 'up',
       },
       failedResponses: {
         value: '2.1%',
         change: '+0.5%',
-        trend: 'down'
+        trend: 'down',
       },
       conversationVolume: this.generateConversationVolumeData(),
-      responseTimeData: this.generateResponseTimeData()
+      responseTimeData: this.generateResponseTimeData(),
     };
   }
 
@@ -59,7 +59,7 @@ export class AnalyticsController {
       date.setDate(date.getDate() - i);
       data.push({
         date: date.toISOString().split('T')[0],
-        conversations: Math.floor(Math.random() * 500) + 100
+        conversations: Math.floor(Math.random() * 500) + 100,
       });
     }
     return data;
@@ -73,7 +73,7 @@ export class AnalyticsController {
       date.setHours(date.getHours() - i);
       data.push({
         hour: date.getHours(),
-        responseTime: Math.random() * 2 + 0.5
+        responseTime: Math.random() * 2 + 0.5,
       });
     }
     return data;

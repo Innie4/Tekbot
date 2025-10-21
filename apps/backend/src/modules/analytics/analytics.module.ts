@@ -7,10 +7,7 @@ import { DatabaseModule } from '../database/database.module';
 import { SentryService } from './sentry.service';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Metric]),
-    DatabaseModule,
-  ],
+  imports: [TypeOrmModule.forFeature([Metric]), DatabaseModule],
   providers: [BusinessMetricsService, HealthService, SentryService],
   exports: [BusinessMetricsService, HealthService, SentryService],
 })

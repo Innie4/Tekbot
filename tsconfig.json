@@ -40,11 +40,7 @@
     },
     "typeRoots": ["./node_modules/@types", "./types"]
   },
-  "include": [
-    "apps/**/*",
-    "packages/**/*",
-    "types/**/*"
-  ],
+  "include": ["apps/**/*", "packages/**/*", "types/**/*"],
   "exclude": [
     "node_modules",
     "dist",

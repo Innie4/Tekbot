@@ -1,10 +1,7 @@
 // Inspired by react-hot-toast library
 import * as React from 'react';
 
-import type {
-  ToastActionElement,
-  ToastProps,
-} from '@/components/ui/toast';
+import type { ToastActionElement, ToastProps } from '@/components/ui/toast';
 
 const TOAST_LIMIT = 5;
 const TOAST_REMOVE_DELAY = 1000000;
@@ -77,18 +74,16 @@ export const reducer = (state: State, action: Action): State => {
     case 'ADD_TOAST':
       return {
         ...state,
-        toasts: [
-          ...state.toasts,
-          { ...action.toast, id: action.toast.id || genId() },
-        ].slice(0, TOAST_LIMIT),
+        toasts: [...state.toasts, { ...action.toast, id: action.toast.id || genId() }].slice(
+          0,
+          TOAST_LIMIT
+        ),
       };
 
     case 'UPDATE_TOAST':
       return {
         ...state,
-        toasts: state.toasts.map((t) =>
-          t.id === action.toast.id ? { ...t, ...action.toast } : t
-        ),
+        toasts: state.toasts.map((t) => (t.id === action.toast.id ? { ...t, ...action.toast } : t)),
       };
 
     case 'DISMISS_TOAST': {
@@ -190,9 +185,7 @@ function useToast() {
     toast,
     dismiss: (toastId?: string) =>
       dispatch(
-        toastId !== undefined
-          ? { type: 'DISMISS_TOAST', toastId }
-          : { type: 'DISMISS_TOAST' }
+        toastId !== undefined ? { type: 'DISMISS_TOAST', toastId } : { type: 'DISMISS_TOAST' }
       ),
   };
 }

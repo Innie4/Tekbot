@@ -8,7 +8,11 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { QueryFailedError } from 'typeorm';
-import { JsonWebTokenError, TokenExpiredError, NotBeforeError } from 'jsonwebtoken';
+import {
+  JsonWebTokenError,
+  TokenExpiredError,
+  NotBeforeError,
+} from 'jsonwebtoken';
 import { SentryService } from '../../modules/analytics/sentry.service';
 
 interface ErrorResponse {
@@ -32,7 +36,9 @@ export class AllExceptionsFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
-    const request = ctx.getRequest<Request & { user?: any; tenant?: any; requestId?: string }>();
+    const request = ctx.getRequest<
+      Request & { user?: any; tenant?: any; requestId?: string }
+    >();
 
     let status: number;
     let message: string;
@@ -43,11 +49,14 @@ export class AllExceptionsFilter implements ExceptionFilter {
     if (exception instanceof HttpException) {
       status = exception.getStatus();
       const exceptionResponse = exception.getResponse();
-      
+
       if (typeof exceptionResponse === 'string') {
         message = exceptionResponse;
         error = exception.name;
-      } else if (typeof exceptionResponse === 'object' && exceptionResponse !== null) {
+      } else if (
+        typeof exceptionResponse === 'object' &&
+        exceptionResponse !== null
+      ) {
         message = (exceptionResponse as any).message || exception.message;
         error = (exceptionResponse as any).error || exception.name;
         details = (exceptionResponse as any).details;
@@ -131,7 +140,10 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const message = error.message.toLowerCase();
 
     // Handle common database constraint violations
-    if (message.includes('unique constraint') || message.includes('duplicate')) {
+    if (
+      message.includes('unique constraint') ||
+      message.includes('duplicate')
+    ) {
       return 'A record with this information already exists';
     }
 
@@ -195,9 +207,14 @@ export class AllExceptionsFilter implements ExceptionFilter {
     return 'An internal server error occurred';
   }
 
-  private logError(exception: unknown, request: Request, errorResponse: ErrorResponse): void {
-    const { statusCode, message, path, requestId, tenantId, userId } = errorResponse;
-    
+  private logError(
+    exception: unknown,
+    request: Request,
+    errorResponse: ErrorResponse,
+  ): void {
+    const { statusCode, message, path, requestId, tenantId, userId } =
+      errorResponse;
+
     const logContext = {
       statusCode,
       message,
@@ -214,7 +231,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
       headers: this.sanitizeHeaders(request.headers),
       exception: {
         name: exception instanceof Error ? exception.name : 'Unknown',
-        message: exception instanceof Error ? exception.message : 'Unknown error',
+        message:
+          exception instanceof Error ? exception.message : 'Unknown error',
         stack: exception instanceof Error ? exception.stack : undefined,
       },
     };
@@ -240,9 +258,14 @@ export class AllExceptionsFilter implements ExceptionFilter {
   }
 
   private sanitizeHeaders(headers: any): any {
-    const sensitiveHeaders = ['authorization', 'cookie', 'x-api-key', 'x-auth-token'];
+    const sensitiveHeaders = [
+      'authorization',
+      'cookie',
+      'x-api-key',
+      'x-auth-token',
+    ];
     const sanitized = { ...headers };
-    
+
     sensitiveHeaders.forEach(header => {
       if (sanitized[header]) {
         sanitized[header] = '[REDACTED]';
@@ -272,7 +295,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
     ];
 
     const sanitized = { ...body };
-    
+
     sensitiveFields.forEach(field => {
       if (sanitized[field]) {
         sanitized[field] = '[REDACTED]';

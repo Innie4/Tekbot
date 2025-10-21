@@ -1,4 +1,14 @@
-import { Controller, Post, Req, Inject, Logger, HttpStatus, HttpException, Headers, SetMetadata } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Req,
+  Inject,
+  Logger,
+  HttpStatus,
+  HttpException,
+  Headers,
+  SetMetadata,
+} from '@nestjs/common';
 import { TwilioService } from '../messaging/twilio.service';
 import { ConversationsService } from '../conversations/conversations.service';
 import { NotificationService } from '../notifications/notification.service';
@@ -58,7 +68,9 @@ export class TwilioWebhookController {
       }
 
       const event: TwilioWebhookEvent = req.body;
-      this.logger.log(`Received Twilio message webhook: ${JSON.stringify(event)}`);
+      this.logger.log(
+        `Received Twilio message webhook: ${JSON.stringify(event)}`,
+      );
 
       // Handle different message events
       if (event.SmsStatus || event.MessageStatus) {
@@ -69,8 +81,14 @@ export class TwilioWebhookController {
 
       return { received: true };
     } catch (error) {
-      this.logger.error(`Twilio message webhook error: ${error.message}`, error.stack);
-      throw new HttpException('Webhook processing failed', HttpStatus.BAD_REQUEST);
+      this.logger.error(
+        `Twilio message webhook error: ${error.message}`,
+        error.stack,
+      );
+      throw new HttpException(
+        'Webhook processing failed',
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 
@@ -88,8 +106,14 @@ export class TwilioWebhookController {
       await this.handleIncomingMessage(event);
       return { received: true };
     } catch (error) {
-      this.logger.error(`Twilio SMS webhook error: ${error.message}`, error.stack);
-      throw new HttpException('Webhook processing failed', HttpStatus.BAD_REQUEST);
+      this.logger.error(
+        `Twilio SMS webhook error: ${error.message}`,
+        error.stack,
+      );
+      throw new HttpException(
+        'Webhook processing failed',
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 
@@ -102,13 +126,21 @@ export class TwilioWebhookController {
       }
 
       const event: TwilioWebhookEvent = req.body;
-      this.logger.log(`Received Twilio WhatsApp webhook: ${JSON.stringify(event)}`);
+      this.logger.log(
+        `Received Twilio WhatsApp webhook: ${JSON.stringify(event)}`,
+      );
 
       await this.handleWhatsAppMessage(event);
       return { received: true };
     } catch (error) {
-      this.logger.error(`Twilio WhatsApp webhook error: ${error.message}`, error.stack);
-      throw new HttpException('Webhook processing failed', HttpStatus.BAD_REQUEST);
+      this.logger.error(
+        `Twilio WhatsApp webhook error: ${error.message}`,
+        error.stack,
+      );
+      throw new HttpException(
+        'Webhook processing failed',
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 
@@ -121,17 +153,27 @@ export class TwilioWebhookController {
       }
 
       const event: TwilioWebhookEvent = req.body;
-      this.logger.log(`Received Twilio status webhook: ${JSON.stringify(event)}`);
+      this.logger.log(
+        `Received Twilio status webhook: ${JSON.stringify(event)}`,
+      );
 
       await this.handleMessageStatus(event);
       return { received: true };
     } catch (error) {
-      this.logger.error(`Twilio status webhook error: ${error.message}`, error.stack);
-      throw new HttpException('Webhook processing failed', HttpStatus.BAD_REQUEST);
+      this.logger.error(
+        `Twilio status webhook error: ${error.message}`,
+        error.stack,
+      );
+      throw new HttpException(
+        'Webhook processing failed',
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 
-  private async handleIncomingMessage(event: TwilioWebhookEvent): Promise<void> {
+  private async handleIncomingMessage(
+    event: TwilioWebhookEvent,
+  ): Promise<void> {
     try {
       const phoneNumber = this.normalizePhoneNumber(event.From);
       const messageBody = event.Body || '';
@@ -142,19 +184,23 @@ export class TwilioWebhookController {
       if (!customer) {
         customer = await this.customersService.create({
           phone: phoneNumber,
-          name: event.ProfileName || event.CallerName || `Customer ${phoneNumber}`,
+          name:
+            event.ProfileName || event.CallerName || `Customer ${phoneNumber}`,
         });
       }
 
       // Find or create conversation
-      let conversation = await this.conversationsService.getConversationsByCustomer(
-        customer.id,
-        customer.tenantId
-      );
+      let conversation =
+        await this.conversationsService.getConversationsByCustomer(
+          customer.id,
+          customer.tenantId,
+        );
 
       // Get the first active conversation or create a new one
-      let activeConversation = conversation.find(c => c.status === 'active' && c.channel === channel);
-      
+      let activeConversation = conversation.find(
+        c => c.status === 'active' && c.channel === channel,
+      );
+
       if (!activeConversation) {
         activeConversation = await this.conversationsService.create({
           tenantId: customer.tenantId,
@@ -191,7 +237,11 @@ export class TwilioWebhookController {
         },
       };
 
-      await this.conversationsService.addMessage(activeConversation.id, customer.tenantId, messageData);
+      await this.conversationsService.addMessage(
+        activeConversation.id,
+        customer.tenantId,
+        messageData,
+      );
 
       // Send notification to admin/staff
       await this.notificationService.sendInApp({
@@ -206,14 +256,21 @@ export class TwilioWebhookController {
         },
       });
 
-      this.logger.log(`Processed incoming ${channel} message from ${phoneNumber}`);
+      this.logger.log(
+        `Processed incoming ${channel} message from ${phoneNumber}`,
+      );
     } catch (error) {
-      this.logger.error(`Error handling incoming message: ${error.message}`, error.stack);
+      this.logger.error(
+        `Error handling incoming message: ${error.message}`,
+        error.stack,
+      );
       throw error;
     }
   }
 
-  private async handleWhatsAppMessage(event: TwilioWebhookEvent): Promise<void> {
+  private async handleWhatsAppMessage(
+    event: TwilioWebhookEvent,
+  ): Promise<void> {
     try {
       // Handle WhatsApp-specific features
       if (event.ButtonPayload) {
@@ -224,14 +281,21 @@ export class TwilioWebhookController {
         await this.handleIncomingMessage(event);
       }
     } catch (error) {
-      this.logger.error(`Error handling WhatsApp message: ${error.message}`, error.stack);
+      this.logger.error(
+        `Error handling WhatsApp message: ${error.message}`,
+        error.stack,
+      );
       throw error;
     }
   }
 
-  private async handleWhatsAppButtonResponse(event: TwilioWebhookEvent): Promise<void> {
-    this.logger.log(`WhatsApp button response: ${event.ButtonText} - ${event.ButtonPayload}`);
-    
+  private async handleWhatsAppButtonResponse(
+    event: TwilioWebhookEvent,
+  ): Promise<void> {
+    this.logger.log(
+      `WhatsApp button response: ${event.ButtonText} - ${event.ButtonPayload}`,
+    );
+
     // Create a modified event for button response
     const buttonEvent = {
       ...event,
@@ -241,9 +305,13 @@ export class TwilioWebhookController {
     await this.handleIncomingMessage(buttonEvent);
   }
 
-  private async handleWhatsAppListResponse(event: TwilioWebhookEvent): Promise<void> {
-    this.logger.log(`WhatsApp list response: ${event.ListTitle} - ${event.Description}`);
-    
+  private async handleWhatsAppListResponse(
+    event: TwilioWebhookEvent,
+  ): Promise<void> {
+    this.logger.log(
+      `WhatsApp list response: ${event.ListTitle} - ${event.Description}`,
+    );
+
     // Create a modified event for list response
     const listEvent = {
       ...event,
@@ -256,7 +324,8 @@ export class TwilioWebhookController {
   private async handleMessageStatus(event: TwilioWebhookEvent): Promise<void> {
     try {
       const status = event.SmsStatus || event.MessageStatus;
-      const messageSid = event.MessageSid || event.SmsSid || event.SmsMessageSid;
+      const messageSid =
+        event.MessageSid || event.SmsSid || event.SmsMessageSid;
 
       this.logger.log(`Message status update: ${messageSid} - ${status}`);
 
@@ -279,20 +348,27 @@ export class TwilioWebhookController {
           this.logger.log(`Unhandled message status: ${status}`);
       }
     } catch (error) {
-      this.logger.error(`Error handling message status: ${error.message}`, error.stack);
+      this.logger.error(
+        `Error handling message status: ${error.message}`,
+        error.stack,
+      );
       throw error;
     }
   }
 
-  private async handleMessageDelivered(event: TwilioWebhookEvent): Promise<void> {
+  private async handleMessageDelivered(
+    event: TwilioWebhookEvent,
+  ): Promise<void> {
     this.logger.log(`Message delivered: ${event.MessageSid}`);
     // TODO: Update message delivery status in database
     // TODO: Send delivery confirmation to admin if needed
   }
 
   private async handleMessageFailed(event: TwilioWebhookEvent): Promise<void> {
-    this.logger.error(`Message failed: ${event.MessageSid} - ${event.ErrorCode}: ${event.ErrorMessage}`);
-    
+    this.logger.error(
+      `Message failed: ${event.MessageSid} - ${event.ErrorCode}: ${event.ErrorMessage}`,
+    );
+
     // Send alert to admin about failed message
     await this.notificationService.sendSlack({
       channel: 'alerts',
@@ -315,13 +391,13 @@ export class TwilioWebhookController {
 
   private normalizePhoneNumber(phoneNumber: string): string {
     if (!phoneNumber) return '';
-    
+
     // Remove whatsapp: prefix if present
     let normalized = phoneNumber.replace(/^whatsapp:/, '');
-    
+
     // Remove any non-digit characters except +
     normalized = normalized.replace(/[^\d+]/g, '');
-    
+
     return normalized;
   }
 }

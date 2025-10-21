@@ -5,9 +5,18 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { CampaignsController } from './campaigns.controller';
-import { CampaignsService, CreateCampaignDto, UpdateCampaignDto } from './campaigns.service';
+import {
+  CampaignsService,
+  CreateCampaignDto,
+  UpdateCampaignDto,
+} from './campaigns.service';
 import { CampaignExecutionProcessor } from './campaign-execution.processor';
-import { Campaign, CampaignStatus, CampaignType, TriggerType } from './entities/campaign.entity';
+import {
+  Campaign,
+  CampaignStatus,
+  CampaignType,
+  TriggerType,
+} from './entities/campaign.entity';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 describe('CampaignsController (Integration)', () => {
@@ -68,7 +77,9 @@ describe('CampaignsController (Integration)', () => {
     await app.init();
 
     campaignsService = module.get<CampaignsService>(CampaignsService);
-    campaignProcessor = module.get<CampaignExecutionProcessor>(CampaignExecutionProcessor);
+    campaignProcessor = module.get<CampaignExecutionProcessor>(
+      CampaignExecutionProcessor,
+    );
     jwtService = module.get<JwtService>(JwtService);
   });
 
@@ -106,7 +117,10 @@ describe('CampaignsController (Integration)', () => {
         .expect(HttpStatus.OK);
 
       expect(response.body).toEqual(mockCampaigns);
-      expect(mockCampaignsService.findAllForTenant).toHaveBeenCalledWith('tenant1', {});
+      expect(mockCampaignsService.findAllForTenant).toHaveBeenCalledWith(
+        'tenant1',
+        {},
+      );
     });
 
     it('should apply query filters', async () => {
@@ -122,12 +136,15 @@ describe('CampaignsController (Integration)', () => {
         })
         .expect(HttpStatus.OK);
 
-      expect(mockCampaignsService.findAllForTenant).toHaveBeenCalledWith('tenant1', {
-        status: CampaignStatus.ACTIVE,
-        type: CampaignType.EMAIL,
-        limit: 10,
-        offset: 0,
-      });
+      expect(mockCampaignsService.findAllForTenant).toHaveBeenCalledWith(
+        'tenant1',
+        {
+          status: CampaignStatus.ACTIVE,
+          type: CampaignType.EMAIL,
+          limit: 10,
+          offset: 0,
+        },
+      );
     });
   });
 
@@ -161,13 +178,13 @@ describe('CampaignsController (Integration)', () => {
       expect(mockCampaignsService.createForTenant).toHaveBeenCalledWith(
         'tenant1',
         createDto,
-        'user1'
+        'user1',
       );
     });
 
     it('should return 400 for invalid campaign data', async () => {
       mockCampaignsService.createForTenant.mockRejectedValue(
-        new Error('Invalid campaign data')
+        new Error('Invalid campaign data'),
       );
 
       await request(app.getHttpServer())
@@ -194,7 +211,9 @@ describe('CampaignsController (Integration)', () => {
         .expect(HttpStatus.OK);
 
       expect(response.body).toEqual(mockSummary);
-      expect(mockCampaignsService.getCampaignSummary).toHaveBeenCalledWith('tenant1');
+      expect(mockCampaignsService.getCampaignSummary).toHaveBeenCalledWith(
+        'tenant1',
+      );
     });
   });
 
@@ -213,12 +232,15 @@ describe('CampaignsController (Integration)', () => {
         .expect(HttpStatus.OK);
 
       expect(response.body).toEqual(mockCampaign);
-      expect(mockCampaignsService.findOneForTenant).toHaveBeenCalledWith('tenant1', '1');
+      expect(mockCampaignsService.findOneForTenant).toHaveBeenCalledWith(
+        'tenant1',
+        '1',
+      );
     });
 
     it('should return 404 when campaign not found', async () => {
       mockCampaignsService.findOneForTenant.mockRejectedValue(
-        new Error('Campaign not found')
+        new Error('Campaign not found'),
       );
 
       await request(app.getHttpServer())
@@ -240,7 +262,9 @@ describe('CampaignsController (Integration)', () => {
         ...updateDto,
       };
 
-      mockCampaignsService.updateForTenant.mockResolvedValue(mockUpdatedCampaign);
+      mockCampaignsService.updateForTenant.mockResolvedValue(
+        mockUpdatedCampaign,
+      );
 
       const response = await request(app.getHttpServer())
         .put('/campaigns/1')
@@ -252,7 +276,7 @@ describe('CampaignsController (Integration)', () => {
         'tenant1',
         '1',
         updateDto,
-        'user1'
+        'user1',
       );
     });
   });
@@ -265,7 +289,10 @@ describe('CampaignsController (Integration)', () => {
         .delete('/campaigns/1')
         .expect(HttpStatus.NO_CONTENT);
 
-      expect(mockCampaignsService.removeForTenant).toHaveBeenCalledWith('tenant1', '1');
+      expect(mockCampaignsService.removeForTenant).toHaveBeenCalledWith(
+        'tenant1',
+        '1',
+      );
     });
   });
 
@@ -277,14 +304,19 @@ describe('CampaignsController (Integration)', () => {
         status: CampaignStatus.ACTIVE,
       };
 
-      mockCampaignsService.launchCampaign.mockResolvedValue(mockLaunchedCampaign);
+      mockCampaignsService.launchCampaign.mockResolvedValue(
+        mockLaunchedCampaign,
+      );
 
       const response = await request(app.getHttpServer())
         .post('/campaigns/1/launch')
         .expect(HttpStatus.CREATED);
 
       expect(response.body).toEqual(mockLaunchedCampaign);
-      expect(mockCampaignsService.launchCampaign).toHaveBeenCalledWith('tenant1', '1');
+      expect(mockCampaignsService.launchCampaign).toHaveBeenCalledWith(
+        'tenant1',
+        '1',
+      );
     });
   });
 
@@ -303,7 +335,10 @@ describe('CampaignsController (Integration)', () => {
         .expect(HttpStatus.CREATED);
 
       expect(response.body).toEqual(mockPausedCampaign);
-      expect(mockCampaignsService.pauseCampaign).toHaveBeenCalledWith('tenant1', '1');
+      expect(mockCampaignsService.pauseCampaign).toHaveBeenCalledWith(
+        'tenant1',
+        '1',
+      );
     });
   });
 
@@ -315,14 +350,19 @@ describe('CampaignsController (Integration)', () => {
         status: CampaignStatus.ACTIVE,
       };
 
-      mockCampaignsService.resumeCampaign.mockResolvedValue(mockResumedCampaign);
+      mockCampaignsService.resumeCampaign.mockResolvedValue(
+        mockResumedCampaign,
+      );
 
       const response = await request(app.getHttpServer())
         .post('/campaigns/1/resume')
         .expect(HttpStatus.CREATED);
 
       expect(response.body).toEqual(mockResumedCampaign);
-      expect(mockCampaignsService.resumeCampaign).toHaveBeenCalledWith('tenant1', '1');
+      expect(mockCampaignsService.resumeCampaign).toHaveBeenCalledWith(
+        'tenant1',
+        '1',
+      );
     });
   });
 
@@ -342,14 +382,19 @@ describe('CampaignsController (Integration)', () => {
         },
       };
 
-      mockCampaignsService.getCampaignAnalytics.mockResolvedValue(mockAnalytics);
+      mockCampaignsService.getCampaignAnalytics.mockResolvedValue(
+        mockAnalytics,
+      );
 
       const response = await request(app.getHttpServer())
         .get('/campaigns/1/analytics')
         .expect(HttpStatus.OK);
 
       expect(response.body).toEqual(mockAnalytics);
-      expect(mockCampaignsService.getCampaignAnalytics).toHaveBeenCalledWith('tenant1', '1');
+      expect(mockCampaignsService.getCampaignAnalytics).toHaveBeenCalledWith(
+        'tenant1',
+        '1',
+      );
     });
   });
 
@@ -364,7 +409,7 @@ describe('CampaignsController (Integration)', () => {
       expect(mockCampaignProcessor.handleTrackingEvent).toHaveBeenCalledWith(
         'campaign1',
         'recipient1',
-        'open'
+        'open',
       );
 
       // Should return a tracking pixel
@@ -384,7 +429,7 @@ describe('CampaignsController (Integration)', () => {
       expect(mockCampaignProcessor.handleTrackingEvent).toHaveBeenCalledWith(
         'campaign1',
         'recipient1',
-        'click'
+        'click',
       );
 
       expect(response.body).toEqual({
@@ -416,7 +461,7 @@ describe('CampaignsController (Integration)', () => {
       expect(mockCampaignProcessor.handleTrackingEvent).toHaveBeenCalledWith(
         'campaign1',
         'recipient1',
-        'unsubscribe'
+        'unsubscribe',
       );
 
       expect(response.body).toEqual({

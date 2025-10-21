@@ -2,7 +2,14 @@ import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 
 interface CorsOptions {
-  origin?: string | string[] | boolean | ((origin: string, callback: (err: Error | null, allow?: boolean) => void) => void);
+  origin?:
+    | string
+    | string[]
+    | boolean
+    | ((
+        origin: string,
+        callback: (err: Error | null, allow?: boolean) => void,
+      ) => void);
   methods?: string | string[];
   allowedHeaders?: string | string[];
   exposedHeaders?: string | string[];
@@ -80,7 +87,11 @@ export class CorsMiddleware implements NestMiddleware {
     next();
   }
 
-  private handlePreflightRequest(req: Request, res: Response, origin?: string): void {
+  private handlePreflightRequest(
+    req: Request,
+    res: Response,
+    origin?: string,
+  ): void {
     // Set origin
     if (this.isOriginAllowed(origin)) {
       res.setHeader('Access-Control-Allow-Origin', origin!);
@@ -104,14 +115,14 @@ export class CorsMiddleware implements NestMiddleware {
       const allowedHeaders = Array.isArray(this.defaultOptions.allowedHeaders)
         ? this.defaultOptions.allowedHeaders
         : this.defaultOptions.allowedHeaders?.split(', ') || [];
-      
+
       const requestedHeadersList = requestedHeaders.split(', ');
-      const validHeaders = requestedHeadersList.filter(header => 
-        allowedHeaders.some(allowed => 
-          allowed.toLowerCase() === header.toLowerCase()
-        )
+      const validHeaders = requestedHeadersList.filter(header =>
+        allowedHeaders.some(
+          allowed => allowed.toLowerCase() === header.toLowerCase(),
+        ),
       );
-      
+
       if (validHeaders.length > 0) {
         res.setHeader('Access-Control-Allow-Headers', validHeaders.join(', '));
       }
@@ -124,14 +135,21 @@ export class CorsMiddleware implements NestMiddleware {
 
     // Set max age
     if (this.defaultOptions.maxAge) {
-      res.setHeader('Access-Control-Max-Age', this.defaultOptions.maxAge.toString());
+      res.setHeader(
+        'Access-Control-Max-Age',
+        this.defaultOptions.maxAge.toString(),
+      );
     }
 
     // Send response
     res.status(this.defaultOptions.optionsSuccessStatus || 204).end();
   }
 
-  private handleActualRequest(req: Request, res: Response, origin?: string): void {
+  private handleActualRequest(
+    req: Request,
+    res: Response,
+    origin?: string,
+  ): void {
     // Set origin
     if (this.isOriginAllowed(origin)) {
       res.setHeader('Access-Control-Allow-Origin', origin!);
@@ -176,7 +194,7 @@ export class CorsMiddleware implements NestMiddleware {
     // Check against production domains
     const url = new URL(origin);
     const hostname = url.hostname;
-    
+
     // Allow subdomains of production domains
     const isProductionDomain = this.productionDomains.some(domain => {
       return hostname === domain || hostname.endsWith(`.${domain}`);
@@ -204,7 +222,7 @@ export class CorsMiddleware implements NestMiddleware {
   private isTenantDomain(hostname: string): boolean {
     // In a real application, this would check against a database of tenant domains
     // For now, we'll use a simple pattern check
-    
+
     // Allow domains that look like tenant subdomains
     const tenantSubdomainPattern = /^[a-z0-9-]+\.(tekassist\.com|localhost)$/i;
     if (tenantSubdomainPattern.test(hostname)) {
@@ -223,12 +241,12 @@ export class CorsMiddleware implements NestMiddleware {
 
   private addTenantSpecificHeaders(req: Request, res: Response): void {
     const tenant = (req as any).tenant;
-    
+
     if (tenant) {
       // Add tenant-specific CORS headers
       res.setHeader('X-Tenant-ID', tenant.id || '');
       res.setHeader('X-Tenant-Slug', tenant.slug || '');
-      
+
       // If tenant has custom domains, add them to allowed origins
       if (tenant.customDomains && Array.isArray(tenant.customDomains)) {
         const origin = req.get('origin');

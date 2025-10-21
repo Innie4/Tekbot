@@ -99,7 +99,7 @@ export class ResponseUtil {
     total: number,
   ): PaginationMeta {
     const totalPages = Math.ceil(total / limit);
-    
+
     return {
       page,
       limit,
@@ -277,9 +277,15 @@ export class ResponseUtil {
     if (error.getStatus && error.getResponse) {
       const response = error.getResponse();
       return {
-        message: typeof response === 'string' ? response : response.message || error.message,
+        message:
+          typeof response === 'string'
+            ? response
+            : response.message || error.message,
         statusCode: error.getStatus(),
-        errors: typeof response === 'object' && response.errors ? response.errors : undefined,
+        errors:
+          typeof response === 'object' && response.errors
+            ? response.errors
+            : undefined,
       };
     }
 

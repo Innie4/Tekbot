@@ -41,40 +41,49 @@ export interface PaginationMeta {
 }
 
 @Injectable()
-export class TransformInterceptor<T> implements NestInterceptor<T, ApiResponse<T>> {
+export class TransformInterceptor<T>
+  implements NestInterceptor<T, ApiResponse<T>>
+{
   constructor(private reflector: Reflector) {}
 
-  intercept(context: ExecutionContext, next: CallHandler): Observable<ApiResponse<T>> {
-    const request = context.switchToHttp().getRequest<Request & { user?: any; tenant?: any; requestId?: string }>();
+  intercept(
+    context: ExecutionContext,
+    next: CallHandler,
+  ): Observable<ApiResponse<T>> {
+    const request = context
+      .switchToHttp()
+      .getRequest<Request & { user?: any; tenant?: any; requestId?: string }>();
     const response = context.switchToHttp().getResponse<Response>();
-    
+
     // Check if response transformation should be skipped
-    const skipTransform = this.reflector.getAllAndOverride<boolean>('skipTransform', [
-      context.getHandler(),
-      context.getClass(),
-    ]);
+    const skipTransform = this.reflector.getAllAndOverride<boolean>(
+      'skipTransform',
+      [context.getHandler(), context.getClass()],
+    );
 
     if (skipTransform) {
       return next.handle();
     }
 
     return next.handle().pipe(
-      map((data) => {
+      map(data => {
         // Handle different response types
         if (this.isAlreadyTransformed(data)) {
           return data;
         }
 
         // Get custom message from metadata
-        const customMessage = this.reflector.getAllAndOverride<string>('responseMessage', [
-          context.getHandler(),
-          context.getClass(),
-        ]);
+        const customMessage = this.reflector.getAllAndOverride<string>(
+          'responseMessage',
+          [context.getHandler(), context.getClass()],
+        );
 
         // Build response
         const apiResponse: ApiResponse<T> = {
           success: true,
-          message: customMessage || this.getDefaultMessage(request.method, response.statusCode),
+          message:
+            customMessage ||
+            this.getDefaultMessage(request.method, response.statusCode),
           data: this.transformData(data),
           meta: {
             timestamp: new Date().toISOString(),
@@ -94,7 +103,7 @@ export class TransformInterceptor<T> implements NestInterceptor<T, ApiResponse<T
         this.setResponseHeaders(response, apiResponse);
 
         return apiResponse;
-      })
+      }),
     );
   }
 
@@ -140,11 +149,9 @@ export class TransformInterceptor<T> implements NestInterceptor<T, ApiResponse<T
     return (
       data &&
       typeof data === 'object' &&
-      (
-        ('items' in data && 'total' in data) ||
+      (('items' in data && 'total' in data) ||
         ('data' in data && 'total' in data) ||
-        ('page' in data && 'limit' in data && 'total' in data)
-      )
+        ('page' in data && 'limit' in data && 'total' in data))
     );
   }
 
@@ -184,19 +191,23 @@ export class TransformInterceptor<T> implements NestInterceptor<T, ApiResponse<T
     return 'Operation completed';
   }
 
-  private setResponseHeaders(response: Response, apiResponse: ApiResponse<any>): void {
+  private setResponseHeaders(
+    response: Response,
+    apiResponse: ApiResponse<any>,
+  ): void {
     // Set standard headers
     response.setHeader('X-API-Version', apiResponse.meta?.version || '1.0.0');
     response.setHeader('X-Request-ID', apiResponse.meta?.requestId || '');
-    
+
     if (apiResponse.meta?.tenantId) {
       response.setHeader('X-Tenant-ID', apiResponse.meta.tenantId);
     }
 
     // Set pagination headers if available
     if (apiResponse.meta?.pagination) {
-      const { page, limit, total, totalPages, hasNext, hasPrev } = apiResponse.meta.pagination;
-      
+      const { page, limit, total, totalPages, hasNext, hasPrev } =
+        apiResponse.meta.pagination;
+
       response.setHeader('X-Total-Count', total.toString());
       response.setHeader('X-Page-Count', totalPages.toString());
       response.setHeader('X-Current-Page', page.toString());
@@ -207,7 +218,10 @@ export class TransformInterceptor<T> implements NestInterceptor<T, ApiResponse<T
 
     // Set cache headers for GET requests
     if (response.req?.method === 'GET') {
-      response.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+      response.setHeader(
+        'Cache-Control',
+        'no-cache, no-store, must-revalidate',
+      );
       response.setHeader('Pragma', 'no-cache');
       response.setHeader('Expires', '0');
     }
@@ -218,4 +232,5 @@ export class TransformInterceptor<T> implements NestInterceptor<T, ApiResponse<T
 export const SkipTransform = () => SetMetadata('skipTransform', true);
 
 // Decorator to set custom response message
-export const ResponseMessage = (message: string) => SetMetadata('responseMessage', message);
+export const ResponseMessage = (message: string) =>
+  SetMetadata('responseMessage', message);

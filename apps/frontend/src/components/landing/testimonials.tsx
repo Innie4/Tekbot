@@ -54,7 +54,10 @@ export default function Testimonials() {
           className="text-center mb-16"
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Loved by <span className="bg-gradient-to-r from-electric-blue to-electric-cyan bg-clip-text text-transparent">Teams</span>
+            Loved by{' '}
+            <span className="bg-gradient-to-r from-electric-blue to-electric-cyan bg-clip-text text-transparent">
+              Teams
+            </span>
           </h2>
           <p className="text-xl text-foreground/70 max-w-2xl mx-auto">
             See what customers say about launching AI assistants with TekAssist

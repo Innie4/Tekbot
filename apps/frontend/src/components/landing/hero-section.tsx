@@ -12,7 +12,7 @@ export default function HeroSection() {
       <div className="absolute inset-0 bg-gradient-to-br from-tech-dark via-tech-dark to-tech-dark/90 z-0" />
       <div className="absolute top-20 left-1/4 w-72 h-72 bg-electric-blue/20 rounded-full blur-3xl z-0" />
       <div className="absolute bottom-20 right-1/4 w-80 h-80 bg-electric-cyan/20 rounded-full blur-3xl z-0" />
-      
+
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Hero content */}
@@ -28,11 +28,12 @@ export default function HeroSection() {
               </span>{' '}
               Trained to Know Your Business
             </h1>
-            
+
             <p className="text-xl text-foreground/80 max-w-lg">
-              Upload your data, train your chatbot, and embed it on your site. Realtime updates, custom branding, and analytics built-in.
+              Upload your data, train your chatbot, and embed it on your site. Realtime updates,
+              custom branding, and analytics built-in.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 pt-4">
               <Button size="lg" variant="glass" className="group" asChild>
                 <a href="/sign-up" className="inline-flex items-center">
@@ -48,7 +49,7 @@ export default function HeroSection() {
               </Button>
             </div>
           </motion.div>
-          
+
           {/* Animated chatbot preview */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -95,7 +96,7 @@ export default function HeroSection() {
             </GlassCard>
           </motion.div>
         </div>
-        
+
         {/* Quick highlights */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -106,7 +107,7 @@ export default function HeroSection() {
           {[
             { title: 'Multi-format Training', description: 'Docs, links, FAQs, and more' },
             { title: 'Realtime Retraining', description: 'Update content instantly as you grow' },
-            { title: 'Custom Branding', description: 'Match colors, logo, and tone of voice' }
+            { title: 'Custom Branding', description: 'Match colors, logo, and tone of voice' },
           ].map((item, index) => (
             <GlassCard key={index} className="p-6">
               <h3 className="text-xl font-semibold mb-2">{item.title}</h3>

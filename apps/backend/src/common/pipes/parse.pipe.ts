@@ -26,10 +26,15 @@ export class ParseUUIDPipe implements PipeTransform<string, string> {
 }
 
 @Injectable()
-export class ParseOptionalUUIDPipe implements PipeTransform<string | undefined, string | undefined> {
+export class ParseOptionalUUIDPipe
+  implements PipeTransform<string | undefined, string | undefined>
+{
   private readonly logger = new Logger(ParseOptionalUUIDPipe.name);
 
-  transform(value: string | undefined, metadata: ArgumentMetadata): string | undefined {
+  transform(
+    value: string | undefined,
+    metadata: ArgumentMetadata,
+  ): string | undefined {
     if (!value) {
       return undefined;
     }
@@ -62,15 +67,15 @@ export class ParseIntPipe implements PipeTransform<string, number> {
     }
 
     const val = parseInt(value, 10);
-    
+
     if (isNaN(val)) {
       const errorMessage = `Validation failed (numeric string is expected): ${value}`;
       this.logger.warn(errorMessage);
-      
+
       if (this.options.exceptionFactory) {
         throw this.options.exceptionFactory(errorMessage);
       }
-      
+
       throw new BadRequestException(errorMessage);
     }
 
@@ -110,15 +115,15 @@ export class ParseFloatPipe implements PipeTransform<string, number> {
     }
 
     const val = parseFloat(value);
-    
+
     if (isNaN(val)) {
       const errorMessage = `Validation failed (numeric string is expected): ${value}`;
       this.logger.warn(errorMessage);
-      
+
       if (this.options.exceptionFactory) {
         throw this.options.exceptionFactory(errorMessage);
       }
-      
+
       throw new BadRequestException(errorMessage);
     }
 
@@ -157,11 +162,11 @@ export class ParseBoolPipe implements PipeTransform<string | boolean, boolean> {
     }
 
     const val = value.toString().toLowerCase();
-    
+
     if (val === 'true' || val === '1' || val === 'yes' || val === 'on') {
       return true;
     }
-    
+
     if (val === 'false' || val === '0' || val === 'no' || val === 'off') {
       return false;
     }
@@ -173,7 +178,9 @@ export class ParseBoolPipe implements PipeTransform<string | boolean, boolean> {
 }
 
 @Injectable()
-export class ParseArrayPipe implements PipeTransform<string | string[], string[]> {
+export class ParseArrayPipe
+  implements PipeTransform<string | string[], string[]>
+{
   private readonly logger = new Logger(ParseArrayPipe.name);
 
   constructor(
@@ -202,22 +209,29 @@ export class ParseArrayPipe implements PipeTransform<string | string[], string[]
     }
 
     let array: string[];
-    
+
     if (Array.isArray(value)) {
       array = value;
     } else if (typeof value === 'string') {
-      array = value.split(this.options.separator!).map(item => item.trim()).filter(item => item);
+      array = value
+        .split(this.options.separator!)
+        .map(item => item.trim())
+        .filter(item => item);
     } else {
       throw new BadRequestException('Invalid array format');
     }
 
     // Validate array length
     if (this.options.min !== undefined && array.length < this.options.min) {
-      throw new BadRequestException(`Array must have at least ${this.options.min} items`);
+      throw new BadRequestException(
+        `Array must have at least ${this.options.min} items`,
+      );
     }
 
     if (this.options.max !== undefined && array.length > this.options.max) {
-      throw new BadRequestException(`Array must have at most ${this.options.max} items`);
+      throw new BadRequestException(
+        `Array must have at most ${this.options.max} items`,
+      );
     }
 
     // Transform items based on type
@@ -234,7 +248,9 @@ export class ParseArrayPipe implements PipeTransform<string | string[], string[]
     if (this.options.items === 'boolean') {
       return array.map(item => {
         const bool = item.toLowerCase();
-        if (!['true', 'false', '1', '0', 'yes', 'no', 'on', 'off'].includes(bool)) {
+        if (
+          !['true', 'false', '1', '0', 'yes', 'no', 'on', 'off'].includes(bool)
+        ) {
           throw new BadRequestException(`Invalid boolean in array: ${item}`);
         }
         return ['true', '1', 'yes', 'on'].includes(bool) ? 'true' : 'false';
@@ -277,7 +293,10 @@ export class ParseDatePipe implements PipeTransform<string, Date> {
       date = new Date(timestamp);
     } else if (this.options.format === 'iso') {
       date = new Date(value);
-      if (isNaN(date.getTime()) || !value.match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/)) {
+      if (
+        isNaN(date.getTime()) ||
+        !value.match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/)
+      ) {
         throw new BadRequestException(`Invalid ISO date: ${value}`);
       }
     } else {
@@ -289,11 +308,15 @@ export class ParseDatePipe implements PipeTransform<string, Date> {
 
     // Validate date range
     if (this.options.min && date < this.options.min) {
-      throw new BadRequestException(`Date must be after ${this.options.min.toISOString()}`);
+      throw new BadRequestException(
+        `Date must be after ${this.options.min.toISOString()}`,
+      );
     }
 
     if (this.options.max && date > this.options.max) {
-      throw new BadRequestException(`Date must be before ${this.options.max.toISOString()}`);
+      throw new BadRequestException(
+        `Date must be before ${this.options.max.toISOString()}`,
+      );
     }
 
     return date;
@@ -324,7 +347,7 @@ export class ParseEnumPipe implements PipeTransform<string, string> {
 
     const enumValues = Object.values(this.enumObject);
     const enumKeys = Object.keys(this.enumObject);
-    
+
     let isValid = false;
     let normalizedValue = value;
 
@@ -332,19 +355,22 @@ export class ParseEnumPipe implements PipeTransform<string, string> {
       isValid = enumValues.includes(value) || enumKeys.includes(value);
     } else {
       const lowerValue = value.toLowerCase();
-      isValid = enumValues.some(v => v.toString().toLowerCase() === lowerValue) ||
-                enumKeys.some(k => k.toLowerCase() === lowerValue);
-      
+      isValid =
+        enumValues.some(v => v.toString().toLowerCase() === lowerValue) ||
+        enumKeys.some(k => k.toLowerCase() === lowerValue);
+
       if (isValid) {
         // Find the correct case
-        normalizedValue = enumValues.find(v => v.toString().toLowerCase() === lowerValue) ||
-                         enumKeys.find(k => k.toLowerCase() === lowerValue) ||
-                         value;
+        normalizedValue =
+          enumValues.find(v => v.toString().toLowerCase() === lowerValue) ||
+          enumKeys.find(k => k.toLowerCase() === lowerValue) ||
+          value;
       }
     }
 
     if (!isValid) {
-      const errorMessage = this.options.errorMessage ||
+      const errorMessage =
+        this.options.errorMessage ||
         `Invalid enum value: ${value}. Valid values are: ${enumValues.join(', ')}`;
       this.logger.warn(errorMessage);
       throw new BadRequestException(errorMessage);

@@ -2,7 +2,12 @@
 export interface WidgetConfig {
   tenantId: string;
   apiUrl: string;
-  position?: 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left' | 'custom';
+  position?:
+    | 'bottom-right'
+    | 'bottom-left'
+    | 'top-right'
+    | 'top-left'
+    | 'custom';
   theme?: 'light' | 'dark' | 'auto' | 'custom';
   size?: 'small' | 'medium' | 'large' | 'custom';
   customPosition?: {
@@ -247,7 +252,7 @@ export interface WidgetState {
   status: WidgetStatus;
 }
 
-export type WidgetStatus = 
+export type WidgetStatus =
   | 'initializing'
   | 'ready'
   | 'connecting'
@@ -332,7 +337,8 @@ export type DeepPartial<T> = {
 
 export type RequiredKeys<T, K extends keyof T> = T & Required<Pick<T, K>>;
 
-export type OptionalKeys<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+export type OptionalKeys<T, K extends keyof T> = Omit<T, K> &
+  Partial<Pick<T, K>>;
 
 // Widget Instance Types
 export interface WidgetInstance {
@@ -347,6 +353,12 @@ export interface WidgetInstance {
   updateTheme(theme: Partial<ThemeConfig>): void;
   getState(): WidgetState;
   getConfig(): WidgetConfig;
-  addEventListener(type: WidgetEventType, handler: (event: WidgetEvent) => void): void;
-  removeEventListener(type: WidgetEventType, handler: (event: WidgetEvent) => void): void;
+  addEventListener(
+    type: WidgetEventType,
+    handler: (event: WidgetEvent) => void,
+  ): void;
+  removeEventListener(
+    type: WidgetEventType,
+    handler: (event: WidgetEvent) => void,
+  ): void;
 }

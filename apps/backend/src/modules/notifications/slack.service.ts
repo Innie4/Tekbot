@@ -19,7 +19,9 @@ export class SlackService {
     const slackTimestamp = req.headers['x-slack-request-timestamp'];
     const secret = this.configService.get<string>('SLACK_SIGNING_SECRET');
     const sigBasestring = `v0:${slackTimestamp}:${req.rawBody || JSON.stringify(req.body)}`;
-    const mySignature = 'v0=' + crypto.createHmac('sha256', secret).update(sigBasestring).digest('hex');
+    const mySignature =
+      'v0=' +
+      crypto.createHmac('sha256', secret).update(sigBasestring).digest('hex');
     return mySignature === slackSignature;
   }
 

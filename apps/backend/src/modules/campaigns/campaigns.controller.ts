@@ -1,20 +1,29 @@
-import { 
-  Controller, 
-  Get, 
-  Post, 
-  Put, 
-  Delete, 
-  Body, 
-  Param, 
-  Request, 
-  UseGuards, 
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Param,
+  Request,
+  UseGuards,
   Query,
   HttpCode,
   HttpStatus,
   Header,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
-import { CampaignsService, CreateCampaignDto, UpdateCampaignDto } from './campaigns.service';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
+import {
+  CampaignsService,
+  CreateCampaignDto,
+  UpdateCampaignDto,
+} from './campaigns.service';
 import { CampaignExecutionProcessor } from './campaign-execution.processor';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CampaignStatus, CampaignType } from './entities/campaign.entity';
@@ -76,7 +85,10 @@ export class CampaignsController {
 
   @Get('summary')
   @ApiOperation({ summary: 'Get campaign performance summary' })
-  @ApiResponse({ status: 200, description: 'Campaign summary retrieved successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Campaign summary retrieved successfully',
+  })
   async getSummary(@Request() req) {
     const tenantId = this.getTenantId(req);
     return this.campaignsService.getCampaignSummary(tenantId);
@@ -96,7 +108,11 @@ export class CampaignsController {
   @ApiResponse({ status: 200, description: 'Campaign updated successfully' })
   @ApiResponse({ status: 400, description: 'Invalid update data' })
   @ApiResponse({ status: 404, description: 'Campaign not found' })
-  async update(@Request() req, @Param('id') id: string, @Body() dto: UpdateCampaignDto) {
+  async update(
+    @Request() req,
+    @Param('id') id: string,
+    @Body() dto: UpdateCampaignDto,
+  ) {
     const tenantId = this.getTenantId(req);
     const userId = this.getUserId(req);
     return this.campaignsService.updateForTenant(tenantId, id, dto, userId);
@@ -145,7 +161,10 @@ export class CampaignsController {
 
   @Get(':id/analytics')
   @ApiOperation({ summary: 'Get campaign analytics' })
-  @ApiResponse({ status: 200, description: 'Campaign analytics retrieved successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Campaign analytics retrieved successfully',
+  })
   @ApiResponse({ status: 404, description: 'Campaign not found' })
   async getAnalytics(@Request() req, @Param('id') id: string) {
     const tenantId = this.getTenantId(req);
@@ -161,25 +180,36 @@ export class CampaignsController {
     @Param('campaignId') campaignId: string,
     @Param('recipientId') recipientId: string,
   ) {
-    await this.campaignProcessor.handleTrackingEvent(campaignId, recipientId, 'open');
-    
+    await this.campaignProcessor.handleTrackingEvent(
+      campaignId,
+      recipientId,
+      'open',
+    );
+
     // Return a 1x1 transparent pixel
     return Buffer.from(
       'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==',
-      'base64'
+      'base64',
     );
   }
 
   @Get('track/click/:campaignId/:recipientId')
   @ApiOperation({ summary: 'Track email click event and redirect' })
-  @ApiResponse({ status: 302, description: 'Click event tracked and redirected' })
+  @ApiResponse({
+    status: 302,
+    description: 'Click event tracked and redirected',
+  })
   async trackClick(
     @Param('campaignId') campaignId: string,
     @Param('recipientId') recipientId: string,
     @Query('url') url: string,
   ) {
-    await this.campaignProcessor.handleTrackingEvent(campaignId, recipientId, 'click');
-    
+    await this.campaignProcessor.handleTrackingEvent(
+      campaignId,
+      recipientId,
+      'click',
+    );
+
     // Redirect to the original URL
     return { redirect: url || 'https://tekassist.com' };
   }
@@ -187,13 +217,20 @@ export class CampaignsController {
   @Post('track/unsubscribe/:campaignId/:recipientId')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Track unsubscribe event' })
-  @ApiResponse({ status: 200, description: 'Unsubscribe event tracked successfully' })
+  @ApiResponse({
+    status: 200,
+    description: 'Unsubscribe event tracked successfully',
+  })
   async trackUnsubscribe(
     @Param('campaignId') campaignId: string,
     @Param('recipientId') recipientId: string,
   ) {
-    await this.campaignProcessor.handleTrackingEvent(campaignId, recipientId, 'unsubscribe');
-    
+    await this.campaignProcessor.handleTrackingEvent(
+      campaignId,
+      recipientId,
+      'unsubscribe',
+    );
+
     return { message: 'You have been successfully unsubscribed' };
   }
 }

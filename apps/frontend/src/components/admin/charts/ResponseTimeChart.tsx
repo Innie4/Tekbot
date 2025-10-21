@@ -1,4 +1,14 @@
-import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
+'use client';
+
+import {
+  ResponsiveContainer,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+} from 'recharts';
 
 const sampleData = [
   { name: 'Mon', time: 2.1 },
@@ -10,7 +20,11 @@ const sampleData = [
   { name: 'Sun', time: 2.7 },
 ];
 
-export default function ResponseTimeChart({ data = sampleData }) {
+export default function ResponseTimeChart({
+  data = sampleData,
+}: {
+  data?: { name: string; time: number }[];
+}) {
   return (
     <ResponsiveContainer width="100%" height={250}>
       <AreaChart data={data}>

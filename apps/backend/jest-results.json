@@ -1,0 +1,1623 @@
+{
+  "numFailedTestSuites": 4,
+  "numFailedTests": 36,
+  "numPassedTestSuites": 10,
+  "numPassedTests": 47,
+  "numPendingTestSuites": 0,
+  "numPendingTests": 0,
+  "numRuntimeErrorTestSuites": 0,
+  "numTodoTests": 0,
+  "numTotalTestSuites": 14,
+  "numTotalTests": 83,
+  "openHandles": [],
+  "snapshot": {
+    "added": 0,
+    "didUpdate": false,
+    "failure": false,
+    "filesAdded": 0,
+    "filesRemoved": 0,
+    "filesRemovedList": [],
+    "filesUnmatched": 0,
+    "filesUpdated": 0,
+    "matched": 0,
+    "total": 0,
+    "unchecked": 0,
+    "uncheckedKeysByFile": [],
+    "unmatched": 0,
+    "updated": 0
+  },
+  "startTime": 1760790853595,
+  "success": false,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "CampaignsController (Integration)",
+            "GET /campaigns"
+          ],
+          "duration": 510,
+          "failureDetails": [{}],
+          "failureMessages": [
+            "Error: expected 200 \"OK\", got 500 \"Internal Server Error\"\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaigns.controller.spec.ts:106:10)\n    at Promise.then.completed (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\utils.js:231:10)\n    at _callCircusTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:316:40)\n    at _runTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:252:3)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:126:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:121:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:121:9)\n    at run (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:71:3)\n    at runAndTransformResultsToJestFormat (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapterInit.js:122:21)\n    at jestAdapter (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapter.js:79:19)\n    at runTestInternal (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-runner\\build\\runTest.js:367:16)\n    at runTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-runner\\build\\runTest.js:444:34)\n----\n    at Test._assertStatus (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:252:14)\n    at C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:308:13\n    at Test._assertFunction (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:285:13)\n    at Test.assert (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:164:23)\n    at Server.localAssert (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:120:14)\n    at Object.onceWrapper (node:events:621:28)\n    at Server.emit (node:events:507:28)\n    at emitCloseNT (node:net:2419:8)\n    at processTicksAndRejections (node:internal/process/task_queues:89:21)"
+          ],
+          "fullName": "CampaignsController (Integration) GET /campaigns should return all campaigns for tenant",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should return all campaigns for tenant"
+        },
+        {
+          "ancestorTitles": [
+            "CampaignsController (Integration)",
+            "GET /campaigns"
+          ],
+          "duration": 17,
+          "failureDetails": [{}],
+          "failureMessages": [
+            "Error: expected 200 \"OK\", got 500 \"Internal Server Error\"\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaigns.controller.spec.ts:123:10)\n    at Promise.then.completed (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\utils.js:231:10)\n    at _callCircusTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:316:40)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at _runTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:252:3)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:126:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:121:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:121:9)\n    at run (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:71:3)\n    at runAndTransformResultsToJestFormat (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapterInit.js:122:21)\n    at jestAdapter (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapter.js:79:19)\n    at runTestInternal (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-runner\\build\\runTest.js:367:16)\n    at runTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-runner\\build\\runTest.js:444:34)\n----\n    at Test._assertStatus (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:252:14)\n    at C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:308:13\n    at Test._assertFunction (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:285:13)\n    at Test.assert (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:164:23)\n    at Server.localAssert (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:120:14)\n    at Object.onceWrapper (node:events:621:28)\n    at Server.emit (node:events:507:28)\n    at emitCloseNT (node:net:2419:8)\n    at processTicksAndRejections (node:internal/process/task_queues:89:21)"
+          ],
+          "fullName": "CampaignsController (Integration) GET /campaigns should apply query filters",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should apply query filters"
+        },
+        {
+          "ancestorTitles": [
+            "CampaignsController (Integration)",
+            "POST /campaigns"
+          ],
+          "duration": 29,
+          "failureDetails": [{}],
+          "failureMessages": [
+            "Error: expected 201 \"Created\", got 500 \"Internal Server Error\"\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaigns.controller.spec.ts:158:10)\n    at Promise.then.completed (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\utils.js:231:10)\n    at _callCircusTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:316:40)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at _runTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:252:3)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:126:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:121:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:121:9)\n    at run (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:71:3)\n    at runAndTransformResultsToJestFormat (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapterInit.js:122:21)\n    at jestAdapter (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapter.js:79:19)\n    at runTestInternal (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-runner\\build\\runTest.js:367:16)\n    at runTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-runner\\build\\runTest.js:444:34)\n----\n    at Test._assertStatus (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:252:14)\n    at C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:308:13\n    at Test._assertFunction (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:285:13)\n    at Test.assert (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:164:23)\n    at Server.localAssert (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:120:14)\n    at Object.onceWrapper (node:events:621:28)\n    at Server.emit (node:events:507:28)\n    at emitCloseNT (node:net:2419:8)\n    at processTicksAndRejections (node:internal/process/task_queues:89:21)"
+          ],
+          "fullName": "CampaignsController (Integration) POST /campaigns should create a new campaign",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should create a new campaign"
+        },
+        {
+          "ancestorTitles": [
+            "CampaignsController (Integration)",
+            "POST /campaigns"
+          ],
+          "duration": 14,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "CampaignsController (Integration) POST /campaigns should return 400 for invalid campaign data",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should return 400 for invalid campaign data"
+        },
+        {
+          "ancestorTitles": [
+            "CampaignsController (Integration)",
+            "GET /campaigns/summary"
+          ],
+          "duration": 14,
+          "failureDetails": [{}],
+          "failureMessages": [
+            "Error: expected 200 \"OK\", got 500 \"Internal Server Error\"\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaigns.controller.spec.ts:194:10)\n    at Promise.then.completed (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\utils.js:231:10)\n    at _callCircusTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:316:40)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at _runTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:252:3)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:126:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:121:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:121:9)\n    at run (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:71:3)\n    at runAndTransformResultsToJestFormat (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapterInit.js:122:21)\n    at jestAdapter (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapter.js:79:19)\n    at runTestInternal (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-runner\\build\\runTest.js:367:16)\n    at runTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-runner\\build\\runTest.js:444:34)\n----\n    at Test._assertStatus (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:252:14)\n    at C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:308:13\n    at Test._assertFunction (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:285:13)\n    at Test.assert (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:164:23)\n    at Server.localAssert (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:120:14)\n    at Object.onceWrapper (node:events:621:28)\n    at Server.emit (node:events:507:28)\n    at emitCloseNT (node:net:2419:8)\n    at processTicksAndRejections (node:internal/process/task_queues:89:21)"
+          ],
+          "fullName": "CampaignsController (Integration) GET /campaigns/summary should return campaign summary",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should return campaign summary"
+        },
+        {
+          "ancestorTitles": [
+            "CampaignsController (Integration)",
+            "GET /campaigns/:id"
+          ],
+          "duration": 12,
+          "failureDetails": [{}],
+          "failureMessages": [
+            "Error: expected 200 \"OK\", got 500 \"Internal Server Error\"\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaigns.controller.spec.ts:213:10)\n    at Promise.then.completed (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\utils.js:231:10)\n    at _callCircusTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:316:40)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at _runTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:252:3)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:126:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:121:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:121:9)\n    at run (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:71:3)\n    at runAndTransformResultsToJestFormat (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapterInit.js:122:21)\n    at jestAdapter (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapter.js:79:19)\n    at runTestInternal (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-runner\\build\\runTest.js:367:16)\n    at runTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-runner\\build\\runTest.js:444:34)\n----\n    at Test._assertStatus (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:252:14)\n    at C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:308:13\n    at Test._assertFunction (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:285:13)\n    at Test.assert (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:164:23)\n    at Server.localAssert (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:120:14)\n    at Object.onceWrapper (node:events:621:28)\n    at Server.emit (node:events:507:28)\n    at emitCloseNT (node:net:2419:8)\n    at processTicksAndRejections (node:internal/process/task_queues:89:21)"
+          ],
+          "fullName": "CampaignsController (Integration) GET /campaigns/:id should return a campaign by ID",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should return a campaign by ID"
+        },
+        {
+          "ancestorTitles": [
+            "CampaignsController (Integration)",
+            "GET /campaigns/:id"
+          ],
+          "duration": 14,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "CampaignsController (Integration) GET /campaigns/:id should return 404 when campaign not found",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should return 404 when campaign not found"
+        },
+        {
+          "ancestorTitles": [
+            "CampaignsController (Integration)",
+            "PUT /campaigns/:id"
+          ],
+          "duration": 14,
+          "failureDetails": [{}],
+          "failureMessages": [
+            "Error: expected 200 \"OK\", got 500 \"Internal Server Error\"\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaigns.controller.spec.ts:248:10)\n    at Promise.then.completed (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\utils.js:231:10)\n    at _callCircusTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:316:40)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at _runTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:252:3)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:126:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:121:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:121:9)\n    at run (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:71:3)\n    at runAndTransformResultsToJestFormat (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapterInit.js:122:21)\n    at jestAdapter (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapter.js:79:19)\n    at runTestInternal (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-runner\\build\\runTest.js:367:16)\n    at runTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-runner\\build\\runTest.js:444:34)\n----\n    at Test._assertStatus (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:252:14)\n    at C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:308:13\n    at Test._assertFunction (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:285:13)\n    at Test.assert (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:164:23)\n    at Server.localAssert (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:120:14)\n    at Object.onceWrapper (node:events:621:28)\n    at Server.emit (node:events:507:28)\n    at emitCloseNT (node:net:2419:8)\n    at processTicksAndRejections (node:internal/process/task_queues:89:21)"
+          ],
+          "fullName": "CampaignsController (Integration) PUT /campaigns/:id should update a campaign",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should update a campaign"
+        },
+        {
+          "ancestorTitles": [
+            "CampaignsController (Integration)",
+            "DELETE /campaigns/:id"
+          ],
+          "duration": 14,
+          "failureDetails": [{}],
+          "failureMessages": [
+            "Error: expected 204 \"No Content\", got 500 \"Internal Server Error\"\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaigns.controller.spec.ts:266:10)\n    at Promise.then.completed (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\utils.js:231:10)\n    at _callCircusTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:316:40)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at _runTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:252:3)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:126:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:121:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:121:9)\n    at run (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:71:3)\n    at runAndTransformResultsToJestFormat (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapterInit.js:122:21)\n    at jestAdapter (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapter.js:79:19)\n    at runTestInternal (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-runner\\build\\runTest.js:367:16)\n    at runTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-runner\\build\\runTest.js:444:34)\n----\n    at Test._assertStatus (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:252:14)\n    at C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:308:13\n    at Test._assertFunction (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:285:13)\n    at Test.assert (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:164:23)\n    at Server.localAssert (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:120:14)\n    at Object.onceWrapper (node:events:621:28)\n    at Server.emit (node:events:507:28)\n    at emitCloseNT (node:net:2419:8)\n    at processTicksAndRejections (node:internal/process/task_queues:89:21)"
+          ],
+          "fullName": "CampaignsController (Integration) DELETE /campaigns/:id should delete a campaign",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should delete a campaign"
+        },
+        {
+          "ancestorTitles": [
+            "CampaignsController (Integration)",
+            "POST /campaigns/:id/launch"
+          ],
+          "duration": 14,
+          "failureDetails": [{}],
+          "failureMessages": [
+            "Error: expected 201 \"Created\", got 500 \"Internal Server Error\"\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaigns.controller.spec.ts:284:10)\n    at Promise.then.completed (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\utils.js:231:10)\n    at _callCircusTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:316:40)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at _runTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:252:3)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:126:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:121:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:121:9)\n    at run (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:71:3)\n    at runAndTransformResultsToJestFormat (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapterInit.js:122:21)\n    at jestAdapter (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapter.js:79:19)\n    at runTestInternal (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-runner\\build\\runTest.js:367:16)\n    at runTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-runner\\build\\runTest.js:444:34)\n----\n    at Test._assertStatus (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:252:14)\n    at C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:308:13\n    at Test._assertFunction (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:285:13)\n    at Test.assert (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:164:23)\n    at Server.localAssert (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:120:14)\n    at Object.onceWrapper (node:events:621:28)\n    at Server.emit (node:events:507:28)\n    at emitCloseNT (node:net:2419:8)\n    at processTicksAndRejections (node:internal/process/task_queues:89:21)"
+          ],
+          "fullName": "CampaignsController (Integration) POST /campaigns/:id/launch should launch a campaign",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should launch a campaign"
+        },
+        {
+          "ancestorTitles": [
+            "CampaignsController (Integration)",
+            "POST /campaigns/:id/pause"
+          ],
+          "duration": 11,
+          "failureDetails": [{}],
+          "failureMessages": [
+            "Error: expected 201 \"Created\", got 500 \"Internal Server Error\"\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaigns.controller.spec.ts:303:10)\n    at Promise.then.completed (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\utils.js:231:10)\n    at _callCircusTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:316:40)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at _runTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:252:3)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:126:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:121:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:121:9)\n    at run (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:71:3)\n    at runAndTransformResultsToJestFormat (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapterInit.js:122:21)\n    at jestAdapter (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapter.js:79:19)\n    at runTestInternal (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-runner\\build\\runTest.js:367:16)\n    at runTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-runner\\build\\runTest.js:444:34)\n----\n    at Test._assertStatus (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:252:14)\n    at C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:308:13\n    at Test._assertFunction (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:285:13)\n    at Test.assert (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:164:23)\n    at Server.localAssert (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:120:14)\n    at Object.onceWrapper (node:events:621:28)\n    at Server.emit (node:events:507:28)\n    at emitCloseNT (node:net:2419:8)\n    at processTicksAndRejections (node:internal/process/task_queues:89:21)"
+          ],
+          "fullName": "CampaignsController (Integration) POST /campaigns/:id/pause should pause a campaign",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should pause a campaign"
+        },
+        {
+          "ancestorTitles": [
+            "CampaignsController (Integration)",
+            "POST /campaigns/:id/resume"
+          ],
+          "duration": 10,
+          "failureDetails": [{}],
+          "failureMessages": [
+            "Error: expected 201 \"Created\", got 500 \"Internal Server Error\"\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaigns.controller.spec.ts:322:10)\n    at Promise.then.completed (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\utils.js:231:10)\n    at _callCircusTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:316:40)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at _runTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:252:3)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:126:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:121:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:121:9)\n    at run (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:71:3)\n    at runAndTransformResultsToJestFormat (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapterInit.js:122:21)\n    at jestAdapter (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapter.js:79:19)\n    at runTestInternal (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-runner\\build\\runTest.js:367:16)\n    at runTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-runner\\build\\runTest.js:444:34)\n----\n    at Test._assertStatus (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:252:14)\n    at C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:308:13\n    at Test._assertFunction (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:285:13)\n    at Test.assert (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:164:23)\n    at Server.localAssert (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:120:14)\n    at Object.onceWrapper (node:events:621:28)\n    at Server.emit (node:events:507:28)\n    at emitCloseNT (node:net:2419:8)\n    at processTicksAndRejections (node:internal/process/task_queues:89:21)"
+          ],
+          "fullName": "CampaignsController (Integration) POST /campaigns/:id/resume should resume a campaign",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should resume a campaign"
+        },
+        {
+          "ancestorTitles": [
+            "CampaignsController (Integration)",
+            "GET /campaigns/:id/analytics"
+          ],
+          "duration": 13,
+          "failureDetails": [{}],
+          "failureMessages": [
+            "Error: expected 200 \"OK\", got 500 \"Internal Server Error\"\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaigns.controller.spec.ts:349:10)\n    at Promise.then.completed (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\utils.js:231:10)\n    at _callCircusTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:316:40)\n    at processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at _runTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:252:3)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:126:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:121:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:121:9)\n    at run (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:71:3)\n    at runAndTransformResultsToJestFormat (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapterInit.js:122:21)\n    at jestAdapter (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapter.js:79:19)\n    at runTestInternal (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-runner\\build\\runTest.js:367:16)\n    at runTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-runner\\build\\runTest.js:444:34)\n----\n    at Test._assertStatus (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:252:14)\n    at C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:308:13\n    at Test._assertFunction (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:285:13)\n    at Test.assert (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:164:23)\n    at Server.localAssert (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\supertest\\lib\\test.js:120:14)\n    at Object.onceWrapper (node:events:621:28)\n    at Server.emit (node:events:507:28)\n    at emitCloseNT (node:net:2419:8)\n    at processTicksAndRejections (node:internal/process/task_queues:89:21)"
+          ],
+          "fullName": "CampaignsController (Integration) GET /campaigns/:id/analytics should return campaign analytics",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should return campaign analytics"
+        },
+        {
+          "ancestorTitles": [
+            "CampaignsController (Integration)",
+            "GET /campaigns/track/open/:campaignId/:recipientId"
+          ],
+          "duration": 15,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "CampaignsController (Integration) GET /campaigns/track/open/:campaignId/:recipientId should track email open event",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 2,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should track email open event"
+        },
+        {
+          "ancestorTitles": [
+            "CampaignsController (Integration)",
+            "GET /campaigns/track/click/:campaignId/:recipientId"
+          ],
+          "duration": 13,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "CampaignsController (Integration) GET /campaigns/track/click/:campaignId/:recipientId should track email click event and redirect",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 2,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should track email click event and redirect"
+        },
+        {
+          "ancestorTitles": [
+            "CampaignsController (Integration)",
+            "GET /campaigns/track/click/:campaignId/:recipientId"
+          ],
+          "duration": 13,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "CampaignsController (Integration) GET /campaigns/track/click/:campaignId/:recipientId should use default redirect URL when no URL provided",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should use default redirect URL when no URL provided"
+        },
+        {
+          "ancestorTitles": [
+            "CampaignsController (Integration)",
+            "POST /campaigns/track/unsubscribe/:campaignId/:recipientId"
+          ],
+          "duration": 9,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "CampaignsController (Integration) POST /campaigns/track/unsubscribe/:campaignId/:recipientId should track unsubscribe event",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 2,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should track unsubscribe event"
+        },
+        {
+          "ancestorTitles": [
+            "CampaignsController (Integration)",
+            "Authentication"
+          ],
+          "duration": 25,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "CampaignsController (Integration) Authentication should require authentication for all endpoints",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should require authentication for all endpoints"
+        }
+      ],
+      "endTime": 1760790871020,
+      "message": "\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignsController (Integration) › GET /campaigns › should return all campaigns for tenant\u001b[39m\u001b[22m\n\n    expected 200 \"OK\", got 500 \"Internal Server Error\"\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 104 |\u001b[39m       \u001b[36mconst\u001b[39m response \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m request(app\u001b[33m.\u001b[39mgetHttpServer())\u001b[22m\n\u001b[2m     \u001b[90m 105 |\u001b[39m         \u001b[33m.\u001b[39m\u001b[36mget\u001b[39m(\u001b[32m'/campaigns'\u001b[39m)\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 106 |\u001b[39m         \u001b[33m.\u001b[39mexpect(\u001b[33mHttpStatus\u001b[39m\u001b[33m.\u001b[39m\u001b[33mOK\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m     |\u001b[39m          \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 107 |\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 108 |\u001b[39m       expect(response\u001b[33m.\u001b[39mbody)\u001b[33m.\u001b[39mtoEqual(mockCampaigns)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 109 |\u001b[39m       expect(mockCampaignsService\u001b[33m.\u001b[39mfindAllForTenant)\u001b[33m.\u001b[39mtoHaveBeenCalledWith(\u001b[32m'tenant1'\u001b[39m\u001b[33m,\u001b[39m {})\u001b[33m;\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaigns.controller.spec.ts\u001b[39m\u001b[0m\u001b[2m:106:10)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      ----\u001b[22m\n\u001b[2m      \u001b[2mat Test._assertStatus (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:252:14)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat \u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:308:13\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Test._assertFunction (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:285:13)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Test.assert (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:164:23)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Server.localAssert (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:120:14)\u001b[22m\u001b[2m\u001b[22m\n\n\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignsController (Integration) › GET /campaigns › should apply query filters\u001b[39m\u001b[22m\n\n    expected 200 \"OK\", got 500 \"Internal Server Error\"\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 121 |\u001b[39m           offset\u001b[33m:\u001b[39m \u001b[32m'0'\u001b[39m\u001b[33m,\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 122 |\u001b[39m         })\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 123 |\u001b[39m         \u001b[33m.\u001b[39mexpect(\u001b[33mHttpStatus\u001b[39m\u001b[33m.\u001b[39m\u001b[33mOK\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m     |\u001b[39m          \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 124 |\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 125 |\u001b[39m       expect(mockCampaignsService\u001b[33m.\u001b[39mfindAllForTenant)\u001b[33m.\u001b[39mtoHaveBeenCalledWith(\u001b[32m'tenant1'\u001b[39m\u001b[33m,\u001b[39m {\u001b[22m\n\u001b[2m     \u001b[90m 126 |\u001b[39m         status\u001b[33m:\u001b[39m \u001b[33mCampaignStatus\u001b[39m\u001b[33m.\u001b[39m\u001b[33mACTIVE\u001b[39m\u001b[33m,\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaigns.controller.spec.ts\u001b[39m\u001b[0m\u001b[2m:123:10)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      ----\u001b[22m\n\u001b[2m      \u001b[2mat Test._assertStatus (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:252:14)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat \u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:308:13\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Test._assertFunction (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:285:13)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Test.assert (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:164:23)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Server.localAssert (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:120:14)\u001b[22m\u001b[2m\u001b[22m\n\n\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignsController (Integration) › POST /campaigns › should create a new campaign\u001b[39m\u001b[22m\n\n    expected 201 \"Created\", got 500 \"Internal Server Error\"\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 156 |\u001b[39m         \u001b[33m.\u001b[39mpost(\u001b[32m'/campaigns'\u001b[39m)\u001b[22m\n\u001b[2m     \u001b[90m 157 |\u001b[39m         \u001b[33m.\u001b[39msend(createDto)\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 158 |\u001b[39m         \u001b[33m.\u001b[39mexpect(\u001b[33mHttpStatus\u001b[39m\u001b[33m.\u001b[39m\u001b[33mCREATED\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m     |\u001b[39m          \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 159 |\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 160 |\u001b[39m       expect(response\u001b[33m.\u001b[39mbody)\u001b[33m.\u001b[39mtoEqual(mockCampaign)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 161 |\u001b[39m       expect(mockCampaignsService\u001b[33m.\u001b[39mcreateForTenant)\u001b[33m.\u001b[39mtoHaveBeenCalledWith(\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaigns.controller.spec.ts\u001b[39m\u001b[0m\u001b[2m:158:10)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      ----\u001b[22m\n\u001b[2m      \u001b[2mat Test._assertStatus (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:252:14)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat \u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:308:13\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Test._assertFunction (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:285:13)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Test.assert (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:164:23)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Server.localAssert (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:120:14)\u001b[22m\u001b[2m\u001b[22m\n\n\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignsController (Integration) › GET /campaigns/summary › should return campaign summary\u001b[39m\u001b[22m\n\n    expected 200 \"OK\", got 500 \"Internal Server Error\"\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 192 |\u001b[39m       \u001b[36mconst\u001b[39m response \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m request(app\u001b[33m.\u001b[39mgetHttpServer())\u001b[22m\n\u001b[2m     \u001b[90m 193 |\u001b[39m         \u001b[33m.\u001b[39m\u001b[36mget\u001b[39m(\u001b[32m'/campaigns/summary'\u001b[39m)\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 194 |\u001b[39m         \u001b[33m.\u001b[39mexpect(\u001b[33mHttpStatus\u001b[39m\u001b[33m.\u001b[39m\u001b[33mOK\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m     |\u001b[39m          \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 195 |\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 196 |\u001b[39m       expect(response\u001b[33m.\u001b[39mbody)\u001b[33m.\u001b[39mtoEqual(mockSummary)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 197 |\u001b[39m       expect(mockCampaignsService\u001b[33m.\u001b[39mgetCampaignSummary)\u001b[33m.\u001b[39mtoHaveBeenCalledWith(\u001b[32m'tenant1'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaigns.controller.spec.ts\u001b[39m\u001b[0m\u001b[2m:194:10)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      ----\u001b[22m\n\u001b[2m      \u001b[2mat Test._assertStatus (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:252:14)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat \u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:308:13\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Test._assertFunction (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:285:13)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Test.assert (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:164:23)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Server.localAssert (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:120:14)\u001b[22m\u001b[2m\u001b[22m\n\n\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignsController (Integration) › GET /campaigns/:id › should return a campaign by ID\u001b[39m\u001b[22m\n\n    expected 200 \"OK\", got 500 \"Internal Server Error\"\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 211 |\u001b[39m       \u001b[36mconst\u001b[39m response \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m request(app\u001b[33m.\u001b[39mgetHttpServer())\u001b[22m\n\u001b[2m     \u001b[90m 212 |\u001b[39m         \u001b[33m.\u001b[39m\u001b[36mget\u001b[39m(\u001b[32m'/campaigns/1'\u001b[39m)\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 213 |\u001b[39m         \u001b[33m.\u001b[39mexpect(\u001b[33mHttpStatus\u001b[39m\u001b[33m.\u001b[39m\u001b[33mOK\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m     |\u001b[39m          \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 214 |\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 215 |\u001b[39m       expect(response\u001b[33m.\u001b[39mbody)\u001b[33m.\u001b[39mtoEqual(mockCampaign)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 216 |\u001b[39m       expect(mockCampaignsService\u001b[33m.\u001b[39mfindOneForTenant)\u001b[33m.\u001b[39mtoHaveBeenCalledWith(\u001b[32m'tenant1'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'1'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaigns.controller.spec.ts\u001b[39m\u001b[0m\u001b[2m:213:10)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      ----\u001b[22m\n\u001b[2m      \u001b[2mat Test._assertStatus (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:252:14)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat \u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:308:13\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Test._assertFunction (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:285:13)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Test.assert (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:164:23)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Server.localAssert (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:120:14)\u001b[22m\u001b[2m\u001b[22m\n\n\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignsController (Integration) › PUT /campaigns/:id › should update a campaign\u001b[39m\u001b[22m\n\n    expected 200 \"OK\", got 500 \"Internal Server Error\"\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 246 |\u001b[39m         \u001b[33m.\u001b[39mput(\u001b[32m'/campaigns/1'\u001b[39m)\u001b[22m\n\u001b[2m     \u001b[90m 247 |\u001b[39m         \u001b[33m.\u001b[39msend(updateDto)\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 248 |\u001b[39m         \u001b[33m.\u001b[39mexpect(\u001b[33mHttpStatus\u001b[39m\u001b[33m.\u001b[39m\u001b[33mOK\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m     |\u001b[39m          \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 249 |\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 250 |\u001b[39m       expect(response\u001b[33m.\u001b[39mbody)\u001b[33m.\u001b[39mtoEqual(mockUpdatedCampaign)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 251 |\u001b[39m       expect(mockCampaignsService\u001b[33m.\u001b[39mupdateForTenant)\u001b[33m.\u001b[39mtoHaveBeenCalledWith(\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaigns.controller.spec.ts\u001b[39m\u001b[0m\u001b[2m:248:10)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      ----\u001b[22m\n\u001b[2m      \u001b[2mat Test._assertStatus (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:252:14)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat \u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:308:13\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Test._assertFunction (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:285:13)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Test.assert (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:164:23)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Server.localAssert (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:120:14)\u001b[22m\u001b[2m\u001b[22m\n\n\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignsController (Integration) › DELETE /campaigns/:id › should delete a campaign\u001b[39m\u001b[22m\n\n    expected 204 \"No Content\", got 500 \"Internal Server Error\"\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 264 |\u001b[39m       \u001b[36mawait\u001b[39m request(app\u001b[33m.\u001b[39mgetHttpServer())\u001b[22m\n\u001b[2m     \u001b[90m 265 |\u001b[39m         \u001b[33m.\u001b[39m\u001b[36mdelete\u001b[39m(\u001b[32m'/campaigns/1'\u001b[39m)\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 266 |\u001b[39m         \u001b[33m.\u001b[39mexpect(\u001b[33mHttpStatus\u001b[39m\u001b[33m.\u001b[39m\u001b[33mNO_CONTENT\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m     |\u001b[39m          \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 267 |\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 268 |\u001b[39m       expect(mockCampaignsService\u001b[33m.\u001b[39mremoveForTenant)\u001b[33m.\u001b[39mtoHaveBeenCalledWith(\u001b[32m'tenant1'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'1'\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 269 |\u001b[39m     })\u001b[33m;\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaigns.controller.spec.ts\u001b[39m\u001b[0m\u001b[2m:266:10)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      ----\u001b[22m\n\u001b[2m      \u001b[2mat Test._assertStatus (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:252:14)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat \u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:308:13\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Test._assertFunction (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:285:13)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Test.assert (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:164:23)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Server.localAssert (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:120:14)\u001b[22m\u001b[2m\u001b[22m\n\n\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignsController (Integration) › POST /campaigns/:id/launch › should launch a campaign\u001b[39m\u001b[22m\n\n    expected 201 \"Created\", got 500 \"Internal Server Error\"\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 282 |\u001b[39m       \u001b[36mconst\u001b[39m response \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m request(app\u001b[33m.\u001b[39mgetHttpServer())\u001b[22m\n\u001b[2m     \u001b[90m 283 |\u001b[39m         \u001b[33m.\u001b[39mpost(\u001b[32m'/campaigns/1/launch'\u001b[39m)\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 284 |\u001b[39m         \u001b[33m.\u001b[39mexpect(\u001b[33mHttpStatus\u001b[39m\u001b[33m.\u001b[39m\u001b[33mCREATED\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m     |\u001b[39m          \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 285 |\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 286 |\u001b[39m       expect(response\u001b[33m.\u001b[39mbody)\u001b[33m.\u001b[39mtoEqual(mockLaunchedCampaign)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 287 |\u001b[39m       expect(mockCampaignsService\u001b[33m.\u001b[39mlaunchCampaign)\u001b[33m.\u001b[39mtoHaveBeenCalledWith(\u001b[32m'tenant1'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'1'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaigns.controller.spec.ts\u001b[39m\u001b[0m\u001b[2m:284:10)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      ----\u001b[22m\n\u001b[2m      \u001b[2mat Test._assertStatus (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:252:14)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat \u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:308:13\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Test._assertFunction (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:285:13)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Test.assert (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:164:23)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Server.localAssert (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:120:14)\u001b[22m\u001b[2m\u001b[22m\n\n\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignsController (Integration) › POST /campaigns/:id/pause › should pause a campaign\u001b[39m\u001b[22m\n\n    expected 201 \"Created\", got 500 \"Internal Server Error\"\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 301 |\u001b[39m       \u001b[36mconst\u001b[39m response \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m request(app\u001b[33m.\u001b[39mgetHttpServer())\u001b[22m\n\u001b[2m     \u001b[90m 302 |\u001b[39m         \u001b[33m.\u001b[39mpost(\u001b[32m'/campaigns/1/pause'\u001b[39m)\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 303 |\u001b[39m         \u001b[33m.\u001b[39mexpect(\u001b[33mHttpStatus\u001b[39m\u001b[33m.\u001b[39m\u001b[33mCREATED\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m     |\u001b[39m          \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 304 |\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 305 |\u001b[39m       expect(response\u001b[33m.\u001b[39mbody)\u001b[33m.\u001b[39mtoEqual(mockPausedCampaign)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 306 |\u001b[39m       expect(mockCampaignsService\u001b[33m.\u001b[39mpauseCampaign)\u001b[33m.\u001b[39mtoHaveBeenCalledWith(\u001b[32m'tenant1'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'1'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaigns.controller.spec.ts\u001b[39m\u001b[0m\u001b[2m:303:10)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      ----\u001b[22m\n\u001b[2m      \u001b[2mat Test._assertStatus (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:252:14)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat \u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:308:13\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Test._assertFunction (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:285:13)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Test.assert (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:164:23)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Server.localAssert (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:120:14)\u001b[22m\u001b[2m\u001b[22m\n\n\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignsController (Integration) › POST /campaigns/:id/resume › should resume a campaign\u001b[39m\u001b[22m\n\n    expected 201 \"Created\", got 500 \"Internal Server Error\"\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 320 |\u001b[39m       \u001b[36mconst\u001b[39m response \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m request(app\u001b[33m.\u001b[39mgetHttpServer())\u001b[22m\n\u001b[2m     \u001b[90m 321 |\u001b[39m         \u001b[33m.\u001b[39mpost(\u001b[32m'/campaigns/1/resume'\u001b[39m)\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 322 |\u001b[39m         \u001b[33m.\u001b[39mexpect(\u001b[33mHttpStatus\u001b[39m\u001b[33m.\u001b[39m\u001b[33mCREATED\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m     |\u001b[39m          \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 323 |\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 324 |\u001b[39m       expect(response\u001b[33m.\u001b[39mbody)\u001b[33m.\u001b[39mtoEqual(mockResumedCampaign)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 325 |\u001b[39m       expect(mockCampaignsService\u001b[33m.\u001b[39mresumeCampaign)\u001b[33m.\u001b[39mtoHaveBeenCalledWith(\u001b[32m'tenant1'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'1'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaigns.controller.spec.ts\u001b[39m\u001b[0m\u001b[2m:322:10)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      ----\u001b[22m\n\u001b[2m      \u001b[2mat Test._assertStatus (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:252:14)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat \u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:308:13\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Test._assertFunction (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:285:13)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Test.assert (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:164:23)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Server.localAssert (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:120:14)\u001b[22m\u001b[2m\u001b[22m\n\n\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignsController (Integration) › GET /campaigns/:id/analytics › should return campaign analytics\u001b[39m\u001b[22m\n\n    expected 200 \"OK\", got 500 \"Internal Server Error\"\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 347 |\u001b[39m       \u001b[36mconst\u001b[39m response \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m request(app\u001b[33m.\u001b[39mgetHttpServer())\u001b[22m\n\u001b[2m     \u001b[90m 348 |\u001b[39m         \u001b[33m.\u001b[39m\u001b[36mget\u001b[39m(\u001b[32m'/campaigns/1/analytics'\u001b[39m)\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 349 |\u001b[39m         \u001b[33m.\u001b[39mexpect(\u001b[33mHttpStatus\u001b[39m\u001b[33m.\u001b[39m\u001b[33mOK\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m     |\u001b[39m          \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 350 |\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 351 |\u001b[39m       expect(response\u001b[33m.\u001b[39mbody)\u001b[33m.\u001b[39mtoEqual(mockAnalytics)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 352 |\u001b[39m       expect(mockCampaignsService\u001b[33m.\u001b[39mgetCampaignAnalytics)\u001b[33m.\u001b[39mtoHaveBeenCalledWith(\u001b[32m'tenant1'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'1'\u001b[39m)\u001b[33m;\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaigns.controller.spec.ts\u001b[39m\u001b[0m\u001b[2m:349:10)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      ----\u001b[22m\n\u001b[2m      \u001b[2mat Test._assertStatus (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:252:14)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat \u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:308:13\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Test._assertFunction (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:285:13)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Test.assert (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:164:23)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Server.localAssert (\u001b[22m\u001b[2m../../node_modules/supertest/lib/test.js\u001b[2m:120:14)\u001b[22m\u001b[2m\u001b[22m\n",
+      "name": "C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaigns.controller.spec.ts",
+      "startTime": 1760790853974,
+      "status": "failed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["CampaignsService", "findAllForTenant"],
+          "duration": 21,
+          "failureDetails": [
+            {
+              "matcherResult": {
+                "message": "\u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\n\u001b[32m- Expected\u001b[39m\n\u001b[31m+ Received\u001b[39m\n\n\u001b[2m  Object {\u001b[22m\n\u001b[2m    \"order\": Object {\u001b[22m\n\u001b[32m-     \"createdAt\": \"DESC\",\u001b[39m\n\u001b[31m+     \"created_at\": \"DESC\",\u001b[39m\n\u001b[2m    },\u001b[22m\n\u001b[2m    \"where\": Object {\u001b[22m\n\u001b[2m      \"tenantId\": \"tenant1\",\u001b[22m\n\u001b[2m    },\u001b[22m\n\u001b[2m  }\u001b[22m,\n\nNumber of calls: \u001b[31m1\u001b[39m",
+                "pass": false
+              }
+            }
+          ],
+          "failureMessages": [
+            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\n\u001b[32m- Expected\u001b[39m\n\u001b[31m+ Received\u001b[39m\n\n\u001b[2m  Object {\u001b[22m\n\u001b[2m    \"order\": Object {\u001b[22m\n\u001b[32m-     \"createdAt\": \"DESC\",\u001b[39m\n\u001b[31m+     \"created_at\": \"DESC\",\u001b[39m\n\u001b[2m    },\u001b[22m\n\u001b[2m    \"where\": Object {\u001b[22m\n\u001b[2m      \"tenantId\": \"tenant1\",\u001b[22m\n\u001b[2m    },\u001b[22m\n\u001b[2m  }\u001b[22m,\n\nNumber of calls: \u001b[31m1\u001b[39m\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaigns.service.spec.ts:88:43)"
+          ],
+          "fullName": "CampaignsService findAllForTenant should return campaigns for a tenant",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should return campaigns for a tenant"
+        },
+        {
+          "ancestorTitles": ["CampaignsService", "findAllForTenant"],
+          "duration": 4,
+          "failureDetails": [
+            {
+              "matcherResult": {
+                "message": "\u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\n\u001b[32m- Expected\u001b[39m\n\u001b[31m+ Received\u001b[39m\n\n\u001b[33m@@ -1,10 +1,9 @@\u001b[39m\n\u001b[2m  Object {\u001b[22m\n\u001b[2m    \"order\": Object {\u001b[22m\n\u001b[32m-     \"createdAt\": \"DESC\",\u001b[39m\n\u001b[31m+     \"created_at\": \"DESC\",\u001b[39m\n\u001b[2m    },\u001b[22m\n\u001b[32m-   \"skip\": 0,\u001b[39m\n\u001b[2m    \"take\": 10,\u001b[22m\n\u001b[2m    \"where\": Object {\u001b[22m\n\u001b[2m      \"status\": \"active\",\u001b[22m\n\u001b[2m      \"tenantId\": \"tenant1\",\u001b[22m\n\u001b[2m      \"type\": \"email\",\u001b[22m,\n\nNumber of calls: \u001b[31m1\u001b[39m",
+                "pass": false
+              }
+            }
+          ],
+          "failureMessages": [
+            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\n\u001b[32m- Expected\u001b[39m\n\u001b[31m+ Received\u001b[39m\n\n\u001b[33m@@ -1,10 +1,9 @@\u001b[39m\n\u001b[2m  Object {\u001b[22m\n\u001b[2m    \"order\": Object {\u001b[22m\n\u001b[32m-     \"createdAt\": \"DESC\",\u001b[39m\n\u001b[31m+     \"created_at\": \"DESC\",\u001b[39m\n\u001b[2m    },\u001b[22m\n\u001b[32m-   \"skip\": 0,\u001b[39m\n\u001b[2m    \"take\": 10,\u001b[22m\n\u001b[2m    \"where\": Object {\u001b[22m\n\u001b[2m      \"status\": \"active\",\u001b[22m\n\u001b[2m      \"tenantId\": \"tenant1\",\u001b[22m\n\u001b[2m      \"type\": \"email\",\u001b[22m,\n\nNumber of calls: \u001b[31m1\u001b[39m\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaigns.service.spec.ts:106:43)"
+          ],
+          "fullName": "CampaignsService findAllForTenant should apply filters when provided",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should apply filters when provided"
+        },
+        {
+          "ancestorTitles": ["CampaignsService", "createForTenant"],
+          "duration": 2,
+          "failureDetails": [{}],
+          "failureMessages": [
+            "TypeError: this.campaignRepository.create is not a function\n    at CampaignsService.createForTenant (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaigns.service.ts:125:46)\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaigns.service.spec.ts:142:22)"
+          ],
+          "fullName": "CampaignsService createForTenant should create a campaign successfully",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should create a campaign successfully"
+        },
+        {
+          "ancestorTitles": ["CampaignsService", "createForTenant"],
+          "duration": 4,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "CampaignsService createForTenant should validate campaign data",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should validate campaign data"
+        },
+        {
+          "ancestorTitles": ["CampaignsService", "createForTenant"],
+          "duration": 2,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "CampaignsService createForTenant should validate scheduled campaigns have scheduledAt",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should validate scheduled campaigns have scheduledAt"
+        },
+        {
+          "ancestorTitles": ["CampaignsService", "findOneForTenant"],
+          "duration": 2,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "CampaignsService findOneForTenant should return a campaign by ID and tenant",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 2,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should return a campaign by ID and tenant"
+        },
+        {
+          "ancestorTitles": ["CampaignsService", "findOneForTenant"],
+          "duration": 2,
+          "failureDetails": [
+            {
+              "message": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mrejects\u001b[2m.\u001b[22mtoThrow\u001b[2m()\u001b[22m\n\nReceived promise resolved instead of rejected\nResolved to value: \u001b[31mnull\u001b[39m"
+            }
+          ],
+          "failureMessages": [
+            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mrejects\u001b[2m.\u001b[22mtoThrow\u001b[2m()\u001b[22m\n\nReceived promise resolved instead of rejected\nResolved to value: \u001b[31mnull\u001b[39m\n    at expect (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\expect\\build\\index.js:113:15)\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaigns.service.spec.ts:201:13)\n    at Promise.then.completed (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\utils.js:231:10)\n    at _callCircusTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:316:40)\n    at _runTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:252:3)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:126:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:121:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:121:9)\n    at run (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:71:3)\n    at runAndTransformResultsToJestFormat (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapterInit.js:122:21)\n    at jestAdapter (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapter.js:79:19)\n    at runTestInternal (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-runner\\build\\runTest.js:367:16)\n    at runTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-runner\\build\\runTest.js:444:34)"
+          ],
+          "fullName": "CampaignsService findOneForTenant should throw NotFoundException when campaign not found",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should throw NotFoundException when campaign not found"
+        },
+        {
+          "ancestorTitles": ["CampaignsService", "updateForTenant"],
+          "duration": 4,
+          "failureDetails": [
+            {
+              "matcherResult": {
+                "actual": {
+                  "id": "1",
+                  "tenantId": "tenant1",
+                  "status": "draft",
+                  "targetAudience": { "customerIds": ["customer1"] }
+                },
+                "expected": {
+                  "id": "1",
+                  "tenantId": "tenant1",
+                  "status": "draft",
+                  "targetAudience": { "customerIds": ["customer1"] },
+                  "name": "Updated Campaign",
+                  "description": "Updated description"
+                },
+                "message": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 2\u001b[39m\n\u001b[31m+ Received  + 0\u001b[39m\n\n\u001b[33m@@ -1,9 +1,7 @@\u001b[39m\n\u001b[2m  Object {\u001b[22m\n\u001b[32m-   \"description\": \"Updated description\",\u001b[39m\n\u001b[2m    \"id\": \"1\",\u001b[22m\n\u001b[32m-   \"name\": \"Updated Campaign\",\u001b[39m\n\u001b[2m    \"status\": \"draft\",\u001b[22m\n\u001b[2m    \"targetAudience\": Object {\u001b[22m\n\u001b[2m      \"customerIds\": Array [\u001b[22m\n\u001b[2m        \"customer1\",\u001b[22m\n\u001b[2m      ],\u001b[22m",
+                "name": "toEqual",
+                "pass": false
+              }
+            }
+          ],
+          "failureMessages": [
+            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 2\u001b[39m\n\u001b[31m+ Received  + 0\u001b[39m\n\n\u001b[33m@@ -1,9 +1,7 @@\u001b[39m\n\u001b[2m  Object {\u001b[22m\n\u001b[32m-   \"description\": \"Updated description\",\u001b[39m\n\u001b[2m    \"id\": \"1\",\u001b[22m\n\u001b[32m-   \"name\": \"Updated Campaign\",\u001b[39m\n\u001b[2m    \"status\": \"draft\",\u001b[22m\n\u001b[2m    \"targetAudience\": Object {\u001b[22m\n\u001b[2m      \"customerIds\": Array [\u001b[22m\n\u001b[2m        \"customer1\",\u001b[22m\n\u001b[2m      ],\u001b[22m\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaigns.service.spec.ts:231:22)"
+          ],
+          "fullName": "CampaignsService updateForTenant should update a campaign successfully",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should update a campaign successfully"
+        },
+        {
+          "ancestorTitles": ["CampaignsService", "updateForTenant"],
+          "duration": 21,
+          "failureDetails": [
+            {
+              "matcherResult": {
+                "message": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mrejects\u001b[2m.\u001b[22mtoThrow\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected constructor: \u001b[32mNotFoundException\u001b[39m\nReceived constructor: \u001b[31mBadRequestException\u001b[39m\n\nReceived message: \u001b[31m\"Campaign 1 not found\"\u001b[39m\n\n    \u001b[0m \u001b[90m 156 |\u001b[39m     \n     \u001b[90m 157 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39mcampaign) {\n    \u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 158 |\u001b[39m       \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mBadRequestException\u001b[39m(\u001b[32m`Campaign ${id} not found`\u001b[39m)\u001b[33m;\u001b[39m\n     \u001b[90m     |\u001b[39m             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n     \u001b[90m 159 |\u001b[39m     }\n     \u001b[90m 160 |\u001b[39m\n     \u001b[90m 161 |\u001b[39m     \u001b[90m// Validate status transitions\u001b[39m\u001b[0m\n\n      \u001b[2mat CampaignsService.updateForTenant (\u001b[22msrc/modules/campaigns/campaigns.service.ts\u001b[2m:158:13)\u001b[22m\n      \u001b[2mat Object.<anonymous> (\u001b[22msrc/modules/campaigns/campaigns.service.spec.ts\u001b[2m:244:7)\u001b[22m",
+                "pass": false
+              },
+              "message": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mrejects\u001b[2m.\u001b[22mtoThrow\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected constructor: \u001b[32mNotFoundException\u001b[39m\nReceived constructor: \u001b[31mBadRequestException\u001b[39m\n\nReceived message: \u001b[31m\"Campaign 1 not found\"\u001b[39m\n\n    \u001b[0m \u001b[90m 156 |\u001b[39m     \n     \u001b[90m 157 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39mcampaign) {\n    \u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 158 |\u001b[39m       \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mBadRequestException\u001b[39m(\u001b[32m`Campaign ${id} not found`\u001b[39m)\u001b[33m;\u001b[39m\n     \u001b[90m     |\u001b[39m             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n     \u001b[90m 159 |\u001b[39m     }\n     \u001b[90m 160 |\u001b[39m\n     \u001b[90m 161 |\u001b[39m     \u001b[90m// Validate status transitions\u001b[39m\u001b[0m\n\n      \u001b[2mat CampaignsService.updateForTenant (\u001b[22msrc/modules/campaigns/campaigns.service.ts\u001b[2m:158:13)\u001b[22m\n      \u001b[2mat Object.<anonymous> (\u001b[22msrc/modules/campaigns/campaigns.service.spec.ts\u001b[2m:244:7)\u001b[22m"
+            }
+          ],
+          "failureMessages": [
+            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mrejects\u001b[2m.\u001b[22mtoThrow\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected constructor: \u001b[32mNotFoundException\u001b[39m\nReceived constructor: \u001b[31mBadRequestException\u001b[39m\n\nReceived message: \u001b[31m\"Campaign 1 not found\"\u001b[39m\n\n    \u001b[0m \u001b[90m 156 |\u001b[39m     \n     \u001b[90m 157 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39mcampaign) {\n    \u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 158 |\u001b[39m       \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mBadRequestException\u001b[39m(\u001b[32m`Campaign ${id} not found`\u001b[39m)\u001b[33m;\u001b[39m\n     \u001b[90m     |\u001b[39m             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n     \u001b[90m 159 |\u001b[39m     }\n     \u001b[90m 160 |\u001b[39m\n     \u001b[90m 161 |\u001b[39m     \u001b[90m// Validate status transitions\u001b[39m\u001b[0m\n\n      \u001b[2mat CampaignsService.updateForTenant (\u001b[22msrc/modules/campaigns/campaigns.service.ts\u001b[2m:158:13)\u001b[22m\n      \u001b[2mat Object.<anonymous> (\u001b[22msrc/modules/campaigns/campaigns.service.spec.ts\u001b[2m:244:7)\u001b[22m\n    at Object.toThrow (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\expect\\build\\index.js:218:22)\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaigns.service.spec.ts:245:18)\n    at Promise.then.completed (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\utils.js:231:10)\n    at _callCircusTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:316:40)\n    at _runTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:252:3)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:126:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:121:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:121:9)\n    at run (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:71:3)\n    at runAndTransformResultsToJestFormat (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapterInit.js:122:21)\n    at jestAdapter (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapter.js:79:19)\n    at runTestInternal (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-runner\\build\\runTest.js:367:16)\n    at runTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-runner\\build\\runTest.js:444:34)"
+          ],
+          "fullName": "CampaignsService updateForTenant should throw NotFoundException when campaign not found",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should throw NotFoundException when campaign not found"
+        },
+        {
+          "ancestorTitles": ["CampaignsService", "updateForTenant"],
+          "duration": 3,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "CampaignsService updateForTenant should validate status transitions",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should validate status transitions"
+        },
+        {
+          "ancestorTitles": ["CampaignsService", "removeForTenant"],
+          "duration": 3,
+          "failureDetails": [
+            {
+              "matcherResult": {
+                "message": "\u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: \u001b[32m\"1\"\u001b[39m\nReceived: \u001b[31m{\"id\": \"1\", \"tenantId\": \"tenant1\"}\u001b[39m\n\nNumber of calls: \u001b[31m1\u001b[39m",
+                "pass": false
+              }
+            }
+          ],
+          "failureMessages": [
+            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: \u001b[32m\"1\"\u001b[39m\nReceived: \u001b[31m{\"id\": \"1\", \"tenantId\": \"tenant1\"}\u001b[39m\n\nNumber of calls: \u001b[31m1\u001b[39m\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaigns.service.spec.ts:279:49)"
+          ],
+          "fullName": "CampaignsService removeForTenant should soft delete a campaign",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should soft delete a campaign"
+        },
+        {
+          "ancestorTitles": ["CampaignsService", "removeForTenant"],
+          "duration": 2,
+          "failureDetails": [
+            {
+              "matcherResult": {
+                "message": "\u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: \u001b[32m\"1\"\u001b[39m\nReceived: \u001b[31m{\"id\": \"1\", \"tenantId\": \"tenant1\"}\u001b[39m\n\nNumber of calls: \u001b[31m1\u001b[39m",
+                "pass": false
+              }
+            }
+          ],
+          "failureMessages": [
+            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: \u001b[32m\"1\"\u001b[39m\nReceived: \u001b[31m{\"id\": \"1\", \"tenantId\": \"tenant1\"}\u001b[39m\n\nNumber of calls: \u001b[31m1\u001b[39m\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaigns.service.spec.ts:296:49)"
+          ],
+          "fullName": "CampaignsService removeForTenant should pause active campaign before deletion",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should pause active campaign before deletion"
+        },
+        {
+          "ancestorTitles": ["CampaignsService", "removeForTenant"],
+          "duration": 6,
+          "failureDetails": [
+            {
+              "matcherResult": {
+                "message": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mrejects\u001b[2m.\u001b[22mtoThrow\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected constructor: \u001b[32mNotFoundException\u001b[39m\nReceived constructor: \u001b[31mBadRequestException\u001b[39m\n\nReceived message: \u001b[31m\"Campaign 1 not found\"\u001b[39m\n\n    \u001b[0m \u001b[90m 190 |\u001b[39m     \n     \u001b[90m 191 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39mcampaign) {\n    \u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 192 |\u001b[39m       \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mBadRequestException\u001b[39m(\u001b[32m`Campaign ${id} not found`\u001b[39m)\u001b[33m;\u001b[39m\n     \u001b[90m     |\u001b[39m             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n     \u001b[90m 193 |\u001b[39m     }\n     \u001b[90m 194 |\u001b[39m\n     \u001b[90m 195 |\u001b[39m     \u001b[90m// Cancel campaign if it's active\u001b[39m\u001b[0m\n\n      \u001b[2mat CampaignsService.removeForTenant (\u001b[22msrc/modules/campaigns/campaigns.service.ts\u001b[2m:192:13)\u001b[22m\n      \u001b[2mat Object.<anonymous> (\u001b[22msrc/modules/campaigns/campaigns.service.spec.ts\u001b[2m:302:7)\u001b[22m",
+                "pass": false
+              },
+              "message": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mrejects\u001b[2m.\u001b[22mtoThrow\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected constructor: \u001b[32mNotFoundException\u001b[39m\nReceived constructor: \u001b[31mBadRequestException\u001b[39m\n\nReceived message: \u001b[31m\"Campaign 1 not found\"\u001b[39m\n\n    \u001b[0m \u001b[90m 190 |\u001b[39m     \n     \u001b[90m 191 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39mcampaign) {\n    \u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 192 |\u001b[39m       \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mBadRequestException\u001b[39m(\u001b[32m`Campaign ${id} not found`\u001b[39m)\u001b[33m;\u001b[39m\n     \u001b[90m     |\u001b[39m             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n     \u001b[90m 193 |\u001b[39m     }\n     \u001b[90m 194 |\u001b[39m\n     \u001b[90m 195 |\u001b[39m     \u001b[90m// Cancel campaign if it's active\u001b[39m\u001b[0m\n\n      \u001b[2mat CampaignsService.removeForTenant (\u001b[22msrc/modules/campaigns/campaigns.service.ts\u001b[2m:192:13)\u001b[22m\n      \u001b[2mat Object.<anonymous> (\u001b[22msrc/modules/campaigns/campaigns.service.spec.ts\u001b[2m:302:7)\u001b[22m"
+            }
+          ],
+          "failureMessages": [
+            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mrejects\u001b[2m.\u001b[22mtoThrow\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected constructor: \u001b[32mNotFoundException\u001b[39m\nReceived constructor: \u001b[31mBadRequestException\u001b[39m\n\nReceived message: \u001b[31m\"Campaign 1 not found\"\u001b[39m\n\n    \u001b[0m \u001b[90m 190 |\u001b[39m     \n     \u001b[90m 191 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39mcampaign) {\n    \u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 192 |\u001b[39m       \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mBadRequestException\u001b[39m(\u001b[32m`Campaign ${id} not found`\u001b[39m)\u001b[33m;\u001b[39m\n     \u001b[90m     |\u001b[39m             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n     \u001b[90m 193 |\u001b[39m     }\n     \u001b[90m 194 |\u001b[39m\n     \u001b[90m 195 |\u001b[39m     \u001b[90m// Cancel campaign if it's active\u001b[39m\u001b[0m\n\n      \u001b[2mat CampaignsService.removeForTenant (\u001b[22msrc/modules/campaigns/campaigns.service.ts\u001b[2m:192:13)\u001b[22m\n      \u001b[2mat Object.<anonymous> (\u001b[22msrc/modules/campaigns/campaigns.service.spec.ts\u001b[2m:302:7)\u001b[22m\n    at Object.toThrow (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\expect\\build\\index.js:218:22)\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaigns.service.spec.ts:303:18)\n    at Promise.then.completed (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\utils.js:298:28)\n    at new Promise (<anonymous>)\n    at callAsyncCircusFn (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\utils.js:231:10)\n    at _callCircusTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:316:40)\n    at _runTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:252:3)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:126:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:121:9)\n    at _runTestsForDescribeBlock (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:121:9)\n    at run (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\run.js:71:3)\n    at runAndTransformResultsToJestFormat (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapterInit.js:122:21)\n    at jestAdapter (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-circus\\build\\legacy-code-todo-rewrite\\jestAdapter.js:79:19)\n    at runTestInternal (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-runner\\build\\runTest.js:367:16)\n    at runTest (C:\\Users\\Inimfon Udoh\\Tekbot\\node_modules\\jest-runner\\build\\runTest.js:444:34)"
+          ],
+          "fullName": "CampaignsService removeForTenant should throw NotFoundException when campaign not found",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should throw NotFoundException when campaign not found"
+        },
+        {
+          "ancestorTitles": ["CampaignsService", "launchCampaign"],
+          "duration": 3,
+          "failureDetails": [{}],
+          "failureMessages": [
+            "TypeError: this.campaignAutomationService.executeCampaign is not a function\n    at CampaignsService.handleStatusChange (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaigns.service.ts:397:48)\n    at CampaignsService.updateForTenant (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaigns.service.ts:181:18)\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaigns.service.spec.ts:325:22)"
+          ],
+          "fullName": "CampaignsService launchCampaign should launch a draft campaign as immediate",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should launch a draft campaign as immediate"
+        },
+        {
+          "ancestorTitles": ["CampaignsService", "launchCampaign"],
+          "duration": 4,
+          "failureDetails": [
+            {
+              "matcherResult": {
+                "actual": "draft",
+                "expected": "scheduled",
+                "message": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"scheduled\"\u001b[39m\nReceived: \u001b[31m\"draft\"\u001b[39m",
+                "name": "toBe",
+                "pass": false
+              }
+            }
+          ],
+          "failureMessages": [
+            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"scheduled\"\u001b[39m\nReceived: \u001b[31m\"draft\"\u001b[39m\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaigns.service.spec.ts:354:29)"
+          ],
+          "fullName": "CampaignsService launchCampaign should launch a scheduled campaign",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should launch a scheduled campaign"
+        },
+        {
+          "ancestorTitles": ["CampaignsService", "launchCampaign"],
+          "duration": 1,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "CampaignsService launchCampaign should throw BadRequestException for non-draft campaigns",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should throw BadRequestException for non-draft campaigns"
+        },
+        {
+          "ancestorTitles": ["CampaignsService", "pauseCampaign"],
+          "duration": 2,
+          "failureDetails": [
+            {
+              "matcherResult": {
+                "actual": "active",
+                "expected": "paused",
+                "message": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"paused\"\u001b[39m\nReceived: \u001b[31m\"active\"\u001b[39m",
+                "name": "toBe",
+                "pass": false
+              }
+            }
+          ],
+          "failureMessages": [
+            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"paused\"\u001b[39m\nReceived: \u001b[31m\"active\"\u001b[39m\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaigns.service.spec.ts:387:29)"
+          ],
+          "fullName": "CampaignsService pauseCampaign should pause an active campaign",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should pause an active campaign"
+        },
+        {
+          "ancestorTitles": ["CampaignsService", "resumeCampaign"],
+          "duration": 2,
+          "failureDetails": [
+            {
+              "matcherResult": {
+                "actual": "paused",
+                "expected": "active",
+                "message": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"active\"\u001b[39m\nReceived: \u001b[31m\"paused\"\u001b[39m",
+                "name": "toBe",
+                "pass": false
+              }
+            }
+          ],
+          "failureMessages": [
+            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"active\"\u001b[39m\nReceived: \u001b[31m\"paused\"\u001b[39m\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaigns.service.spec.ts:408:29)"
+          ],
+          "fullName": "CampaignsService resumeCampaign should resume a paused campaign",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should resume a paused campaign"
+        },
+        {
+          "ancestorTitles": ["CampaignsService", "getCampaignSummary"],
+          "duration": 3,
+          "failureDetails": [
+            {
+              "matcherResult": {
+                "actual": {
+                  "totalCampaigns": 0,
+                  "activeCampaigns": 0,
+                  "totalSent": 0,
+                  "averageOpenRate": 0,
+                  "averageClickRate": 0
+                },
+                "expected": {
+                  "totalCampaigns": 10,
+                  "activeCampaigns": 3,
+                  "totalSent": 100,
+                  "averageOpenRate": 50,
+                  "averageClickRate": 50
+                },
+                "message": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 5\u001b[39m\n\u001b[31m+ Received  + 5\u001b[39m\n\n\u001b[2m  Object {\u001b[22m\n\u001b[32m-   \"activeCampaigns\": 3,\u001b[39m\n\u001b[32m-   \"averageClickRate\": 50,\u001b[39m\n\u001b[32m-   \"averageOpenRate\": 50,\u001b[39m\n\u001b[32m-   \"totalCampaigns\": 10,\u001b[39m\n\u001b[32m-   \"totalSent\": 100,\u001b[39m\n\u001b[31m+   \"activeCampaigns\": 0,\u001b[39m\n\u001b[31m+   \"averageClickRate\": 0,\u001b[39m\n\u001b[31m+   \"averageOpenRate\": 0,\u001b[39m\n\u001b[31m+   \"totalCampaigns\": 0,\u001b[39m\n\u001b[31m+   \"totalSent\": 0,\u001b[39m\n\u001b[2m  }\u001b[22m",
+                "name": "toEqual",
+                "pass": false
+              }
+            }
+          ],
+          "failureMessages": [
+            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 5\u001b[39m\n\u001b[31m+ Received  + 5\u001b[39m\n\n\u001b[2m  Object {\u001b[22m\n\u001b[32m-   \"activeCampaigns\": 3,\u001b[39m\n\u001b[32m-   \"averageClickRate\": 50,\u001b[39m\n\u001b[32m-   \"averageOpenRate\": 50,\u001b[39m\n\u001b[32m-   \"totalCampaigns\": 10,\u001b[39m\n\u001b[32m-   \"totalSent\": 100,\u001b[39m\n\u001b[31m+   \"activeCampaigns\": 0,\u001b[39m\n\u001b[31m+   \"averageClickRate\": 0,\u001b[39m\n\u001b[31m+   \"averageOpenRate\": 0,\u001b[39m\n\u001b[31m+   \"totalCampaigns\": 0,\u001b[39m\n\u001b[31m+   \"totalSent\": 0,\u001b[39m\n\u001b[2m  }\u001b[22m\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaigns.service.spec.ts:431:22)"
+          ],
+          "fullName": "CampaignsService getCampaignSummary should return campaign summary for tenant",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should return campaign summary for tenant"
+        },
+        {
+          "ancestorTitles": ["CampaignsService", "estimateRecipients"],
+          "duration": 2,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "CampaignsService estimateRecipients should estimate recipients by customer IDs",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 2,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should estimate recipients by customer IDs"
+        },
+        {
+          "ancestorTitles": ["CampaignsService", "estimateRecipients"],
+          "duration": 2,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "CampaignsService estimateRecipients should estimate recipients by segment",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should estimate recipients by segment"
+        }
+      ],
+      "endTime": 1760790872510,
+      "message": "\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignsService › findAllForTenant › should return campaigns for a tenant\u001b[39m\u001b[22m\n\n    \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\n    \u001b[32m- Expected\u001b[39m\n    \u001b[31m+ Received\u001b[39m\n\n    \u001b[2m  Object {\u001b[22m\n    \u001b[2m    \"order\": Object {\u001b[22m\n    \u001b[32m-     \"createdAt\": \"DESC\",\u001b[39m\n    \u001b[31m+     \"created_at\": \"DESC\",\u001b[39m\n    \u001b[2m    },\u001b[22m\n    \u001b[2m    \"where\": Object {\u001b[22m\n    \u001b[2m      \"tenantId\": \"tenant1\",\u001b[22m\n    \u001b[2m    },\u001b[22m\n    \u001b[2m  }\u001b[22m,\n\n    Number of calls: \u001b[31m1\u001b[39m\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 86 |\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 87 |\u001b[39m       expect(result)\u001b[33m.\u001b[39mtoEqual(mockCampaigns)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 88 |\u001b[39m       expect(mockCampaignRepository\u001b[33m.\u001b[39mfind)\u001b[33m.\u001b[39mtoHaveBeenCalledWith({\u001b[22m\n\u001b[2m     \u001b[90m    |\u001b[39m                                           \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 89 |\u001b[39m         where\u001b[33m:\u001b[39m { tenantId\u001b[33m:\u001b[39m \u001b[32m'tenant1'\u001b[39m }\u001b[33m,\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 90 |\u001b[39m         order\u001b[33m:\u001b[39m { createdAt\u001b[33m:\u001b[39m \u001b[32m'DESC'\u001b[39m }\u001b[33m,\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 91 |\u001b[39m       })\u001b[33m;\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaigns.service.spec.ts\u001b[39m\u001b[0m\u001b[2m:88:43)\u001b[22m\u001b[2m\u001b[22m\n\n\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignsService › findAllForTenant › should apply filters when provided\u001b[39m\u001b[22m\n\n    \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\n    \u001b[32m- Expected\u001b[39m\n    \u001b[31m+ Received\u001b[39m\n\n    \u001b[33m@@ -1,10 +1,9 @@\u001b[39m\n    \u001b[2m  Object {\u001b[22m\n    \u001b[2m    \"order\": Object {\u001b[22m\n    \u001b[32m-     \"createdAt\": \"DESC\",\u001b[39m\n    \u001b[31m+     \"created_at\": \"DESC\",\u001b[39m\n    \u001b[2m    },\u001b[22m\n    \u001b[32m-   \"skip\": 0,\u001b[39m\n    \u001b[2m    \"take\": 10,\u001b[22m\n    \u001b[2m    \"where\": Object {\u001b[22m\n    \u001b[2m      \"status\": \"active\",\u001b[22m\n    \u001b[2m      \"tenantId\": \"tenant1\",\u001b[22m\n    \u001b[2m      \"type\": \"email\",\u001b[22m,\n\n    Number of calls: \u001b[31m1\u001b[39m\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 104 |\u001b[39m       \u001b[36mawait\u001b[39m service\u001b[33m.\u001b[39mfindAllForTenant(\u001b[32m'tenant1'\u001b[39m\u001b[33m,\u001b[39m filters)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 105 |\u001b[39m\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 106 |\u001b[39m       expect(mockCampaignRepository\u001b[33m.\u001b[39mfind)\u001b[33m.\u001b[39mtoHaveBeenCalledWith({\u001b[22m\n\u001b[2m     \u001b[90m     |\u001b[39m                                           \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 107 |\u001b[39m         where\u001b[33m:\u001b[39m {\u001b[22m\n\u001b[2m     \u001b[90m 108 |\u001b[39m           tenantId\u001b[33m:\u001b[39m \u001b[32m'tenant1'\u001b[39m\u001b[33m,\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 109 |\u001b[39m           status\u001b[33m:\u001b[39m \u001b[33mCampaignStatus\u001b[39m\u001b[33m.\u001b[39m\u001b[33mACTIVE\u001b[39m\u001b[33m,\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaigns.service.spec.ts\u001b[39m\u001b[0m\u001b[2m:106:43)\u001b[22m\u001b[2m\u001b[22m\n\n\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignsService › createForTenant › should create a campaign successfully\u001b[39m\u001b[22m\n\n    TypeError: this.campaignRepository.create is not a function\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 123 |\u001b[39m     }\u001b[22m\n\u001b[2m     \u001b[90m 124 |\u001b[39m\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 125 |\u001b[39m     \u001b[36mconst\u001b[39m campaign \u001b[33m=\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mcampaignRepository\u001b[33m.\u001b[39mcreate({\u001b[22m\n\u001b[2m     \u001b[90m     |\u001b[39m                                              \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 126 |\u001b[39m       \u001b[33m...\u001b[39mdto\u001b[33m,\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 127 |\u001b[39m       tenantId\u001b[33m,\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 128 |\u001b[39m       status\u001b[33m:\u001b[39m \u001b[33mCampaignStatus\u001b[39m\u001b[33m.\u001b[39m\u001b[33mDRAFT\u001b[39m\u001b[33m,\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat CampaignsService.createForTenant (\u001b[22m\u001b[2msrc/modules/campaigns/campaigns.service.ts\u001b[2m:125:46)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaigns.service.spec.ts\u001b[39m\u001b[0m\u001b[2m:142:22)\u001b[22m\u001b[2m\u001b[22m\n\n\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignsService › findOneForTenant › should throw NotFoundException when campaign not found\u001b[39m\u001b[22m\n\n    \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mrejects\u001b[2m.\u001b[22mtoThrow\u001b[2m()\u001b[22m\n\n    Received promise resolved instead of rejected\n    Resolved to value: \u001b[31mnull\u001b[39m\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 199 |\u001b[39m       mockCampaignRepository\u001b[33m.\u001b[39mfindOne\u001b[33m.\u001b[39mmockResolvedValue(\u001b[36mnull\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 200 |\u001b[39m\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 201 |\u001b[39m       \u001b[36mawait\u001b[39m expect(service\u001b[33m.\u001b[39mfindOneForTenant(\u001b[32m'tenant1'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'1'\u001b[39m))\u001b[22m\n\u001b[2m     \u001b[90m     |\u001b[39m             \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 202 |\u001b[39m         \u001b[33m.\u001b[39mrejects\u001b[33m.\u001b[39mtoThrow(\u001b[33mNotFoundException\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 203 |\u001b[39m     })\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 204 |\u001b[39m   })\u001b[33m;\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat expect (\u001b[22m\u001b[2m../../node_modules/expect/build/index.js\u001b[2m:113:15)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaigns.service.spec.ts\u001b[39m\u001b[0m\u001b[2m:201:13)\u001b[22m\u001b[2m\u001b[22m\n\n\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignsService › updateForTenant › should update a campaign successfully\u001b[39m\u001b[22m\n\n    \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n    \u001b[32m- Expected  - 2\u001b[39m\n    \u001b[31m+ Received  + 0\u001b[39m\n\n    \u001b[33m@@ -1,9 +1,7 @@\u001b[39m\n    \u001b[2m  Object {\u001b[22m\n    \u001b[32m-   \"description\": \"Updated description\",\u001b[39m\n    \u001b[2m    \"id\": \"1\",\u001b[22m\n    \u001b[32m-   \"name\": \"Updated Campaign\",\u001b[39m\n    \u001b[2m    \"status\": \"draft\",\u001b[22m\n    \u001b[2m    \"targetAudience\": Object {\u001b[22m\n    \u001b[2m      \"customerIds\": Array [\u001b[22m\n    \u001b[2m        \"customer1\",\u001b[22m\n    \u001b[2m      ],\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 229 |\u001b[39m       \u001b[36mconst\u001b[39m result \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m service\u001b[33m.\u001b[39mupdateForTenant(\u001b[32m'tenant1'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'1'\u001b[39m\u001b[33m,\u001b[39m updateDto\u001b[33m,\u001b[39m \u001b[32m'user1'\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 230 |\u001b[39m\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 231 |\u001b[39m       expect(result)\u001b[33m.\u001b[39mtoEqual(updatedCampaign)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m     |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 232 |\u001b[39m       expect(mockCampaignRepository\u001b[33m.\u001b[39msave)\u001b[33m.\u001b[39mtoHaveBeenCalledWith(\u001b[22m\n\u001b[2m     \u001b[90m 233 |\u001b[39m         expect\u001b[33m.\u001b[39mobjectContaining({\u001b[22m\n\u001b[2m     \u001b[90m 234 |\u001b[39m           \u001b[33m...\u001b[39mupdateDto\u001b[33m,\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaigns.service.spec.ts\u001b[39m\u001b[0m\u001b[2m:231:22)\u001b[22m\u001b[2m\u001b[22m\n\n\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignsService › updateForTenant › should throw NotFoundException when campaign not found\u001b[39m\u001b[22m\n\n    \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mrejects\u001b[2m.\u001b[22mtoThrow\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\n    Expected constructor: \u001b[32mNotFoundException\u001b[39m\n    Received constructor: \u001b[31mBadRequestException\u001b[39m\n\n    Received message: \u001b[31m\"Campaign 1 not found\"\u001b[39m\n\n        \u001b[0m \u001b[90m 156 |\u001b[39m     \n         \u001b[90m 157 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39mcampaign) {\n        \u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 158 |\u001b[39m       \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mBadRequestException\u001b[39m(\u001b[32m`Campaign ${id} not found`\u001b[39m)\u001b[33m;\u001b[39m\n         \u001b[90m     |\u001b[39m             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n         \u001b[90m 159 |\u001b[39m     }\n         \u001b[90m 160 |\u001b[39m\n         \u001b[90m 161 |\u001b[39m     \u001b[90m// Validate status transitions\u001b[39m\u001b[0m\n\n          \u001b[2mat CampaignsService.updateForTenant (\u001b[22msrc/modules/campaigns/campaigns.service.ts\u001b[2m:158:13)\u001b[22m\n          \u001b[2mat Object.<anonymous> (\u001b[22msrc/modules/campaigns/campaigns.service.spec.ts\u001b[2m:244:7)\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 243 |\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 244 |\u001b[39m       \u001b[36mawait\u001b[39m expect(service\u001b[33m.\u001b[39mupdateForTenant(\u001b[32m'tenant1'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'1'\u001b[39m\u001b[33m,\u001b[39m updateDto\u001b[33m,\u001b[39m \u001b[32m'user1'\u001b[39m))\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 245 |\u001b[39m         \u001b[33m.\u001b[39mrejects\u001b[33m.\u001b[39mtoThrow(\u001b[33mNotFoundException\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m     |\u001b[39m                  \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 246 |\u001b[39m     })\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 247 |\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 248 |\u001b[39m     it(\u001b[32m'should validate status transitions'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m () \u001b[33m=>\u001b[39m {\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.toThrow (\u001b[22m\u001b[2m../../node_modules/expect/build/index.js\u001b[2m:218:22)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaigns.service.spec.ts\u001b[39m\u001b[0m\u001b[2m:245:18)\u001b[22m\u001b[2m\u001b[22m\n\n\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignsService › removeForTenant › should soft delete a campaign\u001b[39m\u001b[22m\n\n    \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\n    Expected: \u001b[32m\"1\"\u001b[39m\n    Received: \u001b[31m{\"id\": \"1\", \"tenantId\": \"tenant1\"}\u001b[39m\n\n    Number of calls: \u001b[31m1\u001b[39m\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 277 |\u001b[39m       \u001b[36mawait\u001b[39m service\u001b[33m.\u001b[39mremoveForTenant(\u001b[32m'tenant1'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'1'\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 278 |\u001b[39m\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 279 |\u001b[39m       expect(mockCampaignRepository\u001b[33m.\u001b[39msoftDelete)\u001b[33m.\u001b[39mtoHaveBeenCalledWith(\u001b[32m'1'\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m     |\u001b[39m                                                 \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 280 |\u001b[39m       expect(mockEventEmitter\u001b[33m.\u001b[39memit)\u001b[33m.\u001b[39mtoHaveBeenCalledWith(\u001b[32m'campaign.deleted'\u001b[39m\u001b[33m,\u001b[39m mockCampaign)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 281 |\u001b[39m     })\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 282 |\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaigns.service.spec.ts\u001b[39m\u001b[0m\u001b[2m:279:49)\u001b[22m\u001b[2m\u001b[22m\n\n\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignsService › removeForTenant › should pause active campaign before deletion\u001b[39m\u001b[22m\n\n    \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\n    Expected: \u001b[32m\"1\"\u001b[39m\n    Received: \u001b[31m{\"id\": \"1\", \"tenantId\": \"tenant1\"}\u001b[39m\n\n    Number of calls: \u001b[31m1\u001b[39m\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 294 |\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 295 |\u001b[39m       expect(mockCampaignAutomationService\u001b[33m.\u001b[39mpauseCampaign)\u001b[33m.\u001b[39mtoHaveBeenCalledWith(\u001b[32m'1'\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 296 |\u001b[39m       expect(mockCampaignRepository\u001b[33m.\u001b[39msoftDelete)\u001b[33m.\u001b[39mtoHaveBeenCalledWith(\u001b[32m'1'\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m     |\u001b[39m                                                 \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 297 |\u001b[39m     })\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 298 |\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 299 |\u001b[39m     it(\u001b[32m'should throw NotFoundException when campaign not found'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m () \u001b[33m=>\u001b[39m {\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaigns.service.spec.ts\u001b[39m\u001b[0m\u001b[2m:296:49)\u001b[22m\u001b[2m\u001b[22m\n\n\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignsService › removeForTenant › should throw NotFoundException when campaign not found\u001b[39m\u001b[22m\n\n    \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mrejects\u001b[2m.\u001b[22mtoThrow\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\n    Expected constructor: \u001b[32mNotFoundException\u001b[39m\n    Received constructor: \u001b[31mBadRequestException\u001b[39m\n\n    Received message: \u001b[31m\"Campaign 1 not found\"\u001b[39m\n\n        \u001b[0m \u001b[90m 190 |\u001b[39m     \n         \u001b[90m 191 |\u001b[39m     \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39mcampaign) {\n        \u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 192 |\u001b[39m       \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mBadRequestException\u001b[39m(\u001b[32m`Campaign ${id} not found`\u001b[39m)\u001b[33m;\u001b[39m\n         \u001b[90m     |\u001b[39m             \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n         \u001b[90m 193 |\u001b[39m     }\n         \u001b[90m 194 |\u001b[39m\n         \u001b[90m 195 |\u001b[39m     \u001b[90m// Cancel campaign if it's active\u001b[39m\u001b[0m\n\n          \u001b[2mat CampaignsService.removeForTenant (\u001b[22msrc/modules/campaigns/campaigns.service.ts\u001b[2m:192:13)\u001b[22m\n          \u001b[2mat Object.<anonymous> (\u001b[22msrc/modules/campaigns/campaigns.service.spec.ts\u001b[2m:302:7)\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 301 |\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 302 |\u001b[39m       \u001b[36mawait\u001b[39m expect(service\u001b[33m.\u001b[39mremoveForTenant(\u001b[32m'tenant1'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'1'\u001b[39m))\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 303 |\u001b[39m         \u001b[33m.\u001b[39mrejects\u001b[33m.\u001b[39mtoThrow(\u001b[33mNotFoundException\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m     |\u001b[39m                  \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 304 |\u001b[39m     })\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 305 |\u001b[39m   })\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 306 |\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.toThrow (\u001b[22m\u001b[2m../../node_modules/expect/build/index.js\u001b[2m:218:22)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaigns.service.spec.ts\u001b[39m\u001b[0m\u001b[2m:303:18)\u001b[22m\u001b[2m\u001b[22m\n\n\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignsService › launchCampaign › should launch a draft campaign as immediate\u001b[39m\u001b[22m\n\n    TypeError: this.campaignAutomationService.executeCampaign is not a function\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 395 |\u001b[39m         \u001b[36mif\u001b[39m (campaign\u001b[33m.\u001b[39mtriggerType \u001b[33m===\u001b[39m \u001b[33mTriggerType\u001b[39m\u001b[33m.\u001b[39m\u001b[33mMANUAL\u001b[39m) {\u001b[22m\n\u001b[2m     \u001b[90m 396 |\u001b[39m           \u001b[90m// Execute immediately for manual campaigns\u001b[39m\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 397 |\u001b[39m           \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mcampaignAutomationService\u001b[33m.\u001b[39mexecuteCampaign(campaign\u001b[33m.\u001b[39mid)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m     |\u001b[39m                                                \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 398 |\u001b[39m         }\u001b[22m\n\u001b[2m     \u001b[90m 399 |\u001b[39m         \u001b[36mbreak\u001b[39m\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 400 |\u001b[39m       \u001b[36mcase\u001b[39m \u001b[32m'paused'\u001b[39m\u001b[33m:\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat CampaignsService.handleStatusChange (\u001b[22m\u001b[2msrc/modules/campaigns/campaigns.service.ts\u001b[2m:397:48)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat CampaignsService.updateForTenant (\u001b[22m\u001b[2msrc/modules/campaigns/campaigns.service.ts\u001b[2m:181:18)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaigns.service.spec.ts\u001b[39m\u001b[0m\u001b[2m:325:22)\u001b[22m\u001b[2m\u001b[22m\n\n\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignsService › launchCampaign › should launch a scheduled campaign\u001b[39m\u001b[22m\n\n    \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\n    Expected: \u001b[32m\"scheduled\"\u001b[39m\n    Received: \u001b[31m\"draft\"\u001b[39m\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 352 |\u001b[39m       \u001b[36mconst\u001b[39m result \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m service\u001b[33m.\u001b[39mlaunchCampaign(\u001b[32m'tenant1'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'1'\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 353 |\u001b[39m\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 354 |\u001b[39m       expect(result\u001b[33m.\u001b[39mstatus)\u001b[33m.\u001b[39mtoBe(\u001b[33mCampaignStatus\u001b[39m\u001b[33m.\u001b[39m\u001b[33mSCHEDULED\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m     |\u001b[39m                             \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 355 |\u001b[39m     })\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 356 |\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 357 |\u001b[39m     it(\u001b[32m'should throw BadRequestException for non-draft campaigns'\u001b[39m\u001b[33m,\u001b[39m \u001b[36masync\u001b[39m () \u001b[33m=>\u001b[39m {\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaigns.service.spec.ts\u001b[39m\u001b[0m\u001b[2m:354:29)\u001b[22m\u001b[2m\u001b[22m\n\n\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignsService › pauseCampaign › should pause an active campaign\u001b[39m\u001b[22m\n\n    \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\n    Expected: \u001b[32m\"paused\"\u001b[39m\n    Received: \u001b[31m\"active\"\u001b[39m\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 385 |\u001b[39m       \u001b[36mconst\u001b[39m result \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m service\u001b[33m.\u001b[39mpauseCampaign(\u001b[32m'tenant1'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'1'\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 386 |\u001b[39m\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 387 |\u001b[39m       expect(result\u001b[33m.\u001b[39mstatus)\u001b[33m.\u001b[39mtoBe(\u001b[33mCampaignStatus\u001b[39m\u001b[33m.\u001b[39m\u001b[33mPAUSED\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m     |\u001b[39m                             \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 388 |\u001b[39m       expect(mockCampaignAutomationService\u001b[33m.\u001b[39mpauseCampaign)\u001b[33m.\u001b[39mtoHaveBeenCalledWith(\u001b[32m'1'\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 389 |\u001b[39m     })\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 390 |\u001b[39m   })\u001b[33m;\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaigns.service.spec.ts\u001b[39m\u001b[0m\u001b[2m:387:29)\u001b[22m\u001b[2m\u001b[22m\n\n\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignsService › resumeCampaign › should resume a paused campaign\u001b[39m\u001b[22m\n\n    \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\n    Expected: \u001b[32m\"active\"\u001b[39m\n    Received: \u001b[31m\"paused\"\u001b[39m\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 406 |\u001b[39m       \u001b[36mconst\u001b[39m result \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m service\u001b[33m.\u001b[39mresumeCampaign(\u001b[32m'tenant1'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'1'\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 407 |\u001b[39m\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 408 |\u001b[39m       expect(result\u001b[33m.\u001b[39mstatus)\u001b[33m.\u001b[39mtoBe(\u001b[33mCampaignStatus\u001b[39m\u001b[33m.\u001b[39m\u001b[33mACTIVE\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m     |\u001b[39m                             \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 409 |\u001b[39m       expect(mockCampaignAutomationService\u001b[33m.\u001b[39mresumeCampaign)\u001b[33m.\u001b[39mtoHaveBeenCalledWith(\u001b[32m'1'\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 410 |\u001b[39m     })\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 411 |\u001b[39m   })\u001b[33m;\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaigns.service.spec.ts\u001b[39m\u001b[0m\u001b[2m:408:29)\u001b[22m\u001b[2m\u001b[22m\n\n\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignsService › getCampaignSummary › should return campaign summary for tenant\u001b[39m\u001b[22m\n\n    \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n    \u001b[32m- Expected  - 5\u001b[39m\n    \u001b[31m+ Received  + 5\u001b[39m\n\n    \u001b[2m  Object {\u001b[22m\n    \u001b[32m-   \"activeCampaigns\": 3,\u001b[39m\n    \u001b[32m-   \"averageClickRate\": 50,\u001b[39m\n    \u001b[32m-   \"averageOpenRate\": 50,\u001b[39m\n    \u001b[32m-   \"totalCampaigns\": 10,\u001b[39m\n    \u001b[32m-   \"totalSent\": 100,\u001b[39m\n    \u001b[31m+   \"activeCampaigns\": 0,\u001b[39m\n    \u001b[31m+   \"averageClickRate\": 0,\u001b[39m\n    \u001b[31m+   \"averageOpenRate\": 0,\u001b[39m\n    \u001b[31m+   \"totalCampaigns\": 0,\u001b[39m\n    \u001b[31m+   \"totalSent\": 0,\u001b[39m\n    \u001b[2m  }\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 429 |\u001b[39m       \u001b[36mconst\u001b[39m result \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m service\u001b[33m.\u001b[39mgetCampaignSummary(\u001b[32m'tenant1'\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 430 |\u001b[39m\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 431 |\u001b[39m       expect(result)\u001b[33m.\u001b[39mtoEqual({\u001b[22m\n\u001b[2m     \u001b[90m     |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 432 |\u001b[39m         totalCampaigns\u001b[33m:\u001b[39m \u001b[35m10\u001b[39m\u001b[33m,\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 433 |\u001b[39m         activeCampaigns\u001b[33m:\u001b[39m \u001b[35m3\u001b[39m\u001b[33m,\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 434 |\u001b[39m         totalSent\u001b[33m:\u001b[39m \u001b[35m100\u001b[39m\u001b[33m,\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaigns.service.spec.ts\u001b[39m\u001b[0m\u001b[2m:431:22)\u001b[22m\u001b[2m\u001b[22m\n",
+      "name": "C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaigns.service.spec.ts",
+      "startTime": 1760790871033,
+      "status": "failed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "CampaignAutomationService",
+            "processScheduledCampaigns"
+          ],
+          "duration": 7,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "CampaignAutomationService processScheduledCampaigns should process scheduled campaigns that are due",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 2,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should process scheduled campaigns that are due"
+        },
+        {
+          "ancestorTitles": ["CampaignAutomationService", "executeCampaign"],
+          "duration": 5,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "CampaignAutomationService executeCampaign should execute a campaign successfully",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 2,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should execute a campaign successfully"
+        },
+        {
+          "ancestorTitles": ["CampaignAutomationService", "executeCampaign"],
+          "duration": 2,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "CampaignAutomationService executeCampaign should handle A/B testing campaigns",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should handle A/B testing campaigns"
+        },
+        {
+          "ancestorTitles": ["CampaignAutomationService", "pauseCampaign"],
+          "duration": 3,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "CampaignAutomationService pauseCampaign should pause an active campaign",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 2,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should pause an active campaign"
+        },
+        {
+          "ancestorTitles": ["CampaignAutomationService", "resumeCampaign"],
+          "duration": 2,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "CampaignAutomationService resumeCampaign should resume a paused campaign",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should resume a paused campaign"
+        },
+        {
+          "ancestorTitles": [
+            "CampaignAutomationService",
+            "handleAppointmentEvent"
+          ],
+          "duration": 2,
+          "failureDetails": [
+            {
+              "matcherResult": {
+                "message": "\u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: \u001b[32m\"1\"\u001b[39m\n\nNumber of calls: \u001b[31m0\u001b[39m",
+                "pass": false
+              }
+            }
+          ],
+          "failureMessages": [
+            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: \u001b[32m\"1\"\u001b[39m\n\nNumber of calls: \u001b[31m0\u001b[39m\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaign-automation.service.spec.ts:347:39)"
+          ],
+          "fullName": "CampaignAutomationService handleAppointmentEvent should trigger event-based campaigns",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should trigger event-based campaigns"
+        },
+        {
+          "ancestorTitles": [
+            "CampaignAutomationService",
+            "getCampaignAnalytics"
+          ],
+          "duration": 5,
+          "failureDetails": [
+            {
+              "matcherResult": {
+                "actual": {
+                  "metrics": {
+                    "sent": 50,
+                    "delivered": 45,
+                    "opened": 20,
+                    "clicked": 10,
+                    "unsubscribed": 1,
+                    "bounced": 2,
+                    "failed": 3
+                  },
+                  "performance": {
+                    "deliveryRate": 90,
+                    "openRate": 44.44444444444444,
+                    "clickRate": 50,
+                    "unsubscribeRate": 2.2222222222222223,
+                    "bounceRate": 4.444444444444445
+                  },
+                  "timeline": { "created": {}, "started": {}, "completed": {} }
+                },
+                "expected": {
+                  "metrics": {
+                    "sent": 50,
+                    "delivered": 45,
+                    "opened": 20,
+                    "clicked": 10,
+                    "unsubscribed": 1,
+                    "bounced": 2,
+                    "failed": 3
+                  },
+                  "performance": {
+                    "deliveryRate": 90,
+                    "openRate": 44.44,
+                    "clickRate": 50,
+                    "unsubscribeRate": 2.22,
+                    "bounceRate": 4.44
+                  },
+                  "timeline": { "created": {}, "started": {}, "completed": {} }
+                },
+                "message": "\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 3\u001b[39m\n\u001b[31m+ Received  + 3\u001b[39m\n\n\u001b[33m@@ -7,15 +7,15 @@\u001b[39m\n\u001b[2m      \"opened\": 20,\u001b[22m\n\u001b[2m      \"sent\": 50,\u001b[22m\n\u001b[2m      \"unsubscribed\": 1,\u001b[22m\n\u001b[2m    },\u001b[22m\n\u001b[2m    \"performance\": Object {\u001b[22m\n\u001b[32m-     \"bounceRate\": 4.44,\u001b[39m\n\u001b[31m+     \"bounceRate\": 4.444444444444445,\u001b[39m\n\u001b[2m      \"clickRate\": 50,\u001b[22m\n\u001b[2m      \"deliveryRate\": 90,\u001b[22m\n\u001b[32m-     \"openRate\": 44.44,\u001b[39m\n\u001b[32m-     \"unsubscribeRate\": 2.22,\u001b[39m\n\u001b[31m+     \"openRate\": 44.44444444444444,\u001b[39m\n\u001b[31m+     \"unsubscribeRate\": 2.2222222222222223,\u001b[39m\n\u001b[2m    },\u001b[22m\n\u001b[2m    \"timeline\": Object {\u001b[22m\n\u001b[2m      \"completed\": 2025-10-18T12:34:33.721Z,\u001b[22m\n\u001b[2m      \"created\": 2025-10-18T12:34:33.721Z,\u001b[22m\n\u001b[2m      \"started\": 2025-10-18T12:34:33.721Z,\u001b[22m",
+                "name": "toEqual",
+                "pass": false
+              }
+            }
+          ],
+          "failureMessages": [
+            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 3\u001b[39m\n\u001b[31m+ Received  + 3\u001b[39m\n\n\u001b[33m@@ -7,15 +7,15 @@\u001b[39m\n\u001b[2m      \"opened\": 20,\u001b[22m\n\u001b[2m      \"sent\": 50,\u001b[22m\n\u001b[2m      \"unsubscribed\": 1,\u001b[22m\n\u001b[2m    },\u001b[22m\n\u001b[2m    \"performance\": Object {\u001b[22m\n\u001b[32m-     \"bounceRate\": 4.44,\u001b[39m\n\u001b[31m+     \"bounceRate\": 4.444444444444445,\u001b[39m\n\u001b[2m      \"clickRate\": 50,\u001b[22m\n\u001b[2m      \"deliveryRate\": 90,\u001b[22m\n\u001b[32m-     \"openRate\": 44.44,\u001b[39m\n\u001b[32m-     \"unsubscribeRate\": 2.22,\u001b[39m\n\u001b[31m+     \"openRate\": 44.44444444444444,\u001b[39m\n\u001b[31m+     \"unsubscribeRate\": 2.2222222222222223,\u001b[39m\n\u001b[2m    },\u001b[22m\n\u001b[2m    \"timeline\": Object {\u001b[22m\n\u001b[2m      \"completed\": 2025-10-18T12:34:33.721Z,\u001b[22m\n\u001b[2m      \"created\": 2025-10-18T12:34:33.721Z,\u001b[22m\n\u001b[2m      \"started\": 2025-10-18T12:34:33.721Z,\u001b[22m\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaign-automation.service.spec.ts:380:22)"
+          ],
+          "fullName": "CampaignAutomationService getCampaignAnalytics should return campaign analytics",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should return campaign analytics"
+        }
+      ],
+      "endTime": 1760790873735,
+      "message": "\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignAutomationService › handleAppointmentEvent › should trigger event-based campaigns\u001b[39m\u001b[22m\n\n    \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\n    Expected: \u001b[32m\"1\"\u001b[39m\n\n    Number of calls: \u001b[31m0\u001b[39m\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 345 |\u001b[39m         }\u001b[33m,\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 346 |\u001b[39m       })\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 347 |\u001b[39m       expect(service\u001b[33m.\u001b[39mexecuteCampaign)\u001b[33m.\u001b[39mtoHaveBeenCalledWith(mockCampaigns[\u001b[35m0\u001b[39m]\u001b[33m.\u001b[39mid)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m     |\u001b[39m                                       \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 348 |\u001b[39m     })\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 349 |\u001b[39m   })\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 350 |\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaign-automation.service.spec.ts\u001b[39m\u001b[0m\u001b[2m:347:39)\u001b[22m\u001b[2m\u001b[22m\n\n\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignAutomationService › getCampaignAnalytics › should return campaign analytics\u001b[39m\u001b[22m\n\n    \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n    \u001b[32m- Expected  - 3\u001b[39m\n    \u001b[31m+ Received  + 3\u001b[39m\n\n    \u001b[33m@@ -7,15 +7,15 @@\u001b[39m\n    \u001b[2m      \"opened\": 20,\u001b[22m\n    \u001b[2m      \"sent\": 50,\u001b[22m\n    \u001b[2m      \"unsubscribed\": 1,\u001b[22m\n    \u001b[2m    },\u001b[22m\n    \u001b[2m    \"performance\": Object {\u001b[22m\n    \u001b[32m-     \"bounceRate\": 4.44,\u001b[39m\n    \u001b[31m+     \"bounceRate\": 4.444444444444445,\u001b[39m\n    \u001b[2m      \"clickRate\": 50,\u001b[22m\n    \u001b[2m      \"deliveryRate\": 90,\u001b[22m\n    \u001b[32m-     \"openRate\": 44.44,\u001b[39m\n    \u001b[32m-     \"unsubscribeRate\": 2.22,\u001b[39m\n    \u001b[31m+     \"openRate\": 44.44444444444444,\u001b[39m\n    \u001b[31m+     \"unsubscribeRate\": 2.2222222222222223,\u001b[39m\n    \u001b[2m    },\u001b[22m\n    \u001b[2m    \"timeline\": Object {\u001b[22m\n    \u001b[2m      \"completed\": 2025-10-18T12:34:33.721Z,\u001b[22m\n    \u001b[2m      \"created\": 2025-10-18T12:34:33.721Z,\u001b[22m\n    \u001b[2m      \"started\": 2025-10-18T12:34:33.721Z,\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 378 |\u001b[39m       \u001b[36mconst\u001b[39m result \u001b[33m=\u001b[39m \u001b[36mawait\u001b[39m service\u001b[33m.\u001b[39mgetCampaignAnalytics(\u001b[32m'1'\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 379 |\u001b[39m\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 380 |\u001b[39m       expect(result)\u001b[33m.\u001b[39mtoEqual({\u001b[22m\n\u001b[2m     \u001b[90m     |\u001b[39m                      \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 381 |\u001b[39m         metrics\u001b[33m:\u001b[39m {\u001b[22m\n\u001b[2m     \u001b[90m 382 |\u001b[39m           sent\u001b[33m:\u001b[39m \u001b[35m50\u001b[39m\u001b[33m,\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 383 |\u001b[39m           delivered\u001b[33m:\u001b[39m \u001b[35m45\u001b[39m\u001b[33m,\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaign-automation.service.spec.ts\u001b[39m\u001b[0m\u001b[2m:380:22)\u001b[22m\u001b[2m\u001b[22m\n",
+      "name": "C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaign-automation.service.spec.ts",
+      "startTime": 1760790872551,
+      "status": "failed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "CampaignExecutionProcessor",
+            "handleCampaignMessage"
+          ],
+          "duration": 8,
+          "failureDetails": [{}],
+          "failureMessages": [
+            "Error: Campaign 1 not found\n    at CampaignExecutionProcessor.handleCampaignMessage (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaign-execution.processor.ts:34:15)\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaign-execution.processor.spec.ts:77:7)"
+          ],
+          "fullName": "CampaignExecutionProcessor handleCampaignMessage should process email campaign message successfully",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should process email campaign message successfully"
+        },
+        {
+          "ancestorTitles": [
+            "CampaignExecutionProcessor",
+            "handleCampaignMessage"
+          ],
+          "duration": 7,
+          "failureDetails": [{}],
+          "failureMessages": [
+            "Error: Campaign 1 not found\n    at CampaignExecutionProcessor.handleCampaignMessage (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaign-execution.processor.ts:34:15)\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaign-execution.processor.spec.ts:108:7)"
+          ],
+          "fullName": "CampaignExecutionProcessor handleCampaignMessage should process SMS campaign message successfully",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should process SMS campaign message successfully"
+        },
+        {
+          "ancestorTitles": [
+            "CampaignExecutionProcessor",
+            "handleCampaignMessage"
+          ],
+          "duration": 5,
+          "failureDetails": [{}],
+          "failureMessages": [
+            "Error: Campaign 1 not found\n    at CampaignExecutionProcessor.handleCampaignMessage (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaign-execution.processor.ts:34:15)\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaign-execution.processor.spec.ts:137:7)"
+          ],
+          "fullName": "CampaignExecutionProcessor handleCampaignMessage should process push notification campaign message successfully",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should process push notification campaign message successfully"
+        },
+        {
+          "ancestorTitles": [
+            "CampaignExecutionProcessor",
+            "handleCampaignMessage"
+          ],
+          "duration": 4,
+          "failureDetails": [{}],
+          "failureMessages": [
+            "Error: Campaign 1 not found\n    at CampaignExecutionProcessor.handleCampaignMessage (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaign-execution.processor.ts:34:15)\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaign-execution.processor.spec.ts:163:7)"
+          ],
+          "fullName": "CampaignExecutionProcessor handleCampaignMessage should process in-app notification campaign message successfully",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should process in-app notification campaign message successfully"
+        },
+        {
+          "ancestorTitles": [
+            "CampaignExecutionProcessor",
+            "handleCampaignMessage"
+          ],
+          "duration": 3,
+          "failureDetails": [{}],
+          "failureMessages": [
+            "Error: Campaign 1 not found\n    at CampaignExecutionProcessor.handleCampaignMessage (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaign-execution.processor.ts:34:15)\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaign-execution.processor.spec.ts:181:7)"
+          ],
+          "fullName": "CampaignExecutionProcessor handleCampaignMessage should handle failed message delivery",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should handle failed message delivery"
+        },
+        {
+          "ancestorTitles": [
+            "CampaignExecutionProcessor",
+            "handleCampaignMessage"
+          ],
+          "duration": 3,
+          "failureDetails": [{}],
+          "failureMessages": [
+            "Error: Campaign 1 not found\n    at CampaignExecutionProcessor.handleCampaignMessage (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaign-execution.processor.ts:34:15)\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaign-execution.processor.spec.ts:193:7)"
+          ],
+          "fullName": "CampaignExecutionProcessor handleCampaignMessage should handle exceptions during message processing",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should handle exceptions during message processing"
+        },
+        {
+          "ancestorTitles": [
+            "CampaignExecutionProcessor",
+            "substituteTemplate"
+          ],
+          "duration": 2,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "CampaignExecutionProcessor substituteTemplate should substitute template variables correctly",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should substitute template variables correctly"
+        },
+        {
+          "ancestorTitles": [
+            "CampaignExecutionProcessor",
+            "substituteTemplate"
+          ],
+          "duration": 1,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "CampaignExecutionProcessor substituteTemplate should handle missing template variables",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should handle missing template variables"
+        },
+        {
+          "ancestorTitles": [
+            "CampaignExecutionProcessor",
+            "substituteTemplate"
+          ],
+          "duration": 2,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "CampaignExecutionProcessor substituteTemplate should handle empty template data",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should handle empty template data"
+        },
+        {
+          "ancestorTitles": [
+            "CampaignExecutionProcessor",
+            "handleTrackingEvent"
+          ],
+          "duration": 3,
+          "failureDetails": [
+            {
+              "matcherResult": {
+                "message": "\u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: \u001b[32m{\"id\": \"1\"}\u001b[39m, \u001b[32m\"openedCount\"\u001b[39m, \u001b[32m1\u001b[39m\n\nNumber of calls: \u001b[31m0\u001b[39m",
+                "pass": false
+              }
+            }
+          ],
+          "failureMessages": [
+            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: \u001b[32m{\"id\": \"1\"}\u001b[39m, \u001b[32m\"openedCount\"\u001b[39m, \u001b[32m1\u001b[39m\n\nNumber of calls: \u001b[31m0\u001b[39m\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaign-execution.processor.spec.ts:271:48)"
+          ],
+          "fullName": "CampaignExecutionProcessor handleTrackingEvent should handle open tracking event",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should handle open tracking event"
+        },
+        {
+          "ancestorTitles": [
+            "CampaignExecutionProcessor",
+            "handleTrackingEvent"
+          ],
+          "duration": 2,
+          "failureDetails": [
+            {
+              "matcherResult": {
+                "message": "\u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: \u001b[32m{\"id\": \"1\"}\u001b[39m, \u001b[32m\"clickedCount\"\u001b[39m, \u001b[32m1\u001b[39m\n\nNumber of calls: \u001b[31m0\u001b[39m",
+                "pass": false
+              }
+            }
+          ],
+          "failureMessages": [
+            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: \u001b[32m{\"id\": \"1\"}\u001b[39m, \u001b[32m\"clickedCount\"\u001b[39m, \u001b[32m1\u001b[39m\n\nNumber of calls: \u001b[31m0\u001b[39m\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaign-execution.processor.spec.ts:281:48)"
+          ],
+          "fullName": "CampaignExecutionProcessor handleTrackingEvent should handle click tracking event",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should handle click tracking event"
+        },
+        {
+          "ancestorTitles": [
+            "CampaignExecutionProcessor",
+            "handleTrackingEvent"
+          ],
+          "duration": 3,
+          "failureDetails": [
+            {
+              "matcherResult": {
+                "message": "\u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: \u001b[32m{\"id\": \"1\"}\u001b[39m, \u001b[32m\"unsubscribedCount\"\u001b[39m, \u001b[32m1\u001b[39m\n\nNumber of calls: \u001b[31m0\u001b[39m",
+                "pass": false
+              }
+            }
+          ],
+          "failureMessages": [
+            "Error: \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: \u001b[32m{\"id\": \"1\"}\u001b[39m, \u001b[32m\"unsubscribedCount\"\u001b[39m, \u001b[32m1\u001b[39m\n\nNumber of calls: \u001b[31m0\u001b[39m\n    at Object.<anonymous> (C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaign-execution.processor.spec.ts:291:48)"
+          ],
+          "fullName": "CampaignExecutionProcessor handleTrackingEvent should handle unsubscribe tracking event",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 0,
+          "retryReasons": [],
+          "status": "failed",
+          "title": "should handle unsubscribe tracking event"
+        },
+        {
+          "ancestorTitles": [
+            "CampaignExecutionProcessor",
+            "handleTrackingEvent"
+          ],
+          "duration": 2,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "CampaignExecutionProcessor handleTrackingEvent should handle unknown tracking event gracefully",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should handle unknown tracking event gracefully"
+        }
+      ],
+      "endTime": 1760790874434,
+      "message": "\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignExecutionProcessor › handleCampaignMessage › should process email campaign message successfully\u001b[39m\u001b[22m\n\n    Campaign 1 not found\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 32 |\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 33 |\u001b[39m       \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39mcampaign) {\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 34 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`Campaign ${data.campaignId} not found`\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 35 |\u001b[39m       }\u001b[22m\n\u001b[2m     \u001b[90m 36 |\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 37 |\u001b[39m       \u001b[90m// Prepare message content\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat CampaignExecutionProcessor.handleCampaignMessage (\u001b[22m\u001b[2msrc/modules/campaigns/campaign-execution.processor.ts\u001b[2m:34:15)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaign-execution.processor.spec.ts\u001b[39m\u001b[0m\u001b[2m:77:7)\u001b[22m\u001b[2m\u001b[22m\n\n\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignExecutionProcessor › handleCampaignMessage › should process SMS campaign message successfully\u001b[39m\u001b[22m\n\n    Campaign 1 not found\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 32 |\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 33 |\u001b[39m       \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39mcampaign) {\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 34 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`Campaign ${data.campaignId} not found`\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 35 |\u001b[39m       }\u001b[22m\n\u001b[2m     \u001b[90m 36 |\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 37 |\u001b[39m       \u001b[90m// Prepare message content\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat CampaignExecutionProcessor.handleCampaignMessage (\u001b[22m\u001b[2msrc/modules/campaigns/campaign-execution.processor.ts\u001b[2m:34:15)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaign-execution.processor.spec.ts\u001b[39m\u001b[0m\u001b[2m:108:7)\u001b[22m\u001b[2m\u001b[22m\n\n\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignExecutionProcessor › handleCampaignMessage › should process push notification campaign message successfully\u001b[39m\u001b[22m\n\n    Campaign 1 not found\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 32 |\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 33 |\u001b[39m       \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39mcampaign) {\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 34 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`Campaign ${data.campaignId} not found`\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 35 |\u001b[39m       }\u001b[22m\n\u001b[2m     \u001b[90m 36 |\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 37 |\u001b[39m       \u001b[90m// Prepare message content\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat CampaignExecutionProcessor.handleCampaignMessage (\u001b[22m\u001b[2msrc/modules/campaigns/campaign-execution.processor.ts\u001b[2m:34:15)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaign-execution.processor.spec.ts\u001b[39m\u001b[0m\u001b[2m:137:7)\u001b[22m\u001b[2m\u001b[22m\n\n\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignExecutionProcessor › handleCampaignMessage › should process in-app notification campaign message successfully\u001b[39m\u001b[22m\n\n    Campaign 1 not found\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 32 |\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 33 |\u001b[39m       \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39mcampaign) {\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 34 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`Campaign ${data.campaignId} not found`\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 35 |\u001b[39m       }\u001b[22m\n\u001b[2m     \u001b[90m 36 |\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 37 |\u001b[39m       \u001b[90m// Prepare message content\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat CampaignExecutionProcessor.handleCampaignMessage (\u001b[22m\u001b[2msrc/modules/campaigns/campaign-execution.processor.ts\u001b[2m:34:15)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaign-execution.processor.spec.ts\u001b[39m\u001b[0m\u001b[2m:163:7)\u001b[22m\u001b[2m\u001b[22m\n\n\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignExecutionProcessor › handleCampaignMessage › should handle failed message delivery\u001b[39m\u001b[22m\n\n    Campaign 1 not found\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 32 |\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 33 |\u001b[39m       \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39mcampaign) {\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 34 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`Campaign ${data.campaignId} not found`\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 35 |\u001b[39m       }\u001b[22m\n\u001b[2m     \u001b[90m 36 |\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 37 |\u001b[39m       \u001b[90m// Prepare message content\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat CampaignExecutionProcessor.handleCampaignMessage (\u001b[22m\u001b[2msrc/modules/campaigns/campaign-execution.processor.ts\u001b[2m:34:15)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaign-execution.processor.spec.ts\u001b[39m\u001b[0m\u001b[2m:181:7)\u001b[22m\u001b[2m\u001b[22m\n\n\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignExecutionProcessor › handleCampaignMessage › should handle exceptions during message processing\u001b[39m\u001b[22m\n\n    Campaign 1 not found\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 32 |\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 33 |\u001b[39m       \u001b[36mif\u001b[39m (\u001b[33m!\u001b[39mcampaign) {\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 34 |\u001b[39m         \u001b[36mthrow\u001b[39m \u001b[36mnew\u001b[39m \u001b[33mError\u001b[39m(\u001b[32m`Campaign ${data.campaignId} not found`\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m    |\u001b[39m               \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 35 |\u001b[39m       }\u001b[22m\n\u001b[2m     \u001b[90m 36 |\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 37 |\u001b[39m       \u001b[90m// Prepare message content\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat CampaignExecutionProcessor.handleCampaignMessage (\u001b[22m\u001b[2msrc/modules/campaigns/campaign-execution.processor.ts\u001b[2m:34:15)\u001b[22m\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaign-execution.processor.spec.ts\u001b[39m\u001b[0m\u001b[2m:193:7)\u001b[22m\u001b[2m\u001b[22m\n\n\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignExecutionProcessor › handleTrackingEvent › should handle open tracking event\u001b[39m\u001b[22m\n\n    \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\n    Expected: \u001b[32m{\"id\": \"1\"}\u001b[39m, \u001b[32m\"openedCount\"\u001b[39m, \u001b[32m1\u001b[39m\n\n    Number of calls: \u001b[31m0\u001b[39m\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 269 |\u001b[39m       \u001b[36mawait\u001b[39m processor\u001b[33m.\u001b[39mhandleTrackingEvent(\u001b[32m'1'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'customer1'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'open'\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 270 |\u001b[39m\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 271 |\u001b[39m       expect(mockCampaignRepository\u001b[33m.\u001b[39mincrement)\u001b[33m.\u001b[39mtoHaveBeenCalledWith(\u001b[22m\n\u001b[2m     \u001b[90m     |\u001b[39m                                                \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 272 |\u001b[39m         { id\u001b[33m:\u001b[39m \u001b[32m'1'\u001b[39m }\u001b[33m,\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 273 |\u001b[39m         \u001b[32m'openedCount'\u001b[39m\u001b[33m,\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 274 |\u001b[39m         \u001b[35m1\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaign-execution.processor.spec.ts\u001b[39m\u001b[0m\u001b[2m:271:48)\u001b[22m\u001b[2m\u001b[22m\n\n\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignExecutionProcessor › handleTrackingEvent › should handle click tracking event\u001b[39m\u001b[22m\n\n    \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\n    Expected: \u001b[32m{\"id\": \"1\"}\u001b[39m, \u001b[32m\"clickedCount\"\u001b[39m, \u001b[32m1\u001b[39m\n\n    Number of calls: \u001b[31m0\u001b[39m\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 279 |\u001b[39m       \u001b[36mawait\u001b[39m processor\u001b[33m.\u001b[39mhandleTrackingEvent(\u001b[32m'1'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'customer1'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'click'\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 280 |\u001b[39m\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 281 |\u001b[39m       expect(mockCampaignRepository\u001b[33m.\u001b[39mincrement)\u001b[33m.\u001b[39mtoHaveBeenCalledWith(\u001b[22m\n\u001b[2m     \u001b[90m     |\u001b[39m                                                \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 282 |\u001b[39m         { id\u001b[33m:\u001b[39m \u001b[32m'1'\u001b[39m }\u001b[33m,\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 283 |\u001b[39m         \u001b[32m'clickedCount'\u001b[39m\u001b[33m,\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 284 |\u001b[39m         \u001b[35m1\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaign-execution.processor.spec.ts\u001b[39m\u001b[0m\u001b[2m:281:48)\u001b[22m\u001b[2m\u001b[22m\n\n\u001b[1m\u001b[31m  \u001b[1m● \u001b[22m\u001b[1mCampaignExecutionProcessor › handleTrackingEvent › should handle unsubscribe tracking event\u001b[39m\u001b[22m\n\n    \u001b[2mexpect(\u001b[22m\u001b[31mjest.fn()\u001b[39m\u001b[2m).\u001b[22mtoHaveBeenCalledWith\u001b[2m(\u001b[22m\u001b[32m...expected\u001b[39m\u001b[2m)\u001b[22m\n\n    Expected: \u001b[32m{\"id\": \"1\"}\u001b[39m, \u001b[32m\"unsubscribedCount\"\u001b[39m, \u001b[32m1\u001b[39m\n\n    Number of calls: \u001b[31m0\u001b[39m\n\u001b[2m\u001b[22m\n\u001b[2m    \u001b[0m \u001b[90m 289 |\u001b[39m       \u001b[36mawait\u001b[39m processor\u001b[33m.\u001b[39mhandleTrackingEvent(\u001b[32m'1'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'customer1'\u001b[39m\u001b[33m,\u001b[39m \u001b[32m'unsubscribe'\u001b[39m)\u001b[33m;\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 290 |\u001b[39m\u001b[22m\n\u001b[2m    \u001b[31m\u001b[1m>\u001b[22m\u001b[2m\u001b[39m\u001b[90m 291 |\u001b[39m       expect(mockCampaignRepository\u001b[33m.\u001b[39mincrement)\u001b[33m.\u001b[39mtoHaveBeenCalledWith(\u001b[22m\n\u001b[2m     \u001b[90m     |\u001b[39m                                                \u001b[31m\u001b[1m^\u001b[22m\u001b[2m\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 292 |\u001b[39m         { id\u001b[33m:\u001b[39m \u001b[32m'1'\u001b[39m }\u001b[33m,\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 293 |\u001b[39m         \u001b[32m'unsubscribedCount'\u001b[39m\u001b[33m,\u001b[39m\u001b[22m\n\u001b[2m     \u001b[90m 294 |\u001b[39m         \u001b[35m1\u001b[39m\u001b[0m\u001b[22m\n\u001b[2m\u001b[22m\n\u001b[2m      \u001b[2mat Object.<anonymous> (\u001b[22m\u001b[2m\u001b[0m\u001b[36msrc/modules/campaigns/campaign-execution.processor.spec.ts\u001b[39m\u001b[0m\u001b[2m:291:48)\u001b[22m\u001b[2m\u001b[22m\n",
+      "name": "C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\src\\modules\\campaigns\\campaign-execution.processor.spec.ts",
+      "startTime": 1760790873756,
+      "status": "failed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["BusinessMetricsService"],
+          "duration": 2,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "BusinessMetricsService should track bot accuracy",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should track bot accuracy"
+        },
+        {
+          "ancestorTitles": ["BusinessMetricsService"],
+          "duration": 1,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "BusinessMetricsService should track conversion",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should track conversion"
+        },
+        {
+          "ancestorTitles": ["BusinessMetricsService"],
+          "duration": 0,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "BusinessMetricsService should track engagement",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should track engagement"
+        }
+      ],
+      "endTime": 1760790874831,
+      "message": "",
+      "name": "C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\test\\business-metrics.service.spec.ts",
+      "startTime": 1760790874442,
+      "status": "passed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["NotificationController"],
+          "duration": 1,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "NotificationController should send email",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should send email"
+        },
+        {
+          "ancestorTitles": ["NotificationController"],
+          "duration": 1,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "NotificationController should send sms",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should send sms"
+        },
+        {
+          "ancestorTitles": ["NotificationController"],
+          "duration": 1,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "NotificationController should send slack",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should send slack"
+        },
+        {
+          "ancestorTitles": ["NotificationController"],
+          "duration": 1,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "NotificationController should send in-app notification",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should send in-app notification"
+        }
+      ],
+      "endTime": 1760790875234,
+      "message": "",
+      "name": "C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\test\\notification.controller.spec.ts",
+      "startTime": 1760790874837,
+      "status": "passed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["NotificationService"],
+          "duration": 2,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "NotificationService should send email",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should send email"
+        },
+        {
+          "ancestorTitles": ["NotificationService"],
+          "duration": 1,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "NotificationService should send sms",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should send sms"
+        },
+        {
+          "ancestorTitles": ["NotificationService"],
+          "duration": 0,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "NotificationService should send slack",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should send slack"
+        },
+        {
+          "ancestorTitles": ["NotificationService"],
+          "duration": 1,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "NotificationService should send in-app notification",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should send in-app notification"
+        }
+      ],
+      "endTime": 1760790875654,
+      "message": "",
+      "name": "C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\test\\notification.service.spec.ts",
+      "startTime": 1760790875258,
+      "status": "passed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["HealthController"],
+          "duration": 1,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "HealthController should return health status",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should return health status"
+        }
+      ],
+      "endTime": 1760790876082,
+      "message": "",
+      "name": "C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\test\\health.controller.spec.ts",
+      "startTime": 1760790875660,
+      "status": "passed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["AnalyticsController"],
+          "duration": 2,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "AnalyticsController should get bot accuracy",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should get bot accuracy"
+        },
+        {
+          "ancestorTitles": ["AnalyticsController"],
+          "duration": 1,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "AnalyticsController should get conversion",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should get conversion"
+        },
+        {
+          "ancestorTitles": ["AnalyticsController"],
+          "duration": 1,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "AnalyticsController should get engagement",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should get engagement"
+        }
+      ],
+      "endTime": 1760790876463,
+      "message": "",
+      "name": "C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\test\\analytics.controller.spec.ts",
+      "startTime": 1760790876088,
+      "status": "passed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["GdprService"],
+          "duration": 2,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "GdprService should export data",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 2,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should export data"
+        },
+        {
+          "ancestorTitles": ["GdprService"],
+          "duration": 1,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "GdprService should delete data",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should delete data"
+        },
+        {
+          "ancestorTitles": ["GdprService"],
+          "duration": 1,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "GdprService should record consent",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should record consent"
+        }
+      ],
+      "endTime": 1760790876842,
+      "message": "",
+      "name": "C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\test\\gdpr.service.spec.ts",
+      "startTime": 1760790876484,
+      "status": "passed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["HealthService"],
+          "duration": 1,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "HealthService should return status ok",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 2,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should return status ok"
+        }
+      ],
+      "endTime": 1760790877210,
+      "message": "",
+      "name": "C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\test\\health.service.spec.ts",
+      "startTime": 1760790876847,
+      "status": "passed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["FileUploadController"],
+          "duration": 1,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "FileUploadController should upload file",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 2,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should upload file"
+        }
+      ],
+      "endTime": 1760790877534,
+      "message": "",
+      "name": "C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\test\\file-upload.controller.spec.ts",
+      "startTime": 1760790877229,
+      "status": "passed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["FileUploadService"],
+          "duration": 2,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "FileUploadService should return uploader",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should return uploader"
+        }
+      ],
+      "endTime": 1760790877739,
+      "message": "",
+      "name": "C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\test\\file-upload.service.spec.ts",
+      "startTime": 1760790877539,
+      "status": "passed",
+      "summary": ""
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": ["RoleGuard"],
+          "duration": 1,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "RoleGuard should allow access if no roles required",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should allow access if no roles required"
+        },
+        {
+          "ancestorTitles": ["RoleGuard"],
+          "duration": 0,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "RoleGuard should allow access if user has required role",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should allow access if user has required role"
+        },
+        {
+          "ancestorTitles": ["RoleGuard"],
+          "duration": 0,
+          "failureDetails": [],
+          "failureMessages": [],
+          "fullName": "RoleGuard should deny access if user lacks required role",
+          "invocations": 1,
+          "location": null,
+          "numPassingAsserts": 1,
+          "retryReasons": [],
+          "status": "passed",
+          "title": "should deny access if user lacks required role"
+        }
+      ],
+      "endTime": 1760790877951,
+      "message": "",
+      "name": "C:\\Users\\Inimfon Udoh\\Tekbot\\apps\\backend\\test\\role.guard.spec.ts",
+      "startTime": 1760790877744,
+      "status": "passed",
+      "summary": ""
+    }
+  ],
+  "wasInterrupted": false
+}

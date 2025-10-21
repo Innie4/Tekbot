@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  BadRequestException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { UsersService } from '../users/users.service';
@@ -38,15 +42,15 @@ export interface JwtPayload {
 @Injectable()
 export class AuthService {
   constructor(
-  private readonly usersService: UsersService,
-  private readonly jwtService: JwtService,
-  private readonly configService: ConfigService,
-  private readonly emailNotificationService: EmailNotificationService,
+    private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
+    private readonly emailNotificationService: EmailNotificationService,
   ) {}
 
   async validateUser(email: string, password: string): Promise<User | null> {
     const user = await this.usersService.findByEmailWithPassword(email);
-    
+
     if (!user) {
       return null;
     }
@@ -55,8 +59,11 @@ export class AuthService {
       throw new UnauthorizedException('Account is not active');
     }
 
-    const isPasswordValid = await this.usersService.validatePassword(password, user.password);
-    
+    const isPasswordValid = await this.usersService.validatePassword(
+      password,
+      user.password,
+    );
+
     if (!isPasswordValid) {
       return null;
     }
@@ -68,7 +75,7 @@ export class AuthService {
 
   async login(loginDto: LoginDto): Promise<AuthResponse> {
     const user = await this.validateUser(loginDto.email, loginDto.password);
-    
+
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
@@ -77,7 +84,7 @@ export class AuthService {
     await this.usersService.updateLastLogin(user.id);
 
     const tokens = await this.generateTokens(user);
-    
+
     return {
       user,
       ...tokens,
@@ -99,7 +106,7 @@ export class AuthService {
     });
 
     const tokens = await this.generateTokens(user);
-    
+
     return {
       user,
       ...tokens,
@@ -113,13 +120,13 @@ export class AuthService {
       });
 
       const user = await this.usersService.findOne(payload.sub);
-      
+
       if (!user || user.status !== UserStatus.ACTIVE) {
         throw new UnauthorizedException('Invalid refresh token');
       }
 
       const accessToken = await this.generateAccessToken(user);
-      
+
       return { accessToken };
     } catch (error) {
       throw new UnauthorizedException('Invalid refresh token');
@@ -137,29 +144,36 @@ export class AuthService {
 
   async forgotPassword(email: string): Promise<{ message: string }> {
     const user = await this.usersService.findByEmail(email);
-    
+
     if (!user) {
       // Don't reveal if email exists or not
-      return { message: 'If the email exists, a password reset link has been sent' };
+      return {
+        message: 'If the email exists, a password reset link has been sent',
+      };
     }
 
     const resetToken = uuidv4();
     const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
 
     await this.usersService.setPasswordResetToken(email, resetToken, expiresAt);
-    
+
     // Send password reset email
     const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password?token=${resetToken}`;
     const subject = 'TekBot Password Reset Request';
     const html = `<p>Hello,</p><p>You requested a password reset. Click <a href="${resetUrl}">here</a> to reset your password. This link will expire in 1 hour.</p>`;
     await this.emailNotificationService.sendMail(user.email, subject, html);
-    
-    return { message: 'If the email exists, a password reset link has been sent' };
+
+    return {
+      message: 'If the email exists, a password reset link has been sent',
+    };
   }
 
-  async resetPassword(token: string, newPassword: string): Promise<{ message: string }> {
+  async resetPassword(
+    token: string,
+    newPassword: string,
+  ): Promise<{ message: string }> {
     await this.usersService.resetPassword(token, newPassword);
-    
+
     return { message: 'Password reset successfully' };
   }
 
@@ -169,7 +183,7 @@ export class AuthService {
     newPassword: string,
   ): Promise<{ message: string }> {
     const user = await this.usersService.findByEmailWithPassword(''); // This needs user ID lookup
-    
+
     if (!user) {
       throw new UnauthorizedException('User not found');
     }
@@ -178,17 +192,19 @@ export class AuthService {
       currentPassword,
       user.password,
     );
-    
+
     if (!isCurrentPasswordValid) {
       throw new UnauthorizedException('Current password is incorrect');
     }
 
     await this.usersService.update(userId, { password: newPassword });
-    
+
     return { message: 'Password changed successfully' };
   }
 
-  private async generateTokens(user: User): Promise<{ accessToken: string; refreshToken: string }> {
+  private async generateTokens(
+    user: User,
+  ): Promise<{ accessToken: string; refreshToken: string }> {
     const payload: JwtPayload = {
       sub: user.id,
       email: user.email,

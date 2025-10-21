@@ -72,7 +72,10 @@ export const ApiSuccessResponse = <TModel extends Type<any>>(
               meta: {
                 type: 'object',
                 properties: {
-                  timestamp: { type: 'string', example: '2023-01-01T00:00:00.000Z' },
+                  timestamp: {
+                    type: 'string',
+                    example: '2023-01-01T00:00:00.000Z',
+                  },
                   requestId: { type: 'string', example: 'req_123456789' },
                   version: { type: 'string', example: 'v1' },
                 },
@@ -107,7 +110,10 @@ export const ApiCreatedSuccessResponse = <TModel extends Type<any>>(
               meta: {
                 type: 'object',
                 properties: {
-                  timestamp: { type: 'string', example: '2023-01-01T00:00:00.000Z' },
+                  timestamp: {
+                    type: 'string',
+                    example: '2023-01-01T00:00:00.000Z',
+                  },
                   requestId: { type: 'string', example: 'req_123456789' },
                   version: { type: 'string', example: 'v1' },
                 },
@@ -145,7 +151,10 @@ export const ApiPaginatedResponse = <TModel extends Type<any>>(
               meta: {
                 type: 'object',
                 properties: {
-                  timestamp: { type: 'string', example: '2023-01-01T00:00:00.000Z' },
+                  timestamp: {
+                    type: 'string',
+                    example: '2023-01-01T00:00:00.000Z',
+                  },
                   requestId: { type: 'string', example: 'req_123456789' },
                   version: { type: 'string', example: 'v1' },
                   pagination: {
@@ -194,7 +203,10 @@ export const ApiErrorResponses = () => {
           meta: {
             type: 'object',
             properties: {
-              timestamp: { type: 'string', example: '2023-01-01T00:00:00.000Z' },
+              timestamp: {
+                type: 'string',
+                example: '2023-01-01T00:00:00.000Z',
+              },
               requestId: { type: 'string', example: 'req_123456789' },
               version: { type: 'string', example: 'v1' },
             },
@@ -211,7 +223,10 @@ export const ApiErrorResponses = () => {
           meta: {
             type: 'object',
             properties: {
-              timestamp: { type: 'string', example: '2023-01-01T00:00:00.000Z' },
+              timestamp: {
+                type: 'string',
+                example: '2023-01-01T00:00:00.000Z',
+              },
               requestId: { type: 'string', example: 'req_123456789' },
               version: { type: 'string', example: 'v1' },
             },
@@ -228,7 +243,10 @@ export const ApiErrorResponses = () => {
           meta: {
             type: 'object',
             properties: {
-              timestamp: { type: 'string', example: '2023-01-01T00:00:00.000Z' },
+              timestamp: {
+                type: 'string',
+                example: '2023-01-01T00:00:00.000Z',
+              },
               requestId: { type: 'string', example: 'req_123456789' },
               version: { type: 'string', example: 'v1' },
             },
@@ -245,7 +263,10 @@ export const ApiErrorResponses = () => {
           meta: {
             type: 'object',
             properties: {
-              timestamp: { type: 'string', example: '2023-01-01T00:00:00.000Z' },
+              timestamp: {
+                type: 'string',
+                example: '2023-01-01T00:00:00.000Z',
+              },
               requestId: { type: 'string', example: 'req_123456789' },
               version: { type: 'string', example: 'v1' },
             },
@@ -262,7 +283,10 @@ export const ApiErrorResponses = () => {
           meta: {
             type: 'object',
             properties: {
-              timestamp: { type: 'string', example: '2023-01-01T00:00:00.000Z' },
+              timestamp: {
+                type: 'string',
+                example: '2023-01-01T00:00:00.000Z',
+              },
               requestId: { type: 'string', example: 'req_123456789' },
               version: { type: 'string', example: 'v1' },
             },
@@ -279,7 +303,10 @@ export const ApiErrorResponses = () => {
           meta: {
             type: 'object',
             properties: {
-              timestamp: { type: 'string', example: '2023-01-01T00:00:00.000Z' },
+              timestamp: {
+                type: 'string',
+                example: '2023-01-01T00:00:00.000Z',
+              },
               requestId: { type: 'string', example: 'req_123456789' },
               version: { type: 'string', example: 'v1' },
             },
@@ -296,7 +323,10 @@ export const ApiErrorResponses = () => {
           meta: {
             type: 'object',
             properties: {
-              timestamp: { type: 'string', example: '2023-01-01T00:00:00.000Z' },
+              timestamp: {
+                type: 'string',
+                example: '2023-01-01T00:00:00.000Z',
+              },
               requestId: { type: 'string', example: 'req_123456789' },
               version: { type: 'string', example: 'v1' },
             },
