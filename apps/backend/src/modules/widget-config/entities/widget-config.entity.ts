@@ -10,8 +10,8 @@ export class WidgetConfig {
   @Column()
   tenantId: string;
 
-  @ManyToOne(() => Tenant, { onDelete: 'CASCADE' })
-  tenant: Tenant;
+  @ManyToOne(() => Tenant, { onDelete: 'CASCADE', nullable: true })
+  tenant?: Tenant;
 
   @Column({ type: 'varchar', length: 255, default: 'Chat with us' })
   title: string;

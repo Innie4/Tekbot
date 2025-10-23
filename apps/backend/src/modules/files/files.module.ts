@@ -1,9 +1,4 @@
 import { Module } from '@nestjs/common';
 
-@Module({
-  imports: [],
-  controllers: [],
-  providers: [],
-  exports: [],
-})
+@Module({})
 export class FilesModule {}

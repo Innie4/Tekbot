@@ -3,8 +3,15 @@ import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { ConfigService } from '@nestjs/config';
 import { UsersService } from '../../users/users.service';
-import { JwtPayload } from '../auth.service';
-import { UserStatus } from '../../users/entities/user.entity';
+
+export interface JwtPayload {
+  sub: string;
+  email: string;
+  role: string;
+  tenantId?: string;
+  iat?: number;
+  exp?: number;
+}
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -15,7 +22,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: configService.get('JWT_SECRET'),
+      secretOrKey: configService.get<string>('JWT_SECRET'),
     });
   }
 
@@ -26,18 +33,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       throw new UnauthorizedException('User not found');
     }
 
-    if (user.status !== UserStatus.ACTIVE) {
-      throw new UnauthorizedException('Account is not active');
+    if (user.status !== 'active') {
+      throw new UnauthorizedException('User account is not active');
     }
 
-    return {
-      id: user.id,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      role: user.role,
-      tenantId: user.tenantId,
-      status: user.status,
-    };
+    return user;
   }
 }

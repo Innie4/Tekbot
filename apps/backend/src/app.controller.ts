@@ -1,83 +1,40 @@
-import { Controller, Get, Version, SetMetadata } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
-
+import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
-import { Public } from './common/decorators';
+import { Public } from './common/decorators/roles.decorator';
 
-@ApiTags('Application')
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Public()
   @Get()
-  @Version('1')
-  @ApiOperation({ summary: 'Get application information' })
-  @ApiResponse({
-    status: 200,
-    description: 'Application information retrieved successfully',
-    schema: {
-      type: 'object',
-      properties: {
-        name: { type: 'string', example: 'TekBot Platform API' },
-        version: { type: 'string', example: '1.0.0' },
-        description: { type: 'string', example: 'Multi-tenant AI assistant engine' },
-        environment: { type: 'string', example: 'development' },
-        timestamp: { type: 'string', format: 'date-time' },
-        uptime: { type: 'number', example: 12345 },
-      },
-    },
-  })
-  getAppInfo() {
-    return this.appService.getAppInfo();
+  @Public()
+  getHello(): string {
+    return this.appService.getHello();
   }
 
-  @Public()
   @Get('health')
-  @SetMetadata('skipThrottle', true)
-  @Version('1')
-  @ApiOperation({ summary: 'Health check endpoint' })
-  @ApiResponse({
-    status: 200,
-    description: 'Service is healthy',
-    schema: {
-      type: 'object',
-      properties: {
-        status: { type: 'string', example: 'ok' },
-        timestamp: { type: 'string', format: 'date-time' },
-        uptime: { type: 'number', example: 12345 },
-        memory: {
-          type: 'object',
-          properties: {
-            used: { type: 'number' },
-            total: { type: 'number' },
-          },
-        },
-      },
-    },
-  })
+  @Public()
   getHealth() {
-    return this.appService.getHealth();
+    return {
+      status: 'ok',
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime(),
+      memory: {
+        used: Math.round(process.memoryUsage().heapUsed / 1024 / 1024),
+        total: Math.round(process.memoryUsage().heapTotal / 1024 / 1024),
+      },
+      pid: process.pid,
+      nodeVersion: process.version,
+    };
   }
 
-  @Public()
   @Get('version')
-  @SetMetadata('skipThrottle', true)
-  @Version('1')
-  @ApiOperation({ summary: 'Get API version' })
-  @ApiResponse({
-    status: 200,
-    description: 'API version retrieved successfully',
-    schema: {
-      type: 'object',
-      properties: {
-        version: { type: 'string', example: '1.0.0' },
-        apiVersion: { type: 'string', example: 'v1' },
-        buildDate: { type: 'string', format: 'date-time' },
-      },
-    },
-  })
+  @Public()
   getVersion() {
-    return this.appService.getVersion();
+    return {
+      version: '1.0.0',
+      name: 'TekBot Platform API',
+      environment: process.env.NODE_ENV || 'development',
+    };
   }
 }

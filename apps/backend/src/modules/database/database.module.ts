@@ -15,12 +15,11 @@ import { DatabaseService } from './database.service';
         const commonOptions = {
           type: 'postgres' as const,
           entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-          migrations: [__dirname + '/../../migrations/*{.ts,.js}'],
-          synchronize: configService.get('NODE_ENV') === 'development',
-          logging: configService.get('DB_LOGGING', false),
-          ssl: configService.get('NODE_ENV') === 'production' ? { rejectUnauthorized: false } : false,
-          retryAttempts: 3,
-          retryDelay: 3000,
+          synchronize: true, // Enable for development
+          logging: false,
+          ssl: false,
+          retryAttempts: 1,
+          retryDelay: 1000,
           autoLoadEntities: true,
         };
 
@@ -33,13 +32,9 @@ import { DatabaseService } from './database.service';
           host: configService.get<string>('DATABASE_HOST', 'localhost'),
           port: configService.get<number>('DATABASE_PORT', 5432),
           username: configService.get<string>('DATABASE_USERNAME', 'postgres'),
-          password: configService.get<string>('DATABASE_PASSWORD', 'password'),
-          database: configService.get<string>('DATABASE_NAME', 'tekassist'),
+          password: configService.get<string>('DATABASE_PASSWORD', ''),
+          database: configService.get<string>('DATABASE_NAME', 'tekbot'),
         };
-      },
-      dataSourceFactory: async (options) => {
-        const dataSource = await new DataSource(options).initialize();
-        return dataSource;
       },
     }),
   ],

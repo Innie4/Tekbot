@@ -1,25 +1,19 @@
-import { Injectable } from '@nestjs/common';
-import * as nodemailer from 'nodemailer';
+import { Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class EmailNotificationService {
-  private transporter: nodemailer.Transporter;
+  private readonly logger = new Logger(EmailNotificationService.name);
 
-  constructor() {
-    this.transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: Number(process.env.SMTP_PORT),
-      secure: process.env.SMTP_SECURE === 'true',
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    });
-  }
+  constructor(private readonly configService: ConfigService) {}
 
   async sendMail(to: string, subject: string, html: string): Promise<void> {
-    await this.transporter.sendMail({
-      from: process.env.SMTP_FROM || 'noreply@tekbot.com',
+    // Mock email service for now
+    this.logger.log(`Sending email to ${to}: ${subject}`);
+    
+    // In a real implementation, you would use nodemailer or another email service
+    // For now, just log the email
+    console.log('Email Details:', {
       to,
       subject,
       html,

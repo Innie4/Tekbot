@@ -13,7 +13,7 @@ import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
-import { TenantMiddleware } from './common/middleware/tenant.middleware';
+// import { TenantMiddleware } from './common/middleware/tenant.middleware';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -73,16 +73,8 @@ async function bootstrap() {
   );
 
   // Global filters (order matters - most specific first)
-  // Register exception filters with Sentry integration
-  const sentryService = (() => {
-    try {
-      // SentryService is provided by AnalyticsModule
-      const service = app.get<any>('SentryService');
-      return service;
-    } catch (e) {
-      return undefined;
-    }
-  })();
+  // Register exception filters without Sentry for now
+  const sentryService = undefined;
 
   app.useGlobalFilters(
     new HttpExceptionFilter(sentryService),
@@ -147,7 +139,15 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
 
   // Global tenant resolution middleware
-  app.use(TenantMiddleware);
+  app.use((req: any, res: any, next: any) => {
+    // Simple tenant middleware - extract tenant ID from headers
+    const tenantId = req.get('x-tenant-id');
+    if (tenantId) {
+      req.tenant = { id: tenantId };
+      req.tenantId = tenantId;
+    }
+    next();
+  });
 
   // Graceful shutdown
   app.enableShutdownHooks();

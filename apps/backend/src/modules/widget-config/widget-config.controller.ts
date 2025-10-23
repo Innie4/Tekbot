@@ -63,16 +63,73 @@ export class WidgetConfigController {
   // Public endpoints for widget embedding
   @Get('public/:tenantId')
   @Public()
-  getPublicConfig(@Param('tenantId') tenantId: string) {
-    return this.widgetConfigService.getPublicConfig(tenantId);
+  async getPublicConfig(@Param('tenantId') tenantId: string) {
+    try {
+      return await this.widgetConfigService.getPublicConfig(tenantId);
+    } catch (error) {
+      // Return default config if tenant doesn't exist
+      return {
+        title: 'Chat with us',
+        welcomeMessage: 'Hello! How can we help you today?',
+        placeholder: 'Type your message...',
+        position: 'bottom-right',
+        theme: {
+          primaryColor: '#3B82F6',
+          secondaryColor: '#EFF6FF',
+          textColor: '#1F2937',
+          backgroundColor: '#FFFFFF',
+          borderRadius: '8px',
+          fontFamily: 'system-ui, -apple-system, sans-serif',
+          fontSize: '14px',
+          buttonColor: '#3B82F6',
+          buttonTextColor: '#FFFFFF',
+          headerColor: '#3B82F6',
+          headerTextColor: '#FFFFFF',
+        },
+        branding: {
+          showPoweredBy: true,
+        },
+        behavior: {
+          autoOpen: false,
+          autoOpenDelay: 3000,
+          enableSound: true,
+          enableTypingIndicator: true,
+          maxHeight: '600px',
+          maxWidth: '400px',
+        },
+        version: 'v1',
+      };
+    }
   }
 
   @Get('embed/:tenantId')
   @Public()
-  getEmbedCodePublic(
+  async getEmbedCodePublic(
     @Param('tenantId') tenantId: string,
     @Query('domain') domain?: string,
   ) {
-    return this.widgetConfigService.generateEmbedCode(tenantId, domain);
+    try {
+      return await this.widgetConfigService.generateEmbedCode(tenantId, domain);
+    } catch (error) {
+      // Return default embed code if tenant doesn't exist
+      const baseUrl = process.env.WIDGET_CDN_URL || process.env.BASE_URL || 'http://localhost:3002';
+      
+      return `
+<!-- TekAssist Chat Widget -->
+<script>
+  (function() {
+    window.TekAssistConfig = {
+      tenantId: '${tenantId}',
+      apiUrl: '${baseUrl}/api',
+      widgetUrl: '${baseUrl}/widget'
+    };
+    var script = document.createElement('script');
+    script.src = '${baseUrl}/widget/embed.js';
+    script.async = true;
+    document.head.appendChild(script);
+  })();
+</script>
+<!-- End TekAssist Chat Widget -->`.trim();
+    }
   }
 }

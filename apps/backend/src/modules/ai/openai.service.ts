@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import fetch from 'node-fetch';
+import axios from 'axios';
 
 @Injectable()
 export class OpenAIService {
@@ -14,19 +14,37 @@ export class OpenAIService {
       this.configService.get<string>('openai.models.chat.default') ||
       'gpt-4';
 
-    const response = await fetch(`${baseURL}/chat/completions`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
+    if (!apiKey) {
+      throw new Error('OpenAI API key is not configured');
+    }
+
+    try {
+      const response = await axios.post(`${baseURL}/chat/completions`, {
         model,
         messages,
-      }),
-    });
-    if (!response.ok) throw new Error('OpenAI API error');
-    const data = await response.json();
-    return data.choices?.[0]?.message?.content || '';
+        max_tokens: 1000,
+        temperature: 0.7,
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`,
+        },
+        timeout: 30000, // 30 seconds timeout
+      });
+
+      return response.data.choices?.[0]?.message?.content || 'Sorry, I could not generate a response.';
+    } catch (error) {
+      console.error('OpenAI API error:', error.response?.data || error.message);
+      
+      if (error.response?.status === 401) {
+        throw new Error('Invalid OpenAI API key');
+      } else if (error.response?.status === 429) {
+        throw new Error('OpenAI API rate limit exceeded');
+      } else if (error.response?.status === 500) {
+        throw new Error('OpenAI API server error');
+      }
+      
+      throw new Error('Failed to get response from OpenAI');
+    }
   }
 }

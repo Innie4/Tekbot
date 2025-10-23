@@ -47,6 +47,7 @@ import { NotificationsModule } from './modules/notifications/notifications.modul
 import { WebhooksModule } from './modules/webhooks/webhooks.module';
 import { AnalyticsModule } from './modules/analytics/analytics.module';
 import { WebSocketModule } from './modules/websocket/websocket.module';
+import { WidgetConfigModule } from './modules/widget-config/widget-config.module';
 import { CustomThrottleGuard } from './common/guards/throttle.guard';
 
 @Module({
@@ -122,29 +123,29 @@ import { CustomThrottleGuard } from './common/guards/throttle.guard';
       isGlobal: true,
     }),
 
-    // Job queues
-    BullModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        redis: {
-          host: configService.get('REDIS_HOST', 'localhost'),
-          port: configService.get('REDIS_PORT', 6379),
-          ...(configService.get('REDIS_PASSWORD') && {
-            password: configService.get('REDIS_PASSWORD'),
-          }),
-        },
-        defaultJobOptions: {
-          removeOnComplete: 10,
-          removeOnFail: 5,
-          attempts: configService.get('QUEUE_MAX_ATTEMPTS', 3),
-          backoff: {
-            type: 'exponential',
-            delay: 2000,
-          },
-        },
-      }),
-    }),
+    // Job queues - disabled for now
+    // BullModule.forRootAsync({
+    //   imports: [ConfigModule],
+    //   inject: [ConfigService],
+    //   useFactory: (configService: ConfigService) => ({
+    //     redis: {
+    //       host: configService.get('REDIS_HOST', 'localhost'),
+    //       port: configService.get('REDIS_PORT', 6379),
+    //       ...(configService.get('REDIS_PASSWORD') && {
+    //         password: configService.get('REDIS_PASSWORD'),
+    //       }),
+    //     },
+    //     defaultJobOptions: {
+    //       removeOnComplete: 10,
+    //       removeOnFail: 5,
+    //       attempts: configService.get('QUEUE_MAX_ATTEMPTS', 3),
+    //       backoff: {
+    //         type: 'exponential',
+    //         delay: 2000,
+    //       },
+    //     },
+    //   }),
+    // }),
 
     // Scheduling
     ScheduleModule.forRoot(),
@@ -182,6 +183,7 @@ import { CustomThrottleGuard } from './common/guards/throttle.guard';
     WebhooksModule,
     AnalyticsModule,
     WebSocketModule,
+    WidgetConfigModule,
   ],
   controllers: [AppController],
   providers: [
