@@ -2,38 +2,45 @@
 
 import { motion } from 'framer-motion';
 import { GlassCard } from '@/components/ui/glass-card';
-import { Zap, Clock, MessageSquare, BrainCircuit, Sparkles, Gauge } from 'lucide-react';
+import {
+  Zap,
+  Clock,
+  MessageSquare,
+  BrainCircuit,
+  Sparkles,
+  Gauge,
+  FileText,
+  RefreshCcw,
+  Palette,
+  BarChart3,
+  Calendar,
+} from 'lucide-react';
 
 const features = [
   {
-    title: 'AI-Powered Responses',
-    description: 'Get intelligent answers based on Tekskillz Technology\'s knowledge base',
-    icon: BrainCircuit,
+    title: 'Multi-format Training',
+    description: 'Ingest docs, links, FAQs, and structured content',
+    icon: FileText,
   },
   {
-    title: 'Instant Solutions',
-    description: 'Receive immediate answers to your technical questions without waiting',
-    icon: Zap,
+    title: 'Realtime Retraining',
+    description: 'Update your assistant instantly as content changes',
+    icon: RefreshCcw,
   },
   {
-    title: '24/7 Availability',
-    description: 'Access support anytime, day or night, whenever you need assistance',
-    icon: Clock,
+    title: 'Custom Branding',
+    description: 'Match colors, logo, and tone for a seamless experience',
+    icon: Palette,
   },
   {
-    title: 'Natural Conversations',
-    description: 'Interact naturally with our AI assistant just like chatting with a human',
-    icon: MessageSquare,
+    title: 'Analytics Dashboard',
+    description: 'Track conversations, satisfaction, and conversion metrics',
+    icon: BarChart3,
   },
   {
-    title: 'Continuous Learning',
-    description: 'Our AI improves over time, learning from new issues and solutions',
-    icon: Sparkles,
-  },
-  {
-    title: 'High Performance',
-    description: 'Optimized for speed and accuracy to solve your problems efficiently',
-    icon: Gauge,
+    title: 'Meeting Booking Integration',
+    description: 'Connect calendars to let users schedule appointments',
+    icon: Calendar,
   },
 ];
 
@@ -49,7 +56,10 @@ export default function FeatureShowcase() {
           className="text-center mb-16"
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Powerful <span className="bg-gradient-to-r from-electric-blue to-electric-cyan bg-clip-text text-transparent">Features</span>
+            Powerful{' '}
+            <span className="bg-gradient-to-r from-electric-blue to-electric-cyan bg-clip-text text-transparent">
+              Features
+            </span>
           </h2>
           <p className="text-xl text-foreground/70 max-w-2xl mx-auto">
             Discover how our AI assistant transforms your technical support experience

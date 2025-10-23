@@ -31,12 +31,8 @@ declare global {
 @Injectable()
 export class LoggingMiddleware implements NestMiddleware {
   private readonly logger = new Logger(LoggingMiddleware.name);
-  
-  private readonly excludedPaths = [
-    '/health',
-    '/metrics',
-    '/favicon.ico',
-  ];
+
+  private readonly excludedPaths = ['/health', '/metrics', '/favicon.ico'];
 
   private readonly sensitiveHeaders = [
     'authorization',
@@ -68,7 +64,7 @@ export class LoggingMiddleware implements NestMiddleware {
     // Generate request ID and start time
     const requestId = uuidv4();
     const startTime = Date.now();
-    
+
     // Attach to request for use in other parts of the application
     req.requestId = requestId;
     req.startTime = startTime;
@@ -94,13 +90,13 @@ export class LoggingMiddleware implements NestMiddleware {
     let responseBody: any;
 
     // Override res.send to capture response body
-    res.send = function(body: any) {
+    res.send = function (body: any) {
       responseBody = body;
       return originalSend.call(this, body);
     };
 
     // Override res.json to capture response body
-    res.json = function(body: any) {
+    res.json = function (body: any) {
       responseBody = body;
       return originalJson.call(this, body);
     };
@@ -109,16 +105,18 @@ export class LoggingMiddleware implements NestMiddleware {
     res.on('finish', () => {
       const endTime = Date.now();
       const responseTime = endTime - startTime;
-      
+
       logContext.statusCode = res.statusCode;
       logContext.responseTime = responseTime;
-      logContext.contentLength = res.get('content-length') ? parseInt(res.get('content-length')!) : undefined;
-      
+      logContext.contentLength = res.get('content-length')
+        ? parseInt(res.get('content-length')!)
+        : undefined;
+
       this.logOutgoingResponse(req, res, logContext, responseBody);
     });
 
     // Handle errors
-    res.on('error', (error) => {
+    res.on('error', error => {
       logContext.error = error;
       this.logError(req, logContext, error);
     });
@@ -127,8 +125,8 @@ export class LoggingMiddleware implements NestMiddleware {
   }
 
   private shouldSkipLogging(path: string): boolean {
-    return this.excludedPaths.some(excludedPath => 
-      path.startsWith(excludedPath)
+    return this.excludedPaths.some(excludedPath =>
+      path.startsWith(excludedPath),
     );
   }
 
@@ -144,11 +142,11 @@ export class LoggingMiddleware implements NestMiddleware {
 
   private logIncomingRequest(req: Request, context: LogContext): void {
     const { requestId, method, url, userAgent, ip } = context;
-    
+
     // Extract user and tenant info if available
     const userId = (req as any).user?.id;
     const tenantId = (req as any).tenant?.id || req.tenantId;
-    
+
     if (userId) context.userId = userId;
     if (tenantId) context.tenantId = tenantId;
 
@@ -175,8 +173,9 @@ export class LoggingMiddleware implements NestMiddleware {
     context: LogContext,
     responseBody: any,
   ): void {
-    const { requestId, method, url, statusCode, responseTime, contentLength } = context;
-    
+    const { requestId, method, url, statusCode, responseTime, contentLength } =
+      context;
+
     const logLevel = this.getLogLevel(statusCode!);
     const logData = {
       requestId,
@@ -192,7 +191,7 @@ export class LoggingMiddleware implements NestMiddleware {
     };
 
     const message = `${method} ${url} ${statusCode} - ${responseTime}ms`;
-    
+
     if (logLevel === 'error') {
       this.logger.error(message, logData);
     } else if (logLevel === 'warn') {
@@ -204,7 +203,7 @@ export class LoggingMiddleware implements NestMiddleware {
 
   private logError(req: Request, context: LogContext, error: any): void {
     const { requestId, method, url } = context;
-    
+
     const logData = {
       requestId,
       method,
@@ -230,7 +229,7 @@ export class LoggingMiddleware implements NestMiddleware {
 
   private sanitizeHeaders(headers: any): any {
     const sanitized = { ...headers };
-    
+
     this.sensitiveHeaders.forEach(header => {
       if (sanitized[header]) {
         sanitized[header] = '[REDACTED]';
@@ -246,7 +245,7 @@ export class LoggingMiddleware implements NestMiddleware {
     }
 
     const sanitized = { ...body };
-    
+
     this.sensitiveBodyFields.forEach(field => {
       if (sanitized[field]) {
         sanitized[field] = '[REDACTED]';

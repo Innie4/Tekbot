@@ -32,7 +32,7 @@ interface ValidationPipeOptions {
 @Injectable()
 export class CustomValidationPipe implements PipeTransform<any> {
   private readonly logger = new Logger(CustomValidationPipe.name);
-  
+
   private readonly options: ValidationPipeOptions;
 
   constructor(options: ValidationPipeOptions = {}) {
@@ -56,7 +56,9 @@ export class CustomValidationPipe implements PipeTransform<any> {
   async transform(value: any, { metatype, type, data }: ArgumentMetadata) {
     // Skip validation for primitive types
     if (!metatype || !this.toValidate(metatype)) {
-      return this.options.transform ? this.transformPrimitive(value, metatype) : value;
+      return this.options.transform
+        ? this.transformPrimitive(value, metatype)
+        : value;
     }
 
     // Transform plain object to class instance
@@ -94,7 +96,7 @@ export class CustomValidationPipe implements PipeTransform<any> {
       const exception = this.options.exceptionFactory
         ? this.options.exceptionFactory(errors)
         : new BadRequestException(this.formatValidationErrors(errors));
-      
+
       throw exception;
     }
 
@@ -204,7 +206,7 @@ export class CustomValidationPipe implements PipeTransform<any> {
     ];
 
     const sanitized = { ...value };
-    
+
     sensitiveFields.forEach(field => {
       if (sanitized[field]) {
         sanitized[field] = '[REDACTED]';
@@ -216,7 +218,9 @@ export class CustomValidationPipe implements PipeTransform<any> {
 }
 
 // Factory function for creating validation pipe with custom options
-export function createValidationPipe(options: ValidationPipeOptions = {}): CustomValidationPipe {
+export function createValidationPipe(
+  options: ValidationPipeOptions = {},
+): CustomValidationPipe {
   return new CustomValidationPipe(options);
 }
 

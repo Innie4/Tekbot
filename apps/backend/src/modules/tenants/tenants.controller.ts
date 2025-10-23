@@ -9,7 +9,12 @@ import {
   UseGuards,
   Request,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { TenantsService } from './tenants.service';
 import { Tenant } from './entities/tenant.entity';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -92,7 +97,13 @@ export class TenantsController {
     @Body() updateData: Partial<Tenant>,
   ): Promise<Tenant> {
     // Remove sensitive fields that tenant admins shouldn't be able to update
-    const { status, plan, stripeCustomerId, stripeSubscriptionId, ...allowedUpdates } = updateData;
+    const {
+      status,
+      plan,
+      stripeCustomerId,
+      stripeSubscriptionId,
+      ...allowedUpdates
+    } = updateData;
     return this.tenantsService.update(req.user.tenantId, allowedUpdates);
   }
 

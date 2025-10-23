@@ -8,20 +8,29 @@ export default function AdminHelpPage() {
         <h2 className="text-xl font-semibold mb-4">How can we help you?</h2>
         <ul className="list-disc ml-4 space-y-4">
           <li>
-            <strong>Dashboard Overview:</strong> Learn how to use analytics, manage appointments, payments, and messages.
+            <strong>Dashboard Overview:</strong> Learn how to use analytics, manage appointments,
+            payments, and messages.
           </li>
           <li>
-            <strong>Managing Users:</strong> Add, edit, or remove users and assign roles for your organization.
+            <strong>Managing Users:</strong> Add, edit, or remove users and assign roles for your
+            organization.
           </li>
           <li>
-            <strong>Settings:</strong> Configure your business profile, integrations, and notification preferences.
+            <strong>Settings:</strong> Configure your business profile, integrations, and
+            notification preferences.
           </li>
           <li>
-            <strong>Support:</strong> Contact our support team for technical issues or onboarding help.
+            <strong>Support:</strong> Contact our support team for technical issues or onboarding
+            help.
           </li>
         </ul>
         <div className="mt-8 text-center">
-          <p>Need more help? <a href="mailto:support@tekassist.com" className="text-blue-400 underline">Contact Support</a></p>
+          <p>
+            Need more help?{' '}
+            <a href="mailto:support@tekassist.com" className="text-blue-400 underline">
+              Contact Support
+            </a>
+          </p>
         </div>
       </div>
     </div>

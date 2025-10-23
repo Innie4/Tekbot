@@ -252,11 +252,11 @@ function MyComponent() {
   };
 
   const updateOption = (path: string, value: any) => {
-    setOptions(prev => {
+    setOptions((prev) => {
       const keys = path.split('.');
       const newOptions = { ...prev };
       let current: any = newOptions;
-      
+
       for (let i = 0; i < keys.length - 1; i++) {
         const key = keys[i];
         if (key) {
@@ -264,7 +264,7 @@ function MyComponent() {
           current = current[key];
         }
       }
-      
+
       const lastKey = keys[keys.length - 1];
       if (lastKey) {
         current[lastKey] = value;
@@ -284,7 +284,9 @@ function MyComponent() {
     <div className="max-w-6xl mx-auto p-6">
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900 mb-2">Widget Snippet Generator</h1>
-        <p className="text-gray-600">Generate embed code for your chat widget with custom configuration</p>
+        <p className="text-gray-600">
+          Generate embed code for your chat widget with custom configuration
+        </p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -300,7 +302,7 @@ function MyComponent() {
                     <button
                       key={tab.id}
                       onClick={() => {
-                        setOptions(prev => ({ ...prev, integration: tab.id as any }));
+                        setOptions((prev) => ({ ...prev, integration: tab.id as any }));
                         setActiveTab(tab.id);
                       }}
                       className={`p-3 rounded-lg border text-left transition-colors ${

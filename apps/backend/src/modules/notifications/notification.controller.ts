@@ -10,7 +10,7 @@ export class NotificationController {
     return this.notificationService.sendEmail({
       to: body.to,
       subject: body.subject,
-      html: body.html
+      html: body.html,
     });
   }
 
@@ -18,7 +18,7 @@ export class NotificationController {
   async sendSms(@Body() body: { to: string; message: string }) {
     return this.notificationService.sendSms({
       to: body.to,
-      body: body.message
+      body: body.message,
     });
   }
 
@@ -26,18 +26,34 @@ export class NotificationController {
   async sendSlack(@Body() body: { channel: string; text: string }) {
     return this.notificationService.sendSlack({
       channel: body.channel,
-      text: body.text
+      text: body.text,
     });
   }
 
   @Post('in-app')
-  async sendInApp(@Body() body: { userId: string; tenantId: string; title: string; message: string; type: 'info' | 'success' | 'warning' | 'error' | 'message_received' | 'appointment_reminder' | 'payment_confirmation' }) {
+  async sendInApp(
+    @Body()
+    body: {
+      userId: string;
+      tenantId: string;
+      title: string;
+      message: string;
+      type:
+        | 'info'
+        | 'success'
+        | 'warning'
+        | 'error'
+        | 'message_received'
+        | 'appointment_reminder'
+        | 'payment_confirmation';
+    },
+  ) {
     return this.notificationService.sendInApp({
       userId: body.userId,
       tenantId: body.tenantId,
       title: body.title,
       message: body.message,
-      type: body.type
+      type: body.type,
     });
   }
 }

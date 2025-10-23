@@ -1,4 +1,4 @@
-"use client";
+'use client';
 import React from 'react';
 import DashboardLayout from '@/components/admin/dashboard-layout';
 import MessagesPanel from '@/components/admin/messages-panel';

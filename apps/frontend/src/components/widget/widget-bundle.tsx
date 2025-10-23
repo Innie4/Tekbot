@@ -3,7 +3,11 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import ChatWidgetStandalone from './chat-widget-standalone';
-import { WidgetMessaging, WidgetMessageTypes, createWidgetMessage } from '../../lib/widget-messaging';
+import {
+  WidgetMessaging,
+  WidgetMessageTypes,
+  createWidgetMessage,
+} from '../../lib/widget-messaging';
 
 interface WidgetConfig {
   title: string;
@@ -64,7 +68,7 @@ class TekAssistWidget {
     this.container = options.container;
     this.widgetRef = React.createRef();
     this.messaging = new WidgetMessaging();
-    
+
     this.setupMessaging();
   }
 
@@ -97,13 +101,13 @@ class TekAssistWidget {
     try {
       // Load configuration
       await this.loadConfig();
-      
+
       // Create React root and render widget
       this.root = createRoot(this.container);
       this.renderWidget();
-      
+
       this.isInitialized = true;
-      
+
       // Notify parent that widget is ready
       this.messaging.sendToParent(
         createWidgetMessage(WidgetMessageTypes.WIDGET_READY, {
@@ -114,7 +118,6 @@ class TekAssistWidget {
 
       // Initial resize notification
       this.notifyResize();
-      
     } catch (error) {
       console.error('Widget initialization failed:', error);
       this.messaging.sendToParent(
@@ -128,7 +131,9 @@ class TekAssistWidget {
 
   private async loadConfig(): Promise<void> {
     try {
-      const response = await fetch(`${this.options.apiUrl}/widget-config/public/${this.options.tenantId}`);
+      const response = await fetch(
+        `${this.options.apiUrl}/widget-config/public/${this.options.tenantId}`
+      );
       if (!response.ok) {
         throw new Error(`Failed to load config: ${response.status}`);
       }
@@ -213,7 +218,7 @@ class TekAssistWidget {
 
     this.config = { ...this.config, ...newConfig };
     this.renderWidget();
-    
+
     this.messaging.sendToParent(
       createWidgetMessage(WidgetMessageTypes.CONFIG_UPDATED, this.config)
     );
@@ -241,17 +246,15 @@ class TekAssistWidget {
     if (this.widgetRef.current && this.widgetRef.current.resetConversation) {
       this.widgetRef.current.resetConversation();
     }
-    
-    this.messaging.sendToParent(
-      createWidgetMessage(WidgetMessageTypes.CONVERSATION_RESET)
-    );
+
+    this.messaging.sendToParent(createWidgetMessage(WidgetMessageTypes.CONVERSATION_RESET));
   }
 
   destroy(): void {
     if (this.root) {
       this.root.unmount();
     }
-    
+
     this.messaging.destroy();
     this.isInitialized = false;
   }

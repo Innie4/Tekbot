@@ -297,7 +297,7 @@ const buildEmbed = () => {
   if (!fs.existsSync(publicDir)) {
     fs.mkdirSync(publicDir, { recursive: true });
   }
-  
+
   const publicEmbedPath = path.join(publicDir, 'embed.html');
   fs.writeFileSync(publicEmbedPath, embedTemplate);
 

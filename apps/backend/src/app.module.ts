@@ -105,10 +105,12 @@ import { CustomThrottleGuard } from './common/guards/throttle.guard';
       imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        throttlers: [{
-          ttl: configService.get('RATE_LIMIT_WINDOW_MS', 900000), // 15 minutes
-          limit: configService.get('RATE_LIMIT_MAX_REQUESTS', 100),
-        }],
+        throttlers: [
+          {
+            ttl: configService.get('RATE_LIMIT_WINDOW_MS', 900000), // 15 minutes
+            limit: configService.get('RATE_LIMIT_MAX_REQUESTS', 100),
+          },
+        ],
       }),
     }),
 

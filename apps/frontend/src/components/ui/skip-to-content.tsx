@@ -6,9 +6,9 @@ interface SkipToContentProps {
   className?: string;
 }
 
-export function SkipToContent({ 
-  targetId = 'main-content', 
-  className 
+export function SkipToContent({
+  targetId = 'main-content',
+  className
 }: SkipToContentProps) {
   return (
     <a

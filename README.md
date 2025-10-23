@@ -7,6 +7,7 @@ A multi-tenant AI assistant engine that starts as TekAssist (internal bot for Te
 TekBot is a comprehensive SaaS platform that provides AI-powered customer service automation with multi-tenant architecture. The platform supports various business verticals with customizable modules and integrations.
 
 ### Key Features
+
 - **Multi-tenant Architecture**: Single database with tenant_id-based separation
 - **AI-Powered Conversations**: OpenAI/GPT integration with intelligent prompt routing
 - **Multi-Channel Communication**: WhatsApp, Instagram, Email integration
@@ -18,6 +19,7 @@ TekBot is a comprehensive SaaS platform that provides AI-powered customer servic
 ## 🏗️ Technical Architecture
 
 ### Stack
+
 - **Frontend**: React-based web chat widget
 - **Backend**: Node.js with NestJS framework
 - **Database**: PostgreSQL with Prisma ORM
@@ -28,6 +30,7 @@ TekBot is a comprehensive SaaS platform that provides AI-powered customer servic
 - **Deployment**: Cloud-ready (AWS/Azure/GCP compatible)
 
 ### Core Modules
+
 1. **CRM Module**: Customer management, leads, tags
 2. **Appointments Module**: Scheduling, staff management, service catalog
 3. **Payments Module**: Payment processing and link generation
@@ -56,6 +59,7 @@ tekbot-platform/
 ## 🚀 Quick Start
 
 ### Prerequisites
+
 - Node.js 18+
 - PostgreSQL 14+
 - Redis 6+
@@ -64,28 +68,33 @@ tekbot-platform/
 ### Development Setup
 
 1. **Clone the repository**
+
    ```bash
    git clone <repository-url>
    cd tekbot-platform
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Set up environment variables**
+
    ```bash
    cp .env.example .env
    # Edit .env with your configuration
    ```
 
 4. **Start the database**
+
    ```bash
    docker-compose up -d postgres redis
    ```
 
 5. **Run database migrations**
+
    ```bash
    npm run db:migrate
    npm run db:seed
@@ -142,29 +151,37 @@ For support, email support@tekskillz.com or join our Slack channel.
 ## TODOs & Missing Features (as of September 2025)
 
 ### Integrations
+
 - Stripe, Paystack, Twilio, Meta, Calendly, Slack, SMTP, OpenAI: Service stubs and controllers created. Webhook, error handling, and advanced logic pending.
 
 ### Security & Compliance
+
 - Audit logging, role-based permissions, GDPR/PCI, multi-factor authentication: Service stubs created. UI, endpoints, and enforcement pending.
 
 ### Monitoring & Analytics
+
 - Sentry, business metrics, health, analytics: Service stubs and controllers created. Data aggregation and dashboard logic pending.
 
 ### Frontend
+
 - Admin dashboard panels scaffolded. Connect to backend APIs, add CRUD, error handling, and role-based UI.
 - Customer portal, mobile/PWA, notification UI: Not started.
 
 ### Backend
+
 - Webhooks, notifications, files, health, analytics: Controllers and services scaffolded. Integration and business logic pending.
 
 ### Database & Migration
+
 - Migration scripts and RLS policies present. Production validation pending.
 
 ### Testing & Documentation
+
 - Unit/E2E tests, API docs, onboarding: Not started.
 
 ---
 
 ## Developer Onboarding
+
 - Configure environment variables in `/apps/backend/src/config` and `.env.example`.
 - See README for feature flags and integration notes.

@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { WidgetMessageTypes } from '../utils/widget-messaging';
 import { TekAssistWidget } from '../widget';
-import { 
-  WidgetState, 
-  WidgetEvent, 
+import {
+  WidgetState,
+  WidgetEvent,
   WidgetEventType,
   ChatMessage,
   WidgetDimensions,
-  WidgetConfig
+  WidgetConfig,
 } from '../widget/simple-types';
 
 interface UseTekAssistWidgetOptions {
@@ -29,7 +29,7 @@ interface UseTekAssistWidgetReturn {
   state: WidgetState;
   isReady: boolean;
   error: Error | null;
-  
+
   // Widget actions
   init: () => Promise<void>;
   destroy: () => void;
@@ -39,10 +39,16 @@ interface UseTekAssistWidgetReturn {
   maximize: () => void;
   sendMessage: (message: string) => Promise<void>;
   updateConfig: (config: Partial<WidgetConfig>) => void;
-  
+
   // Event handlers
-  addEventListener: (type: WidgetEventType, handler: (event: WidgetEvent) => void) => void;
-  removeEventListener: (type: WidgetEventType, handler: (event: WidgetEvent) => void) => void;
+  addEventListener: (
+    type: WidgetEventType,
+    handler: (event: WidgetEvent) => void,
+  ) => void;
+  removeEventListener: (
+    type: WidgetEventType,
+    handler: (event: WidgetEvent) => void,
+  ) => void;
 }
 
 const initialState: WidgetState = {
@@ -55,12 +61,16 @@ const initialState: WidgetState = {
   unreadCount: 0,
 };
 
-export function useTekAssistWidget(options: UseTekAssistWidgetOptions): UseTekAssistWidgetReturn {
+export function useTekAssistWidget(
+  options: UseTekAssistWidgetOptions,
+): UseTekAssistWidgetReturn {
   const widgetRef = useRef<TekAssistWidget | null>(null);
   const [state, setState] = useState<WidgetState>(initialState);
   const [isReady, setIsReady] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const eventHandlersRef = useRef<Map<WidgetEventType, Set<(event: WidgetEvent) => void>>>(new Map());
+  const eventHandlersRef = useRef<
+    Map<WidgetEventType, Set<(event: WidgetEvent) => void>>
+  >(new Map());
 
   // Initialize widget
   const init = useCallback(async () => {
@@ -91,9 +101,11 @@ export function useTekAssistWidget(options: UseTekAssistWidgetOptions): UseTekAs
       widgetRef.current = widget;
       setIsReady(true);
       setState(prev => ({ ...prev, isLoading: false }));
-
     } catch (error) {
-      const err = error instanceof Error ? error : new Error('Failed to initialize widget');
+      const err =
+        error instanceof Error
+          ? error
+          : new Error('Failed to initialize widget');
       setError(err);
       setState(prev => ({ ...prev, isLoading: false }));
     }
@@ -139,15 +151,21 @@ export function useTekAssistWidget(options: UseTekAssistWidgetOptions): UseTekAs
   }, []);
 
   // Event handling
-  const addEventListener = useCallback((type: WidgetEventType, handler: (event: WidgetEvent) => void) => {
-    // Widget doesn't have addEventListener method, so we'll handle events through callbacks
-    console.warn('addEventListener not implemented on TekAssistWidget');
-  }, []);
+  const addEventListener = useCallback(
+    (type: WidgetEventType, handler: (event: WidgetEvent) => void) => {
+      // Widget doesn't have addEventListener method, so we'll handle events through callbacks
+      console.warn('addEventListener not implemented on TekAssistWidget');
+    },
+    [],
+  );
 
-  const removeEventListener = useCallback((type: WidgetEventType, handler: (event: WidgetEvent) => void) => {
-    // Widget doesn't have removeEventListener method, so we'll handle events through callbacks
-    console.warn('removeEventListener not implemented on TekAssistWidget');
-  }, []);
+  const removeEventListener = useCallback(
+    (type: WidgetEventType, handler: (event: WidgetEvent) => void) => {
+      // Widget doesn't have removeEventListener method, so we'll handle events through callbacks
+      console.warn('removeEventListener not implemented on TekAssistWidget');
+    },
+    [],
+  );
 
   // Auto-initialize if enabled
   useEffect(() => {
@@ -207,10 +225,22 @@ export function useTekAssistWidgetState(widget: TekAssistWidget | null) {
     };
 
     // Listen for state changes
-    const unsubscribeOpen = widget.subscribe(WidgetMessageTypes.OPEN, handleStateChange);
-    const unsubscribeClose = widget.subscribe(WidgetMessageTypes.CLOSE, handleStateChange);
-    const unsubscribeMessage = widget.subscribe(WidgetMessageTypes.MESSAGE, handleStateChange);
-    const unsubscribeStatusChange = widget.subscribe(WidgetMessageTypes.STATUS_CHANGE, handleStateChange);
+    const unsubscribeOpen = widget.subscribe(
+      WidgetMessageTypes.OPEN,
+      handleStateChange,
+    );
+    const unsubscribeClose = widget.subscribe(
+      WidgetMessageTypes.CLOSE,
+      handleStateChange,
+    );
+    const unsubscribeMessage = widget.subscribe(
+      WidgetMessageTypes.MESSAGE,
+      handleStateChange,
+    );
+    const unsubscribeStatusChange = widget.subscribe(
+      WidgetMessageTypes.STATUS_CHANGE,
+      handleStateChange,
+    );
 
     // Initial state
     handleStateChange();

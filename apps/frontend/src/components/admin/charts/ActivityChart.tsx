@@ -1,3 +1,5 @@
+'use client';
+
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 
 const sampleData = [
@@ -8,7 +10,11 @@ const sampleData = [
   { name: 'May', users: 170 },
 ];
 
-export default function ActivityChart({ data = sampleData }) {
+export default function ActivityChart({
+  data = sampleData,
+}: {
+  data?: { name: string; users: number }[];
+}) {
   return (
     <ResponsiveContainer width="100%" height={250}>
       <BarChart data={data}>

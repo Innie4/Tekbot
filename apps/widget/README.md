@@ -45,12 +45,12 @@ function App() {
   return (
     <div>
       <h1>My Website</h1>
-      
+
       <TekAssistWidget
-        tenantId="your-tenant-id"
-        apiUrl="https://api.tekassist.com"
-        position="bottom-right"
-        theme="light"
+        tenantId='your-tenant-id'
+        apiUrl='https://api.tekassist.com'
+        position='bottom-right'
+        theme='light'
       />
     </div>
   );
@@ -84,31 +84,31 @@ function MyComponent() {
 ```html
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>My Website</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Welcome to my website</h1>
-    
+
     <!-- Widget container -->
     <div id="tekassist-widget-container"></div>
-    
+
     <!-- Widget script -->
     <script>
-        window.TekAssistConfig = {
-            tenantId: 'your-tenant-id',
-            apiUrl: 'https://api.tekassist.com',
-            position: 'bottom-right',
-            theme: 'light',
-            features: {
-                autoOpen: false,
-                sound: true,
-                typing: true
-            }
-        };
+      window.TekAssistConfig = {
+        tenantId: 'your-tenant-id',
+        apiUrl: 'https://api.tekassist.com',
+        position: 'bottom-right',
+        theme: 'light',
+        features: {
+          autoOpen: false,
+          sound: true,
+          typing: true,
+        },
+      };
     </script>
     <script src="/widget/embed.js"></script>
-</body>
+  </body>
 </html>
 ```
 
@@ -116,8 +116,8 @@ function MyComponent() {
 
 ```html
 <iframe
-    src="/widget/embed.html?tenantId=your-tenant-id&apiUrl=https://api.tekassist.com"
-    style="
+  src="/widget/embed.html?tenantId=your-tenant-id&apiUrl=https://api.tekassist.com"
+  style="
         position: fixed;
         bottom: 20px;
         right: 20px;
@@ -137,11 +137,11 @@ function MyComponent() {
 
 ```typescript
 interface WidgetConfig {
-  tenantId: string;           // Required: Your TekAssist tenant ID
-  apiUrl: string;             // Required: TekAssist API endpoint
-  position?: string;          // Widget position: 'bottom-right', 'bottom-left', etc.
-  theme?: string;             // Theme: 'light', 'dark', 'auto', 'custom'
-  size?: string;              // Size: 'small', 'medium', 'large', 'custom'
+  tenantId: string; // Required: Your TekAssist tenant ID
+  apiUrl: string; // Required: TekAssist API endpoint
+  position?: string; // Widget position: 'bottom-right', 'bottom-left', etc.
+  theme?: string; // Theme: 'light', 'dark', 'auto', 'custom'
+  size?: string; // Size: 'small', 'medium', 'large', 'custom'
 }
 ```
 
@@ -151,21 +151,21 @@ interface WidgetConfig {
 const config = {
   tenantId: 'your-tenant-id',
   apiUrl: 'https://api.tekassist.com',
-  
+
   // Positioning
   position: 'bottom-right',
   customPosition: {
     bottom: '20px',
-    right: '20px'
+    right: '20px',
   },
-  
+
   // Sizing
   size: 'medium',
   customSize: {
     width: '400px',
-    height: '600px'
+    height: '600px',
   },
-  
+
   // Features
   features: {
     autoOpen: false,
@@ -174,9 +174,9 @@ const config = {
     fileUpload: true,
     emoji: true,
     markdown: true,
-    voiceInput: false
+    voiceInput: false,
   },
-  
+
   // Branding
   branding: {
     logo: 'https://example.com/logo.png',
@@ -185,27 +185,27 @@ const config = {
     colors: {
       primary: '#3B82F6',
       secondary: '#EFF6FF',
-      accent: '#F59E0B'
-    }
+      accent: '#F59E0B',
+    },
   },
-  
+
   // Behavior
   behavior: {
     autoMinimize: true,
     minimizeTimeout: 30000,
     persistConversation: true,
     showTypingIndicator: true,
-    maxMessages: 100
+    maxMessages: 100,
   },
-  
+
   // Callbacks
   callbacks: {
     onReady: () => console.log('Widget ready'),
     onOpen: () => console.log('Widget opened'),
     onClose: () => console.log('Widget closed'),
-    onMessage: (message) => console.log('New message:', message),
-    onError: (error) => console.error('Widget error:', error)
-  }
+    onMessage: message => console.log('New message:', message),
+    onError: error => console.error('Widget error:', error),
+  },
 };
 ```
 
@@ -217,10 +217,10 @@ The widget uses CSS variables for theming, allowing easy customization:
 
 ```css
 :root {
-  --tekassist-primary-color: #3B82F6;
-  --tekassist-secondary-color: #EFF6FF;
-  --tekassist-background-color: #FFFFFF;
-  --tekassist-text-color: #1F2937;
+  --tekassist-primary-color: #3b82f6;
+  --tekassist-secondary-color: #eff6ff;
+  --tekassist-background-color: #ffffff;
+  --tekassist-text-color: #1f2937;
   --tekassist-border-radius: 12px;
   --tekassist-font-family: 'Inter', sans-serif;
   --tekassist-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1);
@@ -240,14 +240,14 @@ themeEngine.applyTheme({
   secondaryColor: '#EFF6FF',
   backgroundColor: '#FFFFFF',
   textColor: '#1F2937',
-  borderRadius: '12px'
+  borderRadius: '12px',
 });
 
 // Component-specific styling
 themeEngine.applyComponentStyles('chatBubble', {
   backgroundColor: '#F3F4F6',
   borderRadius: '18px',
-  padding: '12px 16px'
+  padding: '12px 16px',
 });
 ```
 
@@ -258,14 +258,14 @@ themeEngine.applyComponentStyles('chatBubble', {
 const lightTheme = {
   primaryColor: '#3B82F6',
   backgroundColor: '#FFFFFF',
-  textColor: '#1F2937'
+  textColor: '#1F2937',
 };
 
 // Dark theme
 const darkTheme = {
   primaryColor: '#60A5FA',
   backgroundColor: '#1F2937',
-  textColor: '#F9FAFB'
+  textColor: '#F9FAFB',
 };
 
 // Apply theme
@@ -278,32 +278,32 @@ widget.updateTheme(darkTheme);
 
 ```typescript
 class TekAssistWidget {
-  constructor(config: WidgetConfig)
-  
+  constructor(config: WidgetConfig);
+
   // Lifecycle
-  init(): Promise<void>
-  destroy(): void
-  
+  init(): Promise<void>;
+  destroy(): void;
+
   // State management
-  open(): void
-  close(): void
-  minimize(): void
-  maximize(): void
-  
+  open(): void;
+  close(): void;
+  minimize(): void;
+  maximize(): void;
+
   // Messaging
-  sendMessage(message: string): Promise<void>
-  
+  sendMessage(message: string): Promise<void>;
+
   // Configuration
-  updateConfig(config: Partial<WidgetConfig>): void
-  updateTheme(theme: Partial<ThemeConfig>): void
-  
+  updateConfig(config: Partial<WidgetConfig>): void;
+  updateTheme(theme: Partial<ThemeConfig>): void;
+
   // State access
-  getState(): WidgetState
-  getConfig(): WidgetConfig
-  
+  getState(): WidgetState;
+  getConfig(): WidgetConfig;
+
   // Events
-  addEventListener(type: string, handler: Function): void
-  removeEventListener(type: string, handler: Function): void
+  addEventListener(type: string, handler: Function): void;
+  removeEventListener(type: string, handler: Function): void;
 }
 ```
 
@@ -316,7 +316,7 @@ function useTekAssistWidget(options: WidgetConfig) {
     state: WidgetState,
     isReady: boolean,
     error: Error | null,
-    
+
     // Actions
     init: () => Promise<void>,
     destroy: () => void,
@@ -324,7 +324,7 @@ function useTekAssistWidget(options: WidgetConfig) {
     close: () => void,
     sendMessage: (message: string) => Promise<void>,
     updateConfig: (config: Partial<WidgetConfig>) => void,
-    
+
     // Events
     addEventListener: (type: string, handler: Function) => void,
     removeEventListener: (type: string, handler: Function) => void
@@ -345,16 +345,17 @@ widget.addEventListener('widget:open', () => {
   console.log('Widget opened');
 });
 
-widget.addEventListener('widget:message', (event) => {
+widget.addEventListener('widget:message', event => {
   console.log('New message:', event.data.message);
 });
 
-widget.addEventListener('widget:error', (event) => {
+widget.addEventListener('widget:error', event => {
   console.error('Widget error:', event.data.error);
 });
 ```
 
 Available events:
+
 - `widget:ready` - Widget initialization complete
 - `widget:open` - Widget opened
 - `widget:close` - Widget closed
@@ -431,7 +432,7 @@ Enable debug mode for detailed logging:
 const widget = new TekAssistWidget({
   tenantId: 'your-tenant-id',
   apiUrl: 'https://api.tekassist.com',
-  debug: true // Enable debug logging
+  debug: true, // Enable debug logging
 });
 ```
 

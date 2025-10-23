@@ -4,7 +4,15 @@ import { useState, useEffect } from 'react';
 import { GlassCard } from '@/components/ui/glass-card';
 import { Button } from '@/components/ui/button';
 import { GlassInput } from '@/components/ui/glass-input';
-import { Search, MoreHorizontal, UserPlus, Filter, ArrowUpDown, Loader2, AlertCircle } from 'lucide-react';
+import {
+  Search,
+  MoreHorizontal,
+  UserPlus,
+  Filter,
+  ArrowUpDown,
+  Loader2,
+  AlertCircle,
+} from 'lucide-react';
 import { motion } from 'framer-motion';
 import { api } from '@/lib/api/api-client';
 
@@ -36,13 +44,13 @@ export default function UserManagement() {
   const [error, setError] = useState<string | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showActionMenu, setShowActionMenu] = useState<string | null>(null);
-  const [newUser, setNewUser] = useState<CreateUserDto>({ 
-    firstName: '', 
-    lastName: '', 
-    email: '', 
-    password: '', 
-    role: 'user', 
-    status: 'active' 
+  const [newUser, setNewUser] = useState<CreateUserDto>({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    role: 'user',
+    status: 'active',
   });
   const [submitting, setSubmitting] = useState(false);
 
@@ -79,13 +87,13 @@ export default function UserManagement() {
       const createdUser = await api.post<User>('/users', newUser);
       setUsers([...users, createdUser]);
       setShowAddModal(false);
-      setNewUser({ 
-        firstName: '', 
-        lastName: '', 
-        email: '', 
-        password: '', 
-        role: 'user', 
-        status: 'active' 
+      setNewUser({
+        firstName: '',
+        lastName: '',
+        email: '',
+        password: '',
+        role: 'user',
+        status: 'active',
       });
     } catch (err: any) {
       setError(err.message || 'Failed to create user');
@@ -98,7 +106,7 @@ export default function UserManagement() {
   const handleDeleteUser = async (id: string) => {
     try {
       await api.delete(`/users/${id}`);
-      setUsers(users.filter(u => u.id !== id));
+      setUsers(users.filter((u) => u.id !== id));
       setShowActionMenu(null);
     } catch (err: any) {
       setError(err.message || 'Failed to delete user');
@@ -109,14 +117,14 @@ export default function UserManagement() {
   const handleUpdateUserStatus = async (id: string, status: 'active' | 'inactive') => {
     try {
       const updatedUser = await api.patch<User>(`/users/${id}`, { status });
-      setUsers(users.map(u => u.id === id ? updatedUser : u));
+      setUsers(users.map((u) => (u.id === id ? updatedUser : u)));
     } catch (err: any) {
       setError(err.message || 'Failed to update user status');
       console.error('Error updating user status:', err);
     }
   };
 
-  const filteredUsers = (Array.isArray(users) ? users : []) .filter(
+  const filteredUsers = (Array.isArray(users) ? users : []).filter(
     (user) =>
       `${user.firstName} ${user.lastName}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
       user.email.toLowerCase().includes(searchTerm.toLowerCase())
@@ -127,7 +135,7 @@ export default function UserManagement() {
     const date = new Date(lastLoginAt);
     const now = new Date();
     const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
-    
+
     if (diffInHours < 1) return 'Just now';
     if (diffInHours < 24) return `${diffInHours} hours ago`;
     const diffInDays = Math.floor(diffInHours / 24);
@@ -145,9 +153,9 @@ export default function UserManagement() {
         >
           <AlertCircle className="w-5 h-5 text-red-400" />
           <p className="text-red-400">{error}</p>
-          <Button 
-            variant="ghost" 
-            size="sm" 
+          <Button
+            variant="ghost"
+            size="sm"
             onClick={() => setError(null)}
             className="ml-auto text-red-400 hover:text-red-300"
           >
@@ -158,8 +166,8 @@ export default function UserManagement() {
 
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold">User Management</h2>
-        <Button 
-          className="glass-button-effect" 
+        <Button
+          className="glass-button-effect"
           onClick={() => setShowAddModal(true)}
           disabled={loading}
         >
@@ -180,14 +188,14 @@ export default function UserManagement() {
                   placeholder="First Name"
                   className="border rounded px-3 py-2 w-full"
                   value={newUser.firstName}
-                  onChange={e => setNewUser({ ...newUser, firstName: e.target.value })}
+                  onChange={(e) => setNewUser({ ...newUser, firstName: e.target.value })}
                 />
                 <input
                   type="text"
                   placeholder="Last Name"
                   className="border rounded px-3 py-2 w-full"
                   value={newUser.lastName}
-                  onChange={e => setNewUser({ ...newUser, lastName: e.target.value })}
+                  onChange={(e) => setNewUser({ ...newUser, lastName: e.target.value })}
                 />
               </div>
               <input
@@ -195,19 +203,19 @@ export default function UserManagement() {
                 placeholder="Email"
                 className="border rounded px-3 py-2 w-full"
                 value={newUser.email}
-                onChange={e => setNewUser({ ...newUser, email: e.target.value })}
+                onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
               />
               <input
                 type="password"
                 placeholder="Password"
                 className="border rounded px-3 py-2 w-full"
                 value={newUser.password}
-                onChange={e => setNewUser({ ...newUser, password: e.target.value })}
+                onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
               />
               <select
                 className="border rounded px-3 py-2 w-full"
                 value={newUser.role}
-                onChange={e => setNewUser({ ...newUser, role: e.target.value })}
+                onChange={(e) => setNewUser({ ...newUser, role: e.target.value })}
               >
                 <option value="user">User</option>
                 <option value="admin">Admin</option>
@@ -216,14 +224,18 @@ export default function UserManagement() {
               <select
                 className="border rounded px-3 py-2 w-full"
                 value={newUser.status}
-                onChange={e => setNewUser({ ...newUser, status: e.target.value as 'active' | 'inactive' })}
+                onChange={(e) =>
+                  setNewUser({ ...newUser, status: e.target.value as 'active' | 'inactive' })
+                }
               >
                 <option value="active">Active</option>
                 <option value="inactive">Inactive</option>
               </select>
             </div>
             <div className="flex justify-end gap-2 mt-6">
-              <Button variant="outline" onClick={() => setShowAddModal(false)}>Cancel</Button>
+              <Button variant="outline" onClick={() => setShowAddModal(false)}>
+                Cancel
+              </Button>
               <Button onClick={handleAddUser}>Add</Button>
             </div>
           </div>
@@ -298,9 +310,12 @@ export default function UserManagement() {
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-full bg-gradient-to-r from-electric-blue to-electric-cyan flex items-center justify-center text-xs font-medium">
-                          {user.firstName[0]}{user.lastName[0]}
+                          {user.firstName[0]}
+                          {user.lastName[0]}
                         </div>
-                        <span>{user.firstName} {user.lastName}</span>
+                        <span>
+                          {user.firstName} {user.lastName}
+                        </span>
                       </div>
                     </td>
                     <td className="py-3 px-4 text-muted-foreground">{user.email}</td>
@@ -316,16 +331,32 @@ export default function UserManagement() {
                         {user.status}
                       </span>
                     </td>
-                    <td className="py-3 px-4 text-muted-foreground">{formatLastActive(user.lastLoginAt)}</td>
+                    <td className="py-3 px-4 text-muted-foreground">
+                      {formatLastActive(user.lastLoginAt)}
+                    </td>
                     <td className="py-3 px-4 text-right">
-                      <Button variant="ghost" size="icon" onClick={() => setShowActionMenu(user.id)}>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => setShowActionMenu(user.id)}
+                      >
                         <MoreHorizontal className="h-4 w-4" />
                       </Button>
                       {/* Actions Dropdown */}
                       {showActionMenu === user.id && (
                         <div className="absolute right-0 mt-2 bg-white rounded shadow z-10">
-                          <button className="block px-4 py-2 w-full text-left hover:bg-gray-100" onClick={() => alert('Edit user coming soon!')}>Edit</button>
-                          <button className="block px-4 py-2 w-full text-left hover:bg-gray-100 text-red-600" onClick={() => handleDeleteUser(user.id)}>Delete</button>
+                          <button
+                            className="block px-4 py-2 w-full text-left hover:bg-gray-100"
+                            onClick={() => alert('Edit user coming soon!')}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            className="block px-4 py-2 w-full text-left hover:bg-gray-100 text-red-600"
+                            onClick={() => handleDeleteUser(user.id)}
+                          >
+                            Delete
+                          </button>
                         </div>
                       )}
                     </td>

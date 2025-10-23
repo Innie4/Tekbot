@@ -9,18 +9,19 @@ export class AiController {
   @Post('chat')
   @Public()
   async chat(
-    @Body() body: { 
-      message: string; 
-      conversationId?: string; 
-      sessionId?: string; 
-      messages?: Array<{ role: string; content: string }> 
+    @Body()
+    body: {
+      message: string;
+      conversationId?: string;
+      sessionId?: string;
+      messages?: Array<{ role: string; content: string }>;
     },
     @Headers('x-tenant-id') tenantId?: string,
   ) {
     try {
       // Handle both widget format and direct messages format
       let messages: Array<{ role: string; content: string }>;
-      
+
       if (body.messages) {
         messages = body.messages;
       } else if (body.message) {
@@ -30,9 +31,9 @@ export class AiController {
       }
 
       const reply = await this.openAIService.getChatResponse(messages);
-      
+
       // Return format expected by widget
-      return { 
+      return {
         response: reply,
         message: reply,
         reply,
@@ -42,7 +43,7 @@ export class AiController {
         metadata: {
           tenantId,
           timestamp: new Date().toISOString(),
-        }
+        },
       };
     } catch (error) {
       console.error('Chat error:', error);

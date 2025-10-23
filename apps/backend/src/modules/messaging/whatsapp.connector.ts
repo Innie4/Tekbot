@@ -6,7 +6,10 @@ export class WhatsAppConnector {
   private client: Twilio;
 
   constructor() {
-    this.client = new Twilio(process.env.TWILIO_ACCOUNT_SID!, process.env.TWILIO_AUTH_TOKEN!);
+    this.client = new Twilio(
+      process.env.TWILIO_ACCOUNT_SID!,
+      process.env.TWILIO_AUTH_TOKEN!,
+    );
   }
 
   async sendMessage(to: string, body: string) {

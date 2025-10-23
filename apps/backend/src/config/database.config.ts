@@ -8,7 +8,10 @@ export default registerAs('database', () => ({
   password: process.env.DATABASE_PASSWORD || 'tekbot_password',
   database: process.env.DATABASE_NAME || 'tekbot_dev',
   schema: process.env.DATABASE_SCHEMA || 'public',
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+  ssl:
+    process.env.NODE_ENV === 'production'
+      ? { rejectUnauthorized: false }
+      : false,
   logging: process.env.NODE_ENV === 'development',
   synchronize: false, // Always use migrations in production
   migrationsRun: process.env.NODE_ENV === 'production',
@@ -27,7 +30,10 @@ export const databaseConfig = registerAs('database', () => ({
   password: process.env.DATABASE_PASSWORD || 'tekbot_password',
   database: process.env.DATABASE_NAME || 'tekbot_dev',
   schema: process.env.DATABASE_SCHEMA || 'public',
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+  ssl:
+    process.env.NODE_ENV === 'production'
+      ? { rejectUnauthorized: false }
+      : false,
   logging: process.env.NODE_ENV === 'development',
   synchronize: false,
   migrationsRun: process.env.NODE_ENV === 'production',

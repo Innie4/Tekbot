@@ -6,21 +6,21 @@ export class CorsMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
     const origin = req.headers.origin as string;
     const allowedOrigins = this.getAllowedOrigins();
-    
+
     // Check if origin is allowed
     if (this.isOriginAllowed(origin, allowedOrigins)) {
       res.header('Access-Control-Allow-Origin', origin);
     }
-    
+
     // Set other CORS headers
     res.header('Access-Control-Allow-Credentials', 'true');
     res.header(
       'Access-Control-Allow-Headers',
-      'Origin, X-Requested-With, Content-Type, Accept, Authorization, X-Tenant-ID, X-Session-ID, X-Customer-ID'
+      'Origin, X-Requested-With, Content-Type, Accept, Authorization, X-Tenant-ID, X-Session-ID, X-Customer-ID',
     );
     res.header(
       'Access-Control-Allow-Methods',
-      'GET, POST, PUT, DELETE, OPTIONS, PATCH'
+      'GET, POST, PUT, DELETE, OPTIONS, PATCH',
     );
     res.header('Access-Control-Max-Age', '86400'); // 24 hours
 
@@ -45,7 +45,7 @@ export class CorsMiddleware implements NestMiddleware {
 
     // Add environment-specific origins
     const envOrigins = process.env.ALLOWED_ORIGINS?.split(',') || [];
-    
+
     return [...baseOrigins, ...envOrigins];
   }
 
@@ -82,10 +82,10 @@ export interface CorsOptions {
 export class WidgetCorsMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
     const origin = req.headers.origin as string;
-    
+
     // More permissive CORS for widget endpoints
     const allowedOrigins = this.getWidgetAllowedOrigins();
-    
+
     if (this.isOriginAllowed(origin, allowedOrigins)) {
       res.header('Access-Control-Allow-Origin', origin);
     } else {
@@ -95,16 +95,13 @@ export class WidgetCorsMiddleware implements NestMiddleware {
         res.header('Access-Control-Allow-Origin', origin);
       }
     }
-    
+
     res.header('Access-Control-Allow-Credentials', 'true');
     res.header(
       'Access-Control-Allow-Headers',
-      'Origin, X-Requested-With, Content-Type, Accept, X-Tenant-ID, X-Session-ID, X-Customer-ID, X-Widget-Version'
+      'Origin, X-Requested-With, Content-Type, Accept, X-Tenant-ID, X-Session-ID, X-Customer-ID, X-Widget-Version',
     );
-    res.header(
-      'Access-Control-Allow-Methods',
-      'GET, POST, OPTIONS'
-    );
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
     res.header('Access-Control-Max-Age', '3600'); // 1 hour for widget requests
 
     if (req.method === 'OPTIONS') {
@@ -145,7 +142,7 @@ export class WidgetCorsMiddleware implements NestMiddleware {
 
     try {
       const url = new URL(origin);
-      
+
       // Basic security checks
       if (url.protocol !== 'https:' && url.protocol !== 'http:') {
         return false;
@@ -177,7 +174,10 @@ export class WidgetCorsMiddleware implements NestMiddleware {
 // Utility function to create CORS configuration
 export function createCorsConfig(options: CorsOptions = {}): any {
   return {
-    origin: (origin: string, callback: (err: Error | null, allow?: boolean) => void) => {
+    origin: (
+      origin: string,
+      callback: (err: Error | null, allow?: boolean) => void,
+    ) => {
       const allowedOrigins = options.origins || [
         'http://localhost:3000',
         'http://localhost:3001',

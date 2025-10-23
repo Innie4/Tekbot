@@ -1,4 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, Index } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  UpdateDateColumn,
+  ManyToOne,
+  Index,
+} from 'typeorm';
 import { Tenant } from '../../tenants/entities/tenant.entity';
 import { Customer } from '../../customers/entities/customer.entity';
 import { Conversation } from '../../conversations/entities/conversation.entity';
@@ -19,7 +27,9 @@ export class Message {
   @Column()
   conversationId: string;
 
-  @ManyToOne(() => Conversation, conversation => conversation.messages, { onDelete: 'CASCADE' })
+  @ManyToOne(() => Conversation, conversation => conversation.messages, {
+    onDelete: 'CASCADE',
+  })
   conversation: Conversation;
 
   @Column({ nullable: true })

@@ -7,46 +7,43 @@ import { Check } from 'lucide-react';
 
 const pricingPlans = [
   {
-    name: 'Basic',
-    price: '$9.99',
+    name: 'Free',
+    price: '$0',
     period: 'per month',
-    description: 'Essential support for individuals',
+    description: 'Get started with core features',
     features: [
-      'AI-powered chat support',
-      '24/7 availability',
-      'Basic hardware troubleshooting',
-      'Software installation guidance',
-      'Email support',
+      'Basic AI chat support',
+      'Multi-format data import',
+      'Starter branding options',
+      'Community support',
     ],
     highlighted: false,
   },
   {
-    name: 'Professional',
-    price: '$29.99',
+    name: 'Pro',
+    price: '$29',
     period: 'per month',
-    description: 'Complete solution for professionals',
+    description: 'Advanced features for growing teams',
     features: [
-      'Everything in Basic',
-      'Priority response',
-      'Advanced technical support',
-      'Remote assistance',
-      'Phone support',
-      'Security consultations',
+      'Everything in Free',
+      'Realtime retraining',
+      'Analytics dashboard',
+      'Meeting booking integration',
+      'Priority email support',
     ],
     highlighted: true,
   },
   {
-    name: 'Enterprise',
-    price: '$99.99',
+    name: 'Business',
+    price: '$99',
     period: 'per month',
-    description: 'Comprehensive support for businesses',
+    description: 'Scalable solution with premium support',
     features: [
-      'Everything in Professional',
-      'Dedicated support team',
-      'Custom knowledge base',
-      'Network infrastructure support',
-      'Quarterly security audits',
-      'Emergency response',
+      'Everything in Pro',
+      'Custom branding presets',
+      'SSO & roles',
+      'Dedicated success manager',
+      'SLA & uptime monitoring',
     ],
     highlighted: false,
   },
@@ -64,7 +61,10 @@ export default function PricingSection() {
           className="text-center mb-16"
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Simple <span className="bg-gradient-to-r from-electric-blue to-electric-cyan bg-clip-text text-transparent">Pricing</span>
+            Simple{' '}
+            <span className="bg-gradient-to-r from-electric-blue to-electric-cyan bg-clip-text text-transparent">
+              Pricing
+            </span>
           </h2>
           <p className="text-xl text-foreground/70 max-w-2xl mx-auto">
             Choose the plan that fits your needs and get started with TekAssist today
@@ -81,7 +81,7 @@ export default function PricingSection() {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="flex"
             >
-              <GlassCard 
+              <GlassCard
                 className={`flex flex-col h-full p-6 ${plan.highlighted ? 'border-electric-blue' : ''}`}
                 variant={plan.highlighted ? 'default' : 'solid'}
               >
@@ -93,7 +93,7 @@ export default function PricingSection() {
                     <span className="text-foreground/70 ml-1">{plan.period}</span>
                   </div>
                 </div>
-                
+
                 <ul className="space-y-3 mb-8 flex-grow">
                   {plan.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className="flex items-start">
@@ -102,11 +102,8 @@ export default function PricingSection() {
                     </li>
                   ))}
                 </ul>
-                
-                <Button 
-                  variant={plan.highlighted ? 'glass' : 'outline'}
-                  className="w-full mt-auto"
-                >
+
+                <Button variant={plan.highlighted ? 'glass' : 'outline'} className="w-full mt-auto">
                   Get Started
                 </Button>
               </GlassCard>

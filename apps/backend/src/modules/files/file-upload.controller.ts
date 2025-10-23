@@ -1,4 +1,10 @@
-import { Controller, Post, UploadedFile, UseInterceptors, Inject } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+  Inject,
+} from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FileUploadService } from './file-upload.service';
 import { VirusScanService } from './virus-scan.service';
@@ -7,7 +13,8 @@ import { VirusScanService } from './virus-scan.service';
 export class FileUploadController {
   constructor(
     private readonly fileUploadService: FileUploadService,
-    @Inject(VirusScanService) private readonly virusScanService: VirusScanService,
+    @Inject(VirusScanService)
+    private readonly virusScanService: VirusScanService,
   ) {}
 
   @Post('upload')

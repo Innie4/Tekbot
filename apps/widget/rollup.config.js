@@ -13,7 +13,9 @@ const baseConfig = {
   external: ['react', 'react-dom'],
   plugins: [
     replace({
-      'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+      'process.env.NODE_ENV': JSON.stringify(
+        process.env.NODE_ENV || 'development',
+      ),
       preventAssignment: true,
     }),
     resolve({
@@ -37,20 +39,24 @@ const baseConfig = {
       babelHelpers: 'bundled',
       exclude: 'node_modules/**',
       presets: [
-        ['@babel/preset-env', { targets: { browsers: ['> 1%', 'last 2 versions'] } }],
+        [
+          '@babel/preset-env',
+          { targets: { browsers: ['> 1%', 'last 2 versions'] } },
+        ],
         ['@babel/preset-react', { runtime: 'automatic' }],
         '@babel/preset-typescript',
       ],
     }),
-    isProduction && terser({
-      compress: {
-        drop_console: true,
-        drop_debugger: true,
-      },
-      mangle: {
-        reserved: ['TekAssistWidget'],
-      },
-    }),
+    isProduction &&
+      terser({
+        compress: {
+          drop_console: true,
+          drop_debugger: true,
+        },
+        mangle: {
+          reserved: ['TekAssistWidget'],
+        },
+      }),
   ].filter(Boolean),
 };
 
@@ -69,7 +75,7 @@ export default [
       sourcemap: !isProduction,
     },
   },
-  
+
   // ES module build for modern bundlers
   {
     ...baseConfig,
@@ -79,7 +85,7 @@ export default [
       sourcemap: !isProduction,
     },
   },
-  
+
   // CommonJS build for Node.js
   {
     ...baseConfig,
@@ -89,7 +95,7 @@ export default [
       sourcemap: !isProduction,
     },
   },
-  
+
   // Standalone embed script (includes React)
   {
     input: 'src/embed.ts',
@@ -101,7 +107,9 @@ export default [
     },
     plugins: [
       replace({
-        'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+        'process.env.NODE_ENV': JSON.stringify(
+          process.env.NODE_ENV || 'development',
+        ),
         preventAssignment: true,
       }),
       resolve({
@@ -125,20 +133,24 @@ export default [
         babelHelpers: 'bundled',
         exclude: 'node_modules/**',
         presets: [
-          ['@babel/preset-env', { targets: { browsers: ['> 1%', 'last 2 versions'] } }],
+          [
+            '@babel/preset-env',
+            { targets: { browsers: ['> 1%', 'last 2 versions'] } },
+          ],
           ['@babel/preset-react', { runtime: 'automatic' }],
           '@babel/preset-typescript',
         ],
       }),
-      isProduction && terser({
-        compress: {
-          drop_console: true,
-          drop_debugger: true,
-        },
-        mangle: {
-          reserved: ['TekAssistEmbed'],
-        },
-      }),
+      isProduction &&
+        terser({
+          compress: {
+            drop_console: true,
+            drop_debugger: true,
+          },
+          mangle: {
+            reserved: ['TekAssistEmbed'],
+          },
+        }),
     ].filter(Boolean),
   },
 ];

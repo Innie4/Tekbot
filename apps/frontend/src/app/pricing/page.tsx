@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 export default function PricingPage() {
   const [showCheckout, setShowCheckout] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
-  const [paymentMethod, setPaymentMethod] = useState<string>("card");
+  const [paymentMethod, setPaymentMethod] = useState<string>('card');
 
   const handleCheckout = (plan: string) => {
     setSelectedPlan(plan);
@@ -29,7 +29,7 @@ export default function PricingPage() {
           </div>
           <button
             className="mt-6 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl transition"
-            onClick={() => handleCheckout("Starter")}
+            onClick={() => handleCheckout('Starter')}
           >
             Get Started
           </button>
@@ -48,7 +48,7 @@ export default function PricingPage() {
           </div>
           <button
             className="mt-6 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-xl transition"
-            onClick={() => handleCheckout("Pro")}
+            onClick={() => handleCheckout('Pro')}
           >
             Choose Pro
           </button>
@@ -60,38 +60,69 @@ export default function PricingPage() {
           <div className="bg-gray-900 rounded-xl p-8 w-full max-w-md text-white">
             <h3 className="text-xl font-bold mb-4">Checkout - {selectedPlan} Plan</h3>
             <div className="mb-6">
-              <label className="block mb-2 font-semibold">Choose payment method:</label>
+              <p className="block mb-2 font-semibold">Choose payment method:</p>
               <div className="flex gap-4 mb-4">
                 <button
-                  className={`px-4 py-2 rounded-xl border ${paymentMethod === "card" ? "bg-blue-600 text-white border-blue-600" : "bg-gray-800 text-white border-gray-700"}`}
-                  onClick={() => setPaymentMethod("card")}
+                  className={`px-4 py-2 rounded-xl border ${paymentMethod === 'card' ? 'bg-blue-600 text-white border-blue-600' : 'bg-gray-800 text-white border-gray-700'}`}
+                  onClick={() => setPaymentMethod('card')}
                 >
                   Pay with Card
                 </button>
                 <button
-                  className={`px-4 py-2 rounded-xl border ${paymentMethod === "bank" ? "bg-blue-600 text-white border-blue-600" : "bg-gray-800 text-white border-gray-700"}`}
-                  onClick={() => setPaymentMethod("bank")}
+                  className={`px-4 py-2 rounded-xl border ${paymentMethod === 'bank' ? 'bg-blue-600 text-white border-blue-600' : 'bg-gray-800 text-white border-gray-700'}`}
+                  onClick={() => setPaymentMethod('bank')}
                 >
                   Pay with Bank
                 </button>
               </div>
-              {paymentMethod === "card" ? (
+              {paymentMethod === 'card' ? (
                 <div className="space-y-3">
-                  <input type="text" placeholder="Card Number" className="border rounded px-3 py-2 w-full bg-gray-800 text-white" />
-                  <input type="text" placeholder="Expiry (MM/YY)" className="border rounded px-3 py-2 w-full bg-gray-800 text-white" />
-                  <input type="text" placeholder="CVV" className="border rounded px-3 py-2 w-full bg-gray-800 text-white" />
+                  <input
+                    type="text"
+                    placeholder="Card Number"
+                    className="border rounded px-3 py-2 w-full bg-gray-800 text-white"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Expiry (MM/YY)"
+                    className="border rounded px-3 py-2 w-full bg-gray-800 text-white"
+                  />
+                  <input
+                    type="text"
+                    placeholder="CVV"
+                    className="border rounded px-3 py-2 w-full bg-gray-800 text-white"
+                  />
                 </div>
               ) : (
                 <div className="space-y-3">
-                  <input type="text" placeholder="Bank Name" className="border rounded px-3 py-2 w-full bg-gray-800 text-white" />
-                  <input type="text" placeholder="Account Number" className="border rounded px-3 py-2 w-full bg-gray-800 text-white" />
-                  <input type="text" placeholder="Account Name" className="border rounded px-3 py-2 w-full bg-gray-800 text-white" />
+                  <input
+                    type="text"
+                    placeholder="Bank Name"
+                    className="border rounded px-3 py-2 w-full bg-gray-800 text-white"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Account Number"
+                    className="border rounded px-3 py-2 w-full bg-gray-800 text-white"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Account Name"
+                    className="border rounded px-3 py-2 w-full bg-gray-800 text-white"
+                  />
                 </div>
               )}
             </div>
             <div className="flex justify-end gap-2 mt-6">
-              <button className="px-4 py-2 rounded-xl bg-gray-700 text-white" onClick={() => setShowCheckout(false)}>Cancel</button>
-              <button className="px-4 py-2 rounded-xl bg-blue-600 text-white font-bold">Pay Now</button>
+              <button
+                className="px-4 py-2 rounded-xl bg-gray-700 text-white"
+                onClick={() => setShowCheckout(false)}
+              >
+                Cancel
+              </button>
+              <button className="px-4 py-2 rounded-xl bg-blue-600 text-white font-bold">
+                Pay Now
+              </button>
             </div>
           </div>
         </div>

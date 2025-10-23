@@ -7,8 +7,8 @@ import { motion } from 'framer-motion';
 
 export default function AdminWidgetPage() {
   const apiUrl = `${(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api').replace(/\/$/, '')}/v${process.env.NEXT_PUBLIC_API_VERSION || '1'}/widget`;
-  const handleConfigSave = (config: any) => {
-    console.log('Widget configuration saved:', config);
+  const handleConfigSave = (config: unknown) => {
+    console.warn('Widget configuration saved:', config);
     // Here you would typically save to your backend
   };
 

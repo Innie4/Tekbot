@@ -6,11 +6,7 @@ module.exports = {
     sourceType: 'module',
     ecmaVersion: 2022,
   },
-  plugins: [
-    '@typescript-eslint/eslint-plugin',
-    'import',
-    'prettier',
-  ],
+  plugins: ['@typescript-eslint/eslint-plugin', 'import', 'prettier'],
   extends: [
     'eslint:recommended',
     '@typescript-eslint/recommended',
@@ -108,16 +104,16 @@ module.exports = {
     'no-unneeded-ternary': 'error',
     'prefer-arrow-callback': 'error',
     'arrow-body-style': ['error', 'as-needed'],
-    'curly': ['error', 'all'],
-    'eqeqeq': ['error', 'always'],
+    curly: ['error', 'all'],
+    eqeqeq: ['error', 'always'],
     'no-param-reassign': 'error',
     'no-return-assign': 'error',
     'no-sequences': 'error',
     'no-throw-literal': 'error',
     'no-void': 'error',
     'prefer-promise-reject-errors': 'error',
-    'radix': 'error',
-    'yoda': 'error',
+    radix: 'error',
+    yoda: 'error',
 
     // Prettier integration
     'prettier/prettier': 'error',
@@ -155,10 +151,7 @@ module.exports = {
         browser: true,
         es6: true,
       },
-      extends: [
-        'plugin:react/recommended',
-        'plugin:react-hooks/recommended',
-      ],
+      extends: ['plugin:react/recommended', 'plugin:react-hooks/recommended'],
       plugins: ['react', 'react-hooks'],
       settings: {
         react: {

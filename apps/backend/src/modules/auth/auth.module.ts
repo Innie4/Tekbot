@@ -26,7 +26,12 @@ import { UsersModule } from '../users/users.module';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, LocalStrategy, EmailNotificationService],
+  providers: [
+    AuthService,
+    JwtStrategy,
+    LocalStrategy,
+    EmailNotificationService,
+  ],
   exports: [AuthService, JwtModule],
 })
 export class AuthModule {}

@@ -12,8 +12,12 @@ export class WidgetConfigService {
     private widgetConfigRepository: Repository<WidgetConfig>,
   ) {}
 
-  async create(createWidgetConfigDto: CreateWidgetConfigDto): Promise<WidgetConfig> {
-    const widgetConfig = this.widgetConfigRepository.create(createWidgetConfigDto);
+  async create(
+    createWidgetConfigDto: CreateWidgetConfigDto,
+  ): Promise<WidgetConfig> {
+    const widgetConfig = this.widgetConfigRepository.create(
+      createWidgetConfigDto,
+    );
     return this.widgetConfigRepository.save(widgetConfig);
   }
 
@@ -31,7 +35,7 @@ export class WidgetConfigService {
     }
 
     let config = await this.findByTenant(tenantId);
-    
+
     if (!config) {
       config = await this.create({
         tenantId,
@@ -78,24 +82,36 @@ export class WidgetConfigService {
     return config;
   }
 
-  async update(tenantId: string, updateWidgetConfigDto: UpdateWidgetConfigDto): Promise<WidgetConfig> {
+  async update(
+    tenantId: string,
+    updateWidgetConfigDto: UpdateWidgetConfigDto,
+  ): Promise<WidgetConfig> {
     const config = await this.findOrCreateByTenant(tenantId);
-    
+
     // Deep merge the configuration objects
     if (updateWidgetConfigDto.theme) {
       config.theme = { ...config.theme, ...updateWidgetConfigDto.theme };
     }
-    
+
     if (updateWidgetConfigDto.branding) {
-      config.branding = { ...config.branding, ...updateWidgetConfigDto.branding };
+      config.branding = {
+        ...config.branding,
+        ...updateWidgetConfigDto.branding,
+      };
     }
-    
+
     if (updateWidgetConfigDto.behavior) {
-      config.behavior = { ...config.behavior, ...updateWidgetConfigDto.behavior };
+      config.behavior = {
+        ...config.behavior,
+        ...updateWidgetConfigDto.behavior,
+      };
     }
-    
+
     if (updateWidgetConfigDto.security) {
-      config.security = { ...config.security, ...updateWidgetConfigDto.security };
+      config.security = {
+        ...config.security,
+        ...updateWidgetConfigDto.security,
+      };
     }
 
     // Update other fields
@@ -112,7 +128,7 @@ export class WidgetConfigService {
 
   async getPublicConfig(tenantId: string): Promise<any> {
     const config = await this.findOrCreateByTenant(tenantId);
-    
+
     if (!config.isActive) {
       throw new NotFoundException('Widget configuration not found or inactive');
     }
@@ -143,20 +159,26 @@ export class WidgetConfigService {
 
   async generateEmbedCode(tenantId: string, domain?: string): Promise<string> {
     const config = await this.findOrCreateByTenant(tenantId);
-    
+
     if (!config.isActive) {
       throw new NotFoundException('Widget configuration not found or inactive');
     }
 
     // Check domain restrictions
-    if (config.security.allowedDomains && config.security.allowedDomains.length > 0) {
+    if (
+      config.security.allowedDomains &&
+      config.security.allowedDomains.length > 0
+    ) {
       if (!domain || !config.security.allowedDomains.includes(domain)) {
         throw new Error('Domain not allowed');
       }
     }
 
-    const baseUrl = process.env.WIDGET_CDN_URL || process.env.BASE_URL || 'http://localhost:3000';
-    
+    const baseUrl =
+      process.env.WIDGET_CDN_URL ||
+      process.env.BASE_URL ||
+      'http://localhost:3000';
+
     return `
 <!-- TekAssist Chat Widget -->
 <script>

@@ -1,13 +1,11 @@
-
-
 import { AnalyticsController } from '../src/modules/analytics/analytics.controller';
 import { BusinessMetricsService } from '../src/modules/analytics/business-metrics.service';
 import { Repository } from 'typeorm';
 
 function createMockRepository() {
   return {
-    create: jest.fn().mockImplementation((data) => data),
-    save: jest.fn().mockImplementation((data) => Promise.resolve(data)),
+    create: jest.fn().mockImplementation(data => data),
+    save: jest.fn().mockImplementation(data => Promise.resolve(data)),
   };
 }
 

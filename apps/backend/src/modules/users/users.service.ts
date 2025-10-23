@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
@@ -158,7 +162,11 @@ export class UsersService {
     });
   }
 
-  async setPasswordResetToken(email: string, token: string, expiresAt: Date): Promise<void> {
+  async setPasswordResetToken(
+    email: string,
+    token: string,
+    expiresAt: Date,
+  ): Promise<void> {
     await this.userRepository.update(
       { email },
       {
@@ -175,7 +183,11 @@ export class UsersService {
       },
     });
 
-    if (!user || !user.passwordResetExpiresAt || user.passwordResetExpiresAt < new Date()) {
+    if (
+      !user ||
+      !user.passwordResetExpiresAt ||
+      user.passwordResetExpiresAt < new Date()
+    ) {
       throw new NotFoundException('Invalid or expired password reset token');
     }
 
@@ -188,7 +200,10 @@ export class UsersService {
     });
   }
 
-  async validatePassword(plainPassword: string, hashedPassword: string): Promise<boolean> {
+  async validatePassword(
+    plainPassword: string,
+    hashedPassword: string,
+  ): Promise<boolean> {
     return bcrypt.compare(plainPassword, hashedPassword);
   }
 }

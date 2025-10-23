@@ -2,9 +2,13 @@ import { registerAs } from '@nestjs/config';
 
 export const authConfig = registerAs('auth', () => ({
   jwt: {
-    secret: process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-this-in-production',
+    secret:
+      process.env.JWT_SECRET ||
+      'your-super-secret-jwt-key-change-this-in-production',
     expiresIn: process.env.JWT_EXPIRES_IN || '7d',
-    refreshSecret: process.env.JWT_REFRESH_SECRET || 'your-super-secret-refresh-key-change-this-in-production',
+    refreshSecret:
+      process.env.JWT_REFRESH_SECRET ||
+      'your-super-secret-refresh-key-change-this-in-production',
     refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '30d',
     issuer: process.env.JWT_ISSUER || 'tekbot-platform',
     audience: process.env.JWT_AUDIENCE || 'tekbot-users',
@@ -13,7 +17,9 @@ export const authConfig = registerAs('auth', () => ({
     saltRounds: parseInt(process.env.BCRYPT_SALT_ROUNDS, 10) || 12,
   },
   session: {
-    secret: process.env.SESSION_SECRET || 'your-session-secret-change-this-in-production',
+    secret:
+      process.env.SESSION_SECRET ||
+      'your-session-secret-change-this-in-production',
     maxAge: parseInt(process.env.SESSION_MAX_AGE, 10) || 86400000, // 24 hours
     secure: process.env.NODE_ENV === 'production',
     httpOnly: true,
@@ -23,12 +29,16 @@ export const authConfig = registerAs('auth', () => ({
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackUrl: process.env.GOOGLE_CALLBACK_URL || 'http://localhost:3000/api/v1/auth/google/callback',
+      callbackUrl:
+        process.env.GOOGLE_CALLBACK_URL ||
+        'http://localhost:3000/api/v1/auth/google/callback',
     },
     microsoft: {
       clientId: process.env.MICROSOFT_CLIENT_ID,
       clientSecret: process.env.MICROSOFT_CLIENT_SECRET,
-      callbackUrl: process.env.MICROSOFT_CALLBACK_URL || 'http://localhost:3000/api/v1/auth/microsoft/callback',
+      callbackUrl:
+        process.env.MICROSOFT_CALLBACK_URL ||
+        'http://localhost:3000/api/v1/auth/microsoft/callback',
     },
   },
   passwordPolicy: {

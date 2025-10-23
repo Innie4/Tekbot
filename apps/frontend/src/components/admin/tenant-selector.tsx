@@ -29,8 +29,10 @@ export default function TenantSelector() {
 
   useEffect(() => {
     const init = async () => {
-      const existingTenantId = typeof window !== 'undefined' ? localStorage.getItem('tenant-id') : null;
-      const existingTenantSlug = typeof window !== 'undefined' ? localStorage.getItem('tenant-slug') : null;
+      const existingTenantId =
+        typeof window !== 'undefined' ? localStorage.getItem('tenant-id') : null;
+      const existingTenantSlug =
+        typeof window !== 'undefined' ? localStorage.getItem('tenant-slug') : null;
       const userRole = currentUser?.role;
 
       // Determine default selection from existing localStorage or user tenant relation
@@ -54,17 +56,27 @@ export default function TenantSelector() {
           try {
             const tenant = await api.get<any>('/tenants/current');
             if (tenant?.id) {
-              resultOptions = [{ id: tenant.id, slug: tenant.subdomain || tenant.slug, name: tenant.name }];
+              resultOptions = [
+                { id: tenant.id, slug: tenant.subdomain || tenant.slug, name: tenant.name },
+              ];
             } else {
               // Fallback to user tenant info
               if (defaultId) {
-                resultOptions = [{ id: defaultId, slug: defaultSlug || undefined, name: currentUser?.tenant?.name }];
+                resultOptions = [
+                  {
+                    id: defaultId,
+                    slug: defaultSlug || undefined,
+                    name: currentUser?.tenant?.name,
+                  },
+                ];
               }
             }
           } catch {
             // If endpoint not accessible, fallback to defaults
             if (defaultId) {
-              resultOptions = [{ id: defaultId, slug: defaultSlug || undefined, name: currentUser?.tenant?.name }];
+              resultOptions = [
+                { id: defaultId, slug: defaultSlug || undefined, name: currentUser?.tenant?.name },
+              ];
             }
           }
         }
@@ -122,7 +134,9 @@ export default function TenantSelector() {
 
   return (
     <div className="flex items-center gap-2">
-      <label htmlFor="tenant-selector" className="sr-only">Tenant</label>
+      <label htmlFor="tenant-selector" className="sr-only">
+        Tenant
+      </label>
       <select
         id="tenant-selector"
         value={selectedId || ''}

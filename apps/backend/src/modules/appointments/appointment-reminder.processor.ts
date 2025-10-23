@@ -27,7 +27,9 @@ export class AppointmentReminderProcessor {
     } = job.data;
 
     try {
-      this.logger.log(`Processing reminder for appointment ${appointmentId} (${reminderMinutes} minutes before)`);
+      this.logger.log(
+        `Processing reminder for appointment ${appointmentId} (${reminderMinutes} minutes before)`,
+      );
 
       const appointmentDateTime = new Date(appointmentTime);
       const formattedDate = appointmentDateTime.toLocaleDateString('en-US', {
@@ -54,7 +56,10 @@ export class AppointmentReminderProcessor {
       });
 
       // Send email reminder
-      if ((reminderType === 'email' || reminderType === 'both') && customerEmail) {
+      if (
+        (reminderType === 'email' || reminderType === 'both') &&
+        customerEmail
+      ) {
         await this.sendEmailReminder({
           tenantId,
           appointmentId,
@@ -71,7 +76,10 @@ export class AppointmentReminderProcessor {
       }
 
       // Send SMS reminder
-      if ((reminderType === 'sms' || reminderType === 'both') && customerPhone) {
+      if (
+        (reminderType === 'sms' || reminderType === 'both') &&
+        customerPhone
+      ) {
         await this.sendSmsReminder({
           tenantId,
           appointmentId,
@@ -92,9 +100,14 @@ export class AppointmentReminderProcessor {
         `${formattedDate} at ${formattedTime}`,
       );
 
-      this.logger.log(`Successfully sent reminder for appointment ${appointmentId}`);
+      this.logger.log(
+        `Successfully sent reminder for appointment ${appointmentId}`,
+      );
     } catch (error) {
-      this.logger.error(`Error processing reminder for appointment ${appointmentId}:`, error);
+      this.logger.error(
+        `Error processing reminder for appointment ${appointmentId}:`,
+        error,
+      );
       throw error; // Re-throw to trigger retry mechanism
     }
   }
@@ -122,9 +135,14 @@ export class AppointmentReminderProcessor {
         html: emailHtml,
       });
 
-      this.logger.log(`Email reminder sent to ${params.customerEmail} for appointment ${params.appointmentId}`);
+      this.logger.log(
+        `Email reminder sent to ${params.customerEmail} for appointment ${params.appointmentId}`,
+      );
     } catch (error) {
-      this.logger.error(`Error sending email reminder for appointment ${params.appointmentId}:`, error);
+      this.logger.error(
+        `Error sending email reminder for appointment ${params.appointmentId}:`,
+        error,
+      );
       throw error;
     }
   }
@@ -147,9 +165,14 @@ export class AppointmentReminderProcessor {
         body: smsMessage,
       });
 
-      this.logger.log(`SMS reminder sent to ${params.customerPhone} for appointment ${params.appointmentId}`);
+      this.logger.log(
+        `SMS reminder sent to ${params.customerPhone} for appointment ${params.appointmentId}`,
+      );
     } catch (error) {
-      this.logger.error(`Error sending SMS reminder for appointment ${params.appointmentId}:`, error);
+      this.logger.error(
+        `Error sending SMS reminder for appointment ${params.appointmentId}:`,
+        error,
+      );
       throw error;
     }
   }
@@ -176,9 +199,11 @@ export class AppointmentReminderProcessor {
     formattedTime: string;
     reminderMinutes: number;
   }): string {
-    const timePhrase = this.getReminderTitle(params.reminderMinutes).toLowerCase();
+    const timePhrase = this.getReminderTitle(
+      params.reminderMinutes,
+    ).toLowerCase();
     const staffInfo = params.staffName ? ` with ${params.staffName}` : '';
-    
+
     return `Hi ${params.customerName}! This is a reminder that you have a ${params.serviceName} appointment${staffInfo} ${timePhrase} on ${params.formattedDate} at ${params.formattedTime}.`;
   }
 
@@ -227,12 +252,16 @@ export class AppointmentReminderProcessor {
                     <span class="label">Service:</span>
                     <span class="value">${params.serviceName}</span>
                 </div>
-                ${params.staffName ? `
+                ${
+                  params.staffName
+                    ? `
                 <div class="detail-row">
                     <span class="label">Staff:</span>
                     <span class="value">${params.staffName}</span>
                 </div>
-                ` : ''}
+                `
+                    : ''
+                }
                 <div class="detail-row">
                     <span class="label">Date:</span>
                     <span class="value">${params.formattedDate}</span>

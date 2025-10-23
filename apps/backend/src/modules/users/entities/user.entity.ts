@@ -68,7 +68,7 @@ export class User {
   @Column({ type: 'uuid', nullable: true })
   tenantId?: string;
 
-  @ManyToOne(() => Tenant, (tenant) => tenant.users, {
+  @ManyToOne(() => Tenant, tenant => tenant.users, {
     onDelete: 'CASCADE',
     nullable: true,
   })

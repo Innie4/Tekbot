@@ -100,7 +100,7 @@ export interface WidgetProps {
 }
 
 // Widget event types
-export type WidgetEventType = 
+export type WidgetEventType =
   | 'WIDGET_READY'
   | 'WIDGET_OPEN'
   | 'WIDGET_CLOSE'

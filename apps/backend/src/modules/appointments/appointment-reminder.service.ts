@@ -43,13 +43,13 @@ export class AppointmentReminderService {
   async scheduleUpcomingReminders(): Promise<void> {
     try {
       this.logger.log('Checking for appointments needing reminders...');
-      
+
       const reminderIntervals = this.getReminderIntervals();
-      
+
       for (const interval of reminderIntervals) {
         await this.scheduleRemindersForInterval(interval);
       }
-      
+
       this.logger.log('Reminder scheduling completed');
     } catch (error) {
       this.logger.error('Error scheduling reminders:', error);
@@ -59,11 +59,13 @@ export class AppointmentReminderService {
   /**
    * Schedule reminders for a specific time interval
    */
-  private async scheduleRemindersForInterval(reminderMinutes: number): Promise<void> {
+  private async scheduleRemindersForInterval(
+    reminderMinutes: number,
+  ): Promise<void> {
     const now = new Date();
-    const reminderTime = new Date(now.getTime() + (reminderMinutes * 60 * 1000));
-    const windowStart = new Date(reminderTime.getTime() - (2.5 * 60 * 1000)); // 2.5 minutes before
-    const windowEnd = new Date(reminderTime.getTime() + (2.5 * 60 * 1000)); // 2.5 minutes after
+    const reminderTime = new Date(now.getTime() + reminderMinutes * 60 * 1000);
+    const windowStart = new Date(reminderTime.getTime() - 2.5 * 60 * 1000); // 2.5 minutes before
+    const windowEnd = new Date(reminderTime.getTime() + 2.5 * 60 * 1000); // 2.5 minutes after
 
     const appointments = await this.appointmentRepository.find({
       where: {
@@ -73,7 +75,9 @@ export class AppointmentReminderService {
       relations: ['customer', 'service', 'staff'],
     });
 
-    this.logger.log(`Found ${appointments.length} appointments for ${reminderMinutes}-minute reminders`);
+    this.logger.log(
+      `Found ${appointments.length} appointments for ${reminderMinutes}-minute reminders`,
+    );
 
     for (const appointment of appointments) {
       await this.scheduleReminderJob(appointment, reminderMinutes);
@@ -83,17 +87,26 @@ export class AppointmentReminderService {
   /**
    * Schedule a reminder job for a specific appointment
    */
-  async scheduleReminderJob(appointment: Appointment, reminderMinutes: number): Promise<void> {
+  async scheduleReminderJob(
+    appointment: Appointment,
+    reminderMinutes: number,
+  ): Promise<void> {
     try {
       // Check if reminder already scheduled for this appointment and interval
-      const existingJobs = await this.reminderQueue.getJobs(['delayed', 'waiting']);
-      const jobExists = existingJobs.some(job => 
-        job.data.appointmentId === appointment.id && 
-        job.data.reminderMinutes === reminderMinutes
+      const existingJobs = await this.reminderQueue.getJobs([
+        'delayed',
+        'waiting',
+      ]);
+      const jobExists = existingJobs.some(
+        job =>
+          job.data.appointmentId === appointment.id &&
+          job.data.reminderMinutes === reminderMinutes,
       );
 
       if (jobExists) {
-        this.logger.debug(`Reminder already scheduled for appointment ${appointment.id} at ${reminderMinutes} minutes`);
+        this.logger.debug(
+          `Reminder already scheduled for appointment ${appointment.id} at ${reminderMinutes} minutes`,
+        );
         return;
       }
 
@@ -112,7 +125,9 @@ export class AppointmentReminderService {
       };
 
       // Calculate delay until reminder should be sent
-      const reminderTime = new Date(appointment.start_time.getTime() - (reminderMinutes * 60 * 1000));
+      const reminderTime = new Date(
+        appointment.start_time.getTime() - reminderMinutes * 60 * 1000,
+      );
       const delay = Math.max(0, reminderTime.getTime() - Date.now());
 
       await this.reminderQueue.add('send-reminder', reminderJobData, {
@@ -127,9 +142,14 @@ export class AppointmentReminderService {
         },
       });
 
-      this.logger.log(`Scheduled ${reminderMinutes}-minute reminder for appointment ${appointment.id}`);
+      this.logger.log(
+        `Scheduled ${reminderMinutes}-minute reminder for appointment ${appointment.id}`,
+      );
     } catch (error) {
-      this.logger.error(`Error scheduling reminder for appointment ${appointment.id}:`, error);
+      this.logger.error(
+        `Error scheduling reminder for appointment ${appointment.id}:`,
+        error,
+      );
     }
   }
 
@@ -139,15 +159,22 @@ export class AppointmentReminderService {
   async cancelReminders(appointmentId: string): Promise<void> {
     try {
       const jobs = await this.reminderQueue.getJobs(['delayed', 'waiting']);
-      const appointmentJobs = jobs.filter(job => job.data.appointmentId === appointmentId);
+      const appointmentJobs = jobs.filter(
+        job => job.data.appointmentId === appointmentId,
+      );
 
       for (const job of appointmentJobs) {
         await job.remove();
       }
 
-      this.logger.log(`Cancelled ${appointmentJobs.length} reminders for appointment ${appointmentId}`);
+      this.logger.log(
+        `Cancelled ${appointmentJobs.length} reminders for appointment ${appointmentId}`,
+      );
     } catch (error) {
-      this.logger.error(`Error cancelling reminders for appointment ${appointmentId}:`, error);
+      this.logger.error(
+        `Error cancelling reminders for appointment ${appointmentId}:`,
+        error,
+      );
     }
   }
 
@@ -177,14 +204,20 @@ export class AppointmentReminderService {
 
       this.logger.log(`Rescheduled reminders for appointment ${appointmentId}`);
     } catch (error) {
-      this.logger.error(`Error rescheduling reminders for appointment ${appointmentId}:`, error);
+      this.logger.error(
+        `Error rescheduling reminders for appointment ${appointmentId}:`,
+        error,
+      );
     }
   }
 
   /**
    * Send immediate reminder for an appointment
    */
-  async sendImmediateReminder(appointmentId: string, reminderType: 'email' | 'sms' | 'both' = 'both'): Promise<void> {
+  async sendImmediateReminder(
+    appointmentId: string,
+    reminderType: 'email' | 'sms' | 'both' = 'both',
+  ): Promise<void> {
     try {
       const appointment = await this.appointmentRepository.findOne({
         where: { id: appointmentId },
@@ -215,9 +248,14 @@ export class AppointmentReminderService {
         removeOnFail: 3,
       });
 
-      this.logger.log(`Queued immediate reminder for appointment ${appointmentId}`);
+      this.logger.log(
+        `Queued immediate reminder for appointment ${appointmentId}`,
+      );
     } catch (error) {
-      this.logger.error(`Error sending immediate reminder for appointment ${appointmentId}:`, error);
+      this.logger.error(
+        `Error sending immediate reminder for appointment ${appointmentId}:`,
+        error,
+      );
       throw error;
     }
   }
@@ -227,12 +265,16 @@ export class AppointmentReminderService {
    */
   private getReminderIntervals(): number[] {
     const defaultIntervals = [1440, 60, 15]; // 24 hours, 1 hour, 15 minutes
-    const configIntervals = this.configService.get<string>('APPOINTMENT_REMINDER_INTERVALS');
-    
+    const configIntervals = this.configService.get<string>(
+      'APPOINTMENT_REMINDER_INTERVALS',
+    );
+
     if (configIntervals) {
-      return configIntervals.split(',').map(interval => parseInt(interval.trim(), 10));
+      return configIntervals
+        .split(',')
+        .map(interval => parseInt(interval.trim(), 10));
     }
-    
+
     return defaultIntervals;
   }
 
@@ -241,9 +283,15 @@ export class AppointmentReminderService {
    */
   private getReminderType(tenantId: string): 'email' | 'sms' | 'both' {
     // This could be enhanced to check tenant preferences from database
-    const emailEnabled = this.configService.get<boolean>('APPOINTMENT_EMAIL_REMINDERS_ENABLED', true);
-    const smsEnabled = this.configService.get<boolean>('APPOINTMENT_SMS_REMINDERS_ENABLED', false);
-    
+    const emailEnabled = this.configService.get<boolean>(
+      'APPOINTMENT_EMAIL_REMINDERS_ENABLED',
+      true,
+    );
+    const smsEnabled = this.configService.get<boolean>(
+      'APPOINTMENT_SMS_REMINDERS_ENABLED',
+      false,
+    );
+
     if (emailEnabled && smsEnabled) return 'both';
     if (smsEnabled) return 'sms';
     return 'email';

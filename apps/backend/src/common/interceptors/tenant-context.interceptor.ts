@@ -1,4 +1,9 @@
-import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
+import {
+  Injectable,
+  NestInterceptor,
+  ExecutionContext,
+  CallHandler,
+} from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { DataSource } from 'typeorm';
 
@@ -11,7 +16,10 @@ export class TenantContextInterceptor implements NestInterceptor {
     await this.dataSource.query(`SET LOCAL app.current_tenant = '${tenantId}'`);
   }
 
-  async intercept(context: ExecutionContext, next: CallHandler): Promise<Observable<any>> {
+  async intercept(
+    context: ExecutionContext,
+    next: CallHandler,
+  ): Promise<Observable<any>> {
     const request = context.switchToHttp().getRequest();
     const tenantId = request?.tenant?.id;
     if (tenantId) {

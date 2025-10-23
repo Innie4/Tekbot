@@ -1,4 +1,16 @@
-import { Controller, Post, Body, Headers, Inject, Logger, HttpStatus, HttpException, RawBodyRequest, Req, SetMetadata } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Headers,
+  Inject,
+  Logger,
+  HttpStatus,
+  HttpException,
+  RawBodyRequest,
+  Req,
+  SetMetadata,
+} from '@nestjs/common';
 import { StripeService } from '../payments/stripe.service';
 import { PaymentsService } from '../payments/payments.service';
 import { AppointmentsService } from '../appointments/appointments.service';
@@ -20,19 +32,28 @@ export class StripeWebhookController {
   ) {}
 
   @Post('payments')
-  async handlePayments(@Req() req: RawBodyRequest<Request>, @Headers('stripe-signature') sig: string) {
+  async handlePayments(
+    @Req() req: RawBodyRequest<Request>,
+    @Headers('stripe-signature') sig: string,
+  ) {
     try {
       const event = await this.stripeService.verifyWebhook(req.rawBody, sig);
-      
+
       switch (event.type) {
         case 'payment_intent.succeeded':
-          await this.handlePaymentSuccess(event.data.object as Stripe.PaymentIntent);
+          await this.handlePaymentSuccess(
+            event.data.object as Stripe.PaymentIntent,
+          );
           break;
         case 'payment_intent.payment_failed':
-          await this.handlePaymentFailed(event.data.object as Stripe.PaymentIntent);
+          await this.handlePaymentFailed(
+            event.data.object as Stripe.PaymentIntent,
+          );
           break;
         case 'payment_intent.canceled':
-          await this.handlePaymentCanceled(event.data.object as Stripe.PaymentIntent);
+          await this.handlePaymentCanceled(
+            event.data.object as Stripe.PaymentIntent,
+          );
           break;
         case 'charge.dispute.created':
           await this.handleChargeDispute(event.data.object as Stripe.Dispute);
@@ -43,31 +64,50 @@ export class StripeWebhookController {
 
       return { received: true };
     } catch (error) {
-      this.logger.error(`Stripe payment webhook error: ${error.message}`, error.stack);
-      throw new HttpException('Webhook processing failed', HttpStatus.BAD_REQUEST);
+      this.logger.error(
+        `Stripe payment webhook error: ${error.message}`,
+        error.stack,
+      );
+      throw new HttpException(
+        'Webhook processing failed',
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 
   @Post('subscriptions')
-  async handleSubscriptions(@Req() req: RawBodyRequest<Request>, @Headers('stripe-signature') sig: string) {
+  async handleSubscriptions(
+    @Req() req: RawBodyRequest<Request>,
+    @Headers('stripe-signature') sig: string,
+  ) {
     try {
       const event = await this.stripeService.verifyWebhook(req.rawBody, sig);
-      
+
       switch (event.type) {
         case 'customer.subscription.created':
-          await this.handleSubscriptionCreated(event.data.object as Stripe.Subscription);
+          await this.handleSubscriptionCreated(
+            event.data.object as Stripe.Subscription,
+          );
           break;
         case 'customer.subscription.updated':
-          await this.handleSubscriptionUpdated(event.data.object as Stripe.Subscription);
+          await this.handleSubscriptionUpdated(
+            event.data.object as Stripe.Subscription,
+          );
           break;
         case 'customer.subscription.deleted':
-          await this.handleSubscriptionCanceled(event.data.object as Stripe.Subscription);
+          await this.handleSubscriptionCanceled(
+            event.data.object as Stripe.Subscription,
+          );
           break;
         case 'invoice.payment_succeeded':
-          await this.handleInvoicePaymentSucceeded(event.data.object as Stripe.Invoice);
+          await this.handleInvoicePaymentSucceeded(
+            event.data.object as Stripe.Invoice,
+          );
           break;
         case 'invoice.payment_failed':
-          await this.handleInvoicePaymentFailed(event.data.object as Stripe.Invoice);
+          await this.handleInvoicePaymentFailed(
+            event.data.object as Stripe.Invoice,
+          );
           break;
         default:
           this.logger.warn(`Unhandled subscription event type: ${event.type}`);
@@ -75,25 +115,40 @@ export class StripeWebhookController {
 
       return { received: true };
     } catch (error) {
-      this.logger.error(`Stripe subscription webhook error: ${error.message}`, error.stack);
-      throw new HttpException('Webhook processing failed', HttpStatus.BAD_REQUEST);
+      this.logger.error(
+        `Stripe subscription webhook error: ${error.message}`,
+        error.stack,
+      );
+      throw new HttpException(
+        'Webhook processing failed',
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 
   @Post('customers')
-  async handleCustomers(@Req() req: RawBodyRequest<Request>, @Headers('stripe-signature') sig: string) {
+  async handleCustomers(
+    @Req() req: RawBodyRequest<Request>,
+    @Headers('stripe-signature') sig: string,
+  ) {
     try {
       const event = await this.stripeService.verifyWebhook(req.rawBody, sig);
-      
+
       switch (event.type) {
         case 'customer.created':
-          await this.handleCustomerCreated(event.data.object as Stripe.Customer);
+          await this.handleCustomerCreated(
+            event.data.object as Stripe.Customer,
+          );
           break;
         case 'customer.updated':
-          await this.handleCustomerUpdated(event.data.object as Stripe.Customer);
+          await this.handleCustomerUpdated(
+            event.data.object as Stripe.Customer,
+          );
           break;
         case 'customer.deleted':
-          await this.handleCustomerDeleted(event.data.object as Stripe.Customer);
+          await this.handleCustomerDeleted(
+            event.data.object as Stripe.Customer,
+          );
           break;
         default:
           this.logger.warn(`Unhandled customer event type: ${event.type}`);
@@ -101,8 +156,14 @@ export class StripeWebhookController {
 
       return { received: true };
     } catch (error) {
-      this.logger.error(`Stripe customer webhook error: ${error.message}`, error.stack);
-      throw new HttpException('Webhook processing failed', HttpStatus.BAD_REQUEST);
+      this.logger.error(
+        `Stripe customer webhook error: ${error.message}`,
+        error.stack,
+      );
+      throw new HttpException(
+        'Webhook processing failed',
+        HttpStatus.BAD_REQUEST,
+      );
     }
   }
 
@@ -117,7 +178,10 @@ export class StripeWebhookController {
     }
 
     // Update payment record
-    const payment = await this.paymentsService.findOneForTenant(tenantId, paymentIntent.id);
+    const payment = await this.paymentsService.findOneForTenant(
+      tenantId,
+      paymentIntent.id,
+    );
     if (payment) {
       await this.paymentsService.updateForTenant(tenantId, payment.id, {
         status: 'completed',
@@ -141,9 +205,15 @@ export class StripeWebhookController {
     });
 
     // Send notifications
-    await this.notificationService.sendPaymentConfirmation(tenantId, appointmentId, paymentIntent.amount / 100);
-    
-    this.logger.log(`Payment succeeded for appointment ${appointmentId}, tenant ${tenantId}`);
+    await this.notificationService.sendPaymentConfirmation(
+      tenantId,
+      appointmentId,
+      paymentIntent.amount / 100,
+    );
+
+    this.logger.log(
+      `Payment succeeded for appointment ${appointmentId}, tenant ${tenantId}`,
+    );
   }
 
   private async handlePaymentFailed(paymentIntent: Stripe.PaymentIntent) {
@@ -173,8 +243,10 @@ export class StripeWebhookController {
 
     // Send failure notification
     await this.notificationService.sendPaymentFailure(tenantId, appointmentId);
-    
-    this.logger.warn(`Payment failed for appointment ${appointmentId}, tenant ${tenantId}`);
+
+    this.logger.warn(
+      `Payment failed for appointment ${appointmentId}, tenant ${tenantId}`,
+    );
   }
 
   private async handlePaymentCanceled(paymentIntent: Stripe.PaymentIntent) {
@@ -201,25 +273,32 @@ export class StripeWebhookController {
     await this.appointmentsService.updateForTenant(tenantId, appointmentId, {
       status: 'payment_canceled',
     });
-    
-    this.logger.log(`Payment canceled for appointment ${appointmentId}, tenant ${tenantId}`);
+
+    this.logger.log(
+      `Payment canceled for appointment ${appointmentId}, tenant ${tenantId}`,
+    );
   }
 
   private async handleChargeDispute(dispute: Stripe.Dispute) {
     const charge = dispute.charge as Stripe.Charge;
     const paymentIntent = charge.payment_intent as string;
-    
+
     // Log dispute for manual review
-    this.logger.error(`Charge dispute created for payment intent: ${paymentIntent}`, {
-      disputeId: dispute.id,
-      amount: dispute.amount,
-      reason: dispute.reason,
-      status: dispute.status,
-    });
+    this.logger.error(
+      `Charge dispute created for payment intent: ${paymentIntent}`,
+      {
+        disputeId: dispute.id,
+        amount: dispute.amount,
+        reason: dispute.reason,
+        status: dispute.status,
+      },
+    );
 
     // Send alert to admin
-    await this.notificationService.sendAdminAlert('Payment Dispute', 
-      `A dispute has been created for payment ${paymentIntent}. Amount: $${dispute.amount / 100}. Reason: ${dispute.reason}`);
+    await this.notificationService.sendAdminAlert(
+      'Payment Dispute',
+      `A dispute has been created for payment ${paymentIntent}. Amount: $${dispute.amount / 100}. Reason: ${dispute.reason}`,
+    );
   }
 
   private async handleSubscriptionCreated(subscription: Stripe.Subscription) {
@@ -231,13 +310,15 @@ export class StripeWebhookController {
       return;
     }
 
-    this.logger.log(`Subscription created for tenant ${tenantId}, customer ${customerId}`);
+    this.logger.log(
+      `Subscription created for tenant ${tenantId}, customer ${customerId}`,
+    );
     // Additional subscription logic can be added here
   }
 
   private async handleSubscriptionUpdated(subscription: Stripe.Subscription) {
     const tenantId = subscription.metadata?.tenantId;
-    
+
     if (!tenantId) {
       this.logger.warn('Missing tenantId in subscription metadata');
       return;
@@ -249,7 +330,7 @@ export class StripeWebhookController {
 
   private async handleSubscriptionCanceled(subscription: Stripe.Subscription) {
     const tenantId = subscription.metadata?.tenantId;
-    
+
     if (!tenantId) {
       this.logger.warn('Missing tenantId in subscription metadata');
       return;
@@ -261,7 +342,7 @@ export class StripeWebhookController {
 
   private async handleInvoicePaymentSucceeded(invoice: Stripe.Invoice) {
     const tenantId = invoice.metadata?.tenantId;
-    
+
     if (!tenantId) {
       this.logger.warn('Missing tenantId in invoice metadata');
       return;
@@ -273,7 +354,7 @@ export class StripeWebhookController {
 
   private async handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
     const tenantId = invoice.metadata?.tenantId;
-    
+
     if (!tenantId) {
       this.logger.warn('Missing tenantId in invoice metadata');
       return;
@@ -281,8 +362,10 @@ export class StripeWebhookController {
 
     this.logger.warn(`Invoice payment failed for tenant ${tenantId}`);
     // Handle failed invoice payment
-    await this.notificationService.sendAdminAlert('Invoice Payment Failed', 
-      `Invoice payment failed for tenant ${tenantId}. Amount: $${invoice.amount_due / 100}`);
+    await this.notificationService.sendAdminAlert(
+      'Invoice Payment Failed',
+      `Invoice payment failed for tenant ${tenantId}. Amount: $${invoice.amount_due / 100}`,
+    );
   }
 
   private async handleCustomerCreated(customer: Stripe.Customer) {

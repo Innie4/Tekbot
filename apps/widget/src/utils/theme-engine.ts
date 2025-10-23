@@ -55,11 +55,14 @@ export class ThemeEngine {
       '--tekassist-background-color': theme.backgroundColor || '#FFFFFF',
       '--tekassist-text-color': theme.textColor || '#1F2937',
       '--tekassist-border-radius': theme.borderRadius || '8px',
-      '--tekassist-font-family': theme.fontFamily || 'system-ui, -apple-system, sans-serif',
+      '--tekassist-font-family':
+        theme.fontFamily || 'system-ui, -apple-system, sans-serif',
       '--tekassist-font-size': theme.fontSize || '14px',
-      '--tekassist-button-color': theme.buttonColor || theme.primaryColor || '#3B82F6',
+      '--tekassist-button-color':
+        theme.buttonColor || theme.primaryColor || '#3B82F6',
       '--tekassist-button-text-color': theme.buttonTextColor || '#FFFFFF',
-      '--tekassist-header-color': theme.headerColor || theme.primaryColor || '#3B82F6',
+      '--tekassist-header-color':
+        theme.headerColor || theme.primaryColor || '#3B82F6',
       '--tekassist-header-text-color': theme.headerTextColor || '#FFFFFF',
     };
 
@@ -80,8 +83,10 @@ export class ThemeEngine {
 
     // Create or update component-specific CSS class
     const className = `tekassist-${componentName}`;
-    let styleElement = document.getElementById(`tekassist-styles-${componentName}`);
-    
+    let styleElement = document.getElementById(
+      `tekassist-styles-${componentName}`,
+    );
+
     if (!styleElement) {
       styleElement = document.createElement('style');
       styleElement.id = `tekassist-styles-${componentName}`;
@@ -114,7 +119,7 @@ export class ThemeEngine {
    */
   removeTheme(themeId: string = 'default'): void {
     this.appliedThemes.delete(themeId);
-    
+
     if (themeId === 'default' && this.rootElement) {
       // Remove CSS variables
       const cssVariables = [
@@ -142,8 +147,10 @@ export class ThemeEngine {
    */
   removeComponentStyles(componentName: string): void {
     this.componentStyles.delete(componentName);
-    
-    const styleElement = document.getElementById(`tekassist-styles-${componentName}`);
+
+    const styleElement = document.getElementById(
+      `tekassist-styles-${componentName}`,
+    );
     if (styleElement) {
       styleElement.remove();
     }
@@ -154,14 +161,14 @@ export class ThemeEngine {
    */
   cleanup(): void {
     this.appliedThemes.clear();
-    
+
     // Remove all component style elements
     this.componentStyles.forEach((_, componentName) => {
       this.removeComponentStyles(componentName);
     });
-    
+
     this.componentStyles.clear();
-    
+
     // Remove theme variables from root element
     this.removeTheme('default');
   }
@@ -186,7 +193,7 @@ export class ThemeEngine {
   private dispatchThemeChangeEvent(themeId: string, theme: ThemeConfig): void {
     if (typeof window !== 'undefined') {
       const event = new CustomEvent('tekassist:theme-change', {
-        detail: { themeId, theme }
+        detail: { themeId, theme },
       });
       window.dispatchEvent(event);
     }

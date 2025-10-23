@@ -47,9 +47,7 @@ const ServicesPanel: React.FC = () => {
   };
 
   const getStatusColor = (isActive: boolean) => {
-    return isActive 
-      ? 'bg-green-100 text-green-800' 
-      : 'bg-gray-100 text-gray-800';
+    return isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800';
   };
 
   if (loading) {
@@ -156,12 +154,12 @@ const ServicesPanel: React.FC = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">
-                      {formatDuration(service.duration)}
-                    </div>
+                    <div className="text-sm text-gray-900">{formatDuration(service.duration)}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(service.is_active)}`}>
+                    <span
+                      className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(service.is_active)}`}
+                    >
                       {service.is_active ? 'Active' : 'Inactive'}
                     </span>
                   </td>
@@ -171,21 +169,15 @@ const ServicesPanel: React.FC = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button className="text-blue-600 hover:text-blue-900 mr-3">
-                      Edit
-                    </button>
+                    <button className="text-blue-600 hover:text-blue-900 mr-3">Edit</button>
                     {service.is_active ? (
                       <button className="text-yellow-600 hover:text-yellow-900 mr-3">
                         Deactivate
                       </button>
                     ) : (
-                      <button className="text-green-600 hover:text-green-900 mr-3">
-                        Activate
-                      </button>
+                      <button className="text-green-600 hover:text-green-900 mr-3">Activate</button>
                     )}
-                    <button className="text-red-600 hover:text-red-900">
-                      Delete
-                    </button>
+                    <button className="text-red-600 hover:text-red-900">Delete</button>
                   </td>
                 </tr>
               ))}

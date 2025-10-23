@@ -1,4 +1,12 @@
-import { IsString, IsOptional, IsBoolean, IsEnum, IsObject, IsArray, IsNumber } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsBoolean,
+  IsEnum,
+  IsObject,
+  IsArray,
+  IsNumber,
+} from 'class-validator';
 
 export class CreateWidgetConfigDto {
   @IsString()

@@ -49,10 +49,14 @@ export default function ServiceCards() {
           className="text-center mb-16"
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Our <span className="bg-gradient-to-r from-electric-blue to-electric-cyan bg-clip-text text-transparent">Services</span>
+            Our{' '}
+            <span className="bg-gradient-to-r from-electric-blue to-electric-cyan bg-clip-text text-transparent">
+              Services
+            </span>
           </h2>
           <p className="text-xl text-foreground/70 max-w-2xl mx-auto">
-            Comprehensive technical support powered by AI to solve your problems quickly and efficiently
+            Comprehensive technical support powered by AI to solve your problems quickly and
+            efficiently
           </p>
         </motion.div>
 

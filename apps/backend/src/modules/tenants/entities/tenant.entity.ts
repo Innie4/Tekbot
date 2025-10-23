@@ -92,7 +92,7 @@ export class Tenant {
   @Column({ type: 'json', nullable: true })
   metadata?: Record<string, any>;
 
-  @OneToMany(() => User, (user) => user.tenant)
+  @OneToMany(() => User, user => user.tenant)
   users: User[];
 
   @CreateDateColumn()
@@ -107,7 +107,11 @@ export class Tenant {
   }
 
   get isOnTrial(): boolean {
-    return this.status === TenantStatus.TRIAL && this.trialEndsAt && this.trialEndsAt > new Date();
+    return (
+      this.status === TenantStatus.TRIAL &&
+      this.trialEndsAt &&
+      this.trialEndsAt > new Date()
+    );
   }
 
   get hasActiveSubscription(): boolean {

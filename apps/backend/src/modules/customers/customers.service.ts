@@ -7,7 +7,7 @@ import { Customer } from './entities/customer.entity';
 export class CustomersService {
   constructor(
     @InjectRepository(Customer)
-    private readonly customerRepository: Repository<Customer>
+    private readonly customerRepository: Repository<Customer>,
   ) {}
 
   async findAllForTenant(tenantId: string) {
@@ -32,9 +32,9 @@ export class CustomersService {
   }
 
   async findByPhone(phone: string): Promise<Customer | null> {
-    return this.customerRepository.findOne({ 
+    return this.customerRepository.findOne({
       where: { phone },
-      relations: ['tenant']
+      relations: ['tenant'],
     });
   }
 

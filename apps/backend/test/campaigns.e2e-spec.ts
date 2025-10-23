@@ -11,7 +11,12 @@ import { Queue } from 'bull';
 import { getQueueToken } from '@nestjs/bull';
 import { CampaignsModule } from '../src/modules/campaigns/campaigns.module';
 import { NotificationsModule } from '../src/modules/notifications/notifications.module';
-import { Campaign, CampaignStatus, CampaignType, TriggerType } from '../src/modules/campaigns/entities/campaign.entity';
+import {
+  Campaign,
+  CampaignStatus,
+  CampaignType,
+  TriggerType,
+} from '../src/modules/campaigns/entities/campaign.entity';
 import { Customer } from '../src/modules/customers/entities/customer.entity';
 import { Appointment } from '../src/modules/appointments/entities/appointment.entity';
 import { Tenant } from '../src/modules/tenants/entities/tenant.entity';
@@ -68,12 +73,24 @@ describe('Campaigns (E2E)', () => {
     app = moduleFixture.createNestApplication();
     await app.init();
 
-    campaignRepository = moduleFixture.get<Repository<Campaign>>(getRepositoryToken(Campaign));
-    customerRepository = moduleFixture.get<Repository<Customer>>(getRepositoryToken(Customer));
-    appointmentRepository = moduleFixture.get<Repository<Appointment>>(getRepositoryToken(Appointment));
-    tenantRepository = moduleFixture.get<Repository<Tenant>>(getRepositoryToken(Tenant));
-    userRepository = moduleFixture.get<Repository<User>>(getRepositoryToken(User));
-    campaignQueue = moduleFixture.get<Queue>(getQueueToken('campaign-execution'));
+    campaignRepository = moduleFixture.get<Repository<Campaign>>(
+      getRepositoryToken(Campaign),
+    );
+    customerRepository = moduleFixture.get<Repository<Customer>>(
+      getRepositoryToken(Customer),
+    );
+    appointmentRepository = moduleFixture.get<Repository<Appointment>>(
+      getRepositoryToken(Appointment),
+    );
+    tenantRepository = moduleFixture.get<Repository<Tenant>>(
+      getRepositoryToken(Tenant),
+    );
+    userRepository = moduleFixture.get<Repository<User>>(
+      getRepositoryToken(User),
+    );
+    campaignQueue = moduleFixture.get<Queue>(
+      getQueueToken('campaign-execution'),
+    );
 
     // Setup test data
     await setupTestData();
@@ -158,7 +175,8 @@ describe('Campaigns (E2E)', () => {
         triggerType: TriggerType.MANUAL,
         subject: 'Welcome {{firstName}}!',
         content: 'Hello {{firstName}}, welcome to {{companyName}}!',
-        htmlContent: '<h1>Welcome {{firstName}}!</h1><p>Hello {{firstName}}, welcome to {{companyName}}!</p>',
+        htmlContent:
+          '<h1>Welcome {{firstName}}!</h1><p>Hello {{firstName}}, welcome to {{companyName}}!</p>',
         targetAudience: {
           customerIds: testCustomers.map(c => c.id),
         },
@@ -524,7 +542,9 @@ describe('Campaigns (E2E)', () => {
         .expect(200);
 
       expect(draftCampaigns.body).toHaveLength(2);
-      expect(draftCampaigns.body.every(c => c.status === CampaignStatus.DRAFT)).toBe(true);
+      expect(
+        draftCampaigns.body.every(c => c.status === CampaignStatus.DRAFT),
+      ).toBe(true);
     });
   });
 

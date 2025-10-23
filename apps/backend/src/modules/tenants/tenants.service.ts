@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Tenant, TenantStatus } from './entities/tenant.entity';
@@ -49,7 +53,9 @@ export class TenantsService {
     if (tenantData.subdomain) {
       const existingTenant = await this.findBySubdomain(tenantData.subdomain);
       if (existingTenant) {
-        throw new ConflictException('Tenant with this subdomain already exists');
+        throw new ConflictException(
+          'Tenant with this subdomain already exists',
+        );
       }
     }
 
@@ -77,7 +83,9 @@ export class TenantsService {
     if (updateData.subdomain && updateData.subdomain !== tenant.subdomain) {
       const existingTenant = await this.findBySubdomain(updateData.subdomain);
       if (existingTenant) {
-        throw new ConflictException('Tenant with this subdomain already exists');
+        throw new ConflictException(
+          'Tenant with this subdomain already exists',
+        );
       }
     }
 
@@ -112,14 +120,17 @@ export class TenantsService {
     return this.findOne(id);
   }
 
-  async updateSettings(id: string, settings: Record<string, any>): Promise<Tenant> {
+  async updateSettings(
+    id: string,
+    settings: Record<string, any>,
+  ): Promise<Tenant> {
     const tenant = await this.findOne(id);
     const updatedSettings = { ...tenant.settings, ...settings };
-    
+
     await this.tenantRepository.update(id, {
       settings: updatedSettings,
     });
-    
+
     return this.findOne(id);
   }
 
@@ -130,14 +141,17 @@ export class TenantsService {
     return this.findOne(id);
   }
 
-  async updateLimits(id: string, limits: Record<string, number>): Promise<Tenant> {
+  async updateLimits(
+    id: string,
+    limits: Record<string, number>,
+  ): Promise<Tenant> {
     const tenant = await this.findOne(id);
     const updatedLimits = { ...tenant.limits, ...limits };
-    
+
     await this.tenantRepository.update(id, {
       limits: updatedLimits,
     });
-    
+
     return this.findOne(id);
   }
 

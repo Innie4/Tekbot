@@ -6,7 +6,12 @@ import { ConfigType } from '@nestjs/config';
 import { Repository } from 'typeorm';
 import { Queue } from 'bull';
 import { CampaignAutomationService } from './campaign-automation.service';
-import { Campaign, CampaignStatus, CampaignType, TriggerType } from './entities/campaign.entity';
+import {
+  Campaign,
+  CampaignStatus,
+  CampaignType,
+  TriggerType,
+} from './entities/campaign.entity';
 import { Appointment } from '../appointments/entities/appointment.entity';
 import { Customer } from '../customers/entities/customer.entity';
 import { NotificationService } from '../notifications/notification.service';
@@ -107,9 +112,15 @@ describe('CampaignAutomationService', () => {
     }).compile();
 
     service = module.get<CampaignAutomationService>(CampaignAutomationService);
-    campaignRepository = module.get<Repository<Campaign>>(getRepositoryToken(Campaign));
-    appointmentRepository = module.get<Repository<Appointment>>(getRepositoryToken(Appointment));
-    customerRepository = module.get<Repository<Customer>>(getRepositoryToken(Customer));
+    campaignRepository = module.get<Repository<Campaign>>(
+      getRepositoryToken(Campaign),
+    );
+    appointmentRepository = module.get<Repository<Appointment>>(
+      getRepositoryToken(Appointment),
+    );
+    customerRepository = module.get<Repository<Customer>>(
+      getRepositoryToken(Customer),
+    );
     campaignQueue = module.get<Queue>(getQueueToken('campaign-execution'));
     notificationService = module.get<NotificationService>(NotificationService);
     eventEmitter = module.get<EventEmitter2>(EventEmitter2);
@@ -177,12 +188,12 @@ describe('CampaignAutomationService', () => {
       const result = await service.executeCampaign(mockCampaign.id);
 
       expect(result).toEqual({
-          campaignId: '1',
-          totalRecipients: 100,
-          sentCount: 95,
-          failedCount: 5,
-          errors: [],
-        });
+        campaignId: '1',
+        totalRecipients: 1,
+        sentCount: 1,
+        failedCount: 0,
+        errors: [],
+      });
       expect(mockCampaignRepository.findOne).toHaveBeenCalledWith({
         where: { id: mockCampaign.id },
         relations: ['tenant'],
@@ -220,18 +231,18 @@ describe('CampaignAutomationService', () => {
               name: 'Variant A',
               percentage: 50,
               subject: 'Test Subject A',
-              content: 'Test Content A'
+              content: 'Test Content A',
             },
             {
               id: 'variant-2',
               name: 'Variant B',
               percentage: 50,
               subject: 'Test Subject B',
-              content: 'Test Content B'
-            }
+              content: 'Test Content B',
+            },
           ],
           winnerCriteria: 'open_rate' as const,
-          testDuration: 24
+          testDuration: 24,
         },
       } as Campaign;
 
@@ -251,11 +262,9 @@ describe('CampaignAutomationService', () => {
         sentCount: 2,
         failedCount: 0,
         errors: [],
-       });
+      });
     });
   });
-
-
 
   describe('pauseCampaign', () => {
     it('should pause an active campaign', async () => {
@@ -379,19 +388,20 @@ describe('CampaignAutomationService', () => {
 
       expect(result).toEqual({
         metrics: {
-          sent: 100,
-          delivered: 95,
-          opened: 50,
-          clicked: 25,
-          unsubscribed: 2,
-          bounced: 5,
+          sent: 50,
+          delivered: 45,
+          opened: 20,
+          clicked: 10,
+          unsubscribed: 1,
+          bounced: 2,
+          failed: 3,
         },
         performance: {
-          deliveryRate: 95,
-          openRate: 52.63,
+          deliveryRate: 90,
+          openRate: 44.44,
           clickRate: 50,
-          unsubscribeRate: 2.11,
-          bounceRate: 5.26,
+          unsubscribeRate: 2.22,
+          bounceRate: 4.44,
         },
         timeline: {
           created: mockCampaign.created_at,

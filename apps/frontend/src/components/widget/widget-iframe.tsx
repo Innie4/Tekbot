@@ -3,7 +3,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 
 interface WidgetMessage {
-  type: 'WIDGET_READY' | 'WIDGET_RESIZE' | 'WIDGET_MESSAGE' | 'WIDGET_CONFIG_UPDATE' | 'WIDGET_ERROR';
+  type:
+    | 'WIDGET_READY'
+    | 'WIDGET_RESIZE'
+    | 'WIDGET_MESSAGE'
+    | 'WIDGET_CONFIG_UPDATE'
+    | 'WIDGET_ERROR';
   data?: any;
   source?: string;
 }
@@ -48,10 +53,11 @@ export default function WidgetIframe({
     });
 
     // In production, this would be your CDN URL
-    const baseUrl = process.env.NODE_ENV === 'production' 
-      ? 'https://cdn.tekassist.com/widget' 
-      : `${window.location.origin}/widget`;
-    
+    const baseUrl =
+      process.env.NODE_ENV === 'production'
+        ? 'https://cdn.tekassist.com/widget'
+        : `${window.location.origin}/widget`;
+
     setWidgetUrl(`${baseUrl}/embed.html?${params.toString()}`);
   }, [tenantId, apiUrl, sessionId, customerId, metadata]);
 

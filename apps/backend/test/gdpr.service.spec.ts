@@ -1,6 +1,5 @@
 import { GdprService } from '../src/common/security/gdpr.service';
 
-
 import { Repository } from 'typeorm';
 
 describe('GdprService', () => {
@@ -10,16 +9,20 @@ describe('GdprService', () => {
 
   beforeEach(() => {
     userRepository = {
-      findOne: jest.fn().mockResolvedValue({ id: 'user1', name: 'Test User', password: 'secret' }),
+      findOne: jest.fn().mockResolvedValue({
+        id: 'user1',
+        name: 'Test User',
+        password: 'secret',
+      }),
       delete: jest.fn().mockResolvedValue({}),
     };
     consentRepository = {
-      create: jest.fn().mockImplementation((data) => data),
+      create: jest.fn().mockImplementation(data => data),
       save: jest.fn().mockResolvedValue({ userId: 'user1', consent: true }),
     };
     service = new GdprService(
       userRepository as Repository<any>,
-      consentRepository as Repository<any>
+      consentRepository as Repository<any>,
     );
   });
 

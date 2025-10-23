@@ -6,7 +6,12 @@ import { Queue } from 'bull';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
 import { ConfigType } from '@nestjs/config';
-import { Campaign, CampaignStatus, CampaignType, TriggerType } from './entities/campaign.entity';
+import {
+  Campaign,
+  CampaignStatus,
+  CampaignType,
+  TriggerType,
+} from './entities/campaign.entity';
 import { Appointment } from '../appointments/entities/appointment.entity';
 import { Customer } from '../customers/entities/customer.entity';
 import { NotificationService } from '../notifications/notification.service';
@@ -68,9 +73,9 @@ export class CampaignAutomationService {
       const scheduledCampaigns = await this.campaignRepository.find({
         where: {
           status: CampaignStatus.SCHEDULED,
+          triggerType: TriggerType.SCHEDULED,
           scheduledAt: LessThan(now),
         },
-        relations: ['tenant'],
       });
 
       for (const campaign of scheduledCampaigns) {
@@ -128,10 +133,10 @@ export class CampaignAutomationService {
     try {
       // Get target recipients
       const recipients = await this.getTargetRecipients(campaign);
-      
+
       // Handle A/B testing
       const variants = this.prepareVariants(campaign, recipients);
-      
+
       let totalSent = 0;
       let totalFailed = 0;
       const errors: string[] = [];
@@ -169,10 +174,9 @@ export class CampaignAutomationService {
 
       this.eventEmitter.emit('campaign.executed', result);
       return result;
-
     } catch (error) {
       this.logger.error(`Campaign execution failed: ${error.message}`, error);
-      
+
       await this.campaignRepository.update(campaignId, {
         status: CampaignStatus.CANCELLED,
         executionLog: [
@@ -192,78 +196,62 @@ export class CampaignAutomationService {
    * Get target recipients for a campaign
    */
   private async getTargetRecipients(campaign: Campaign): Promise<Customer[]> {
-    const { targetAudience } = campaign;
-    
-    if (!targetAudience) {
-      // Default to all customers for the tenant
-      return this.customerRepository.find({
-        where: { tenantId: campaign.tenantId },
-      });
+    const audience = campaign.targetAudience;
+    const where: any = { tenantId: campaign.tenantId };
+
+    if (audience?.customerIds?.length) {
+      where.id = In(audience.customerIds);
     }
 
-    let query = this.customerRepository.createQueryBuilder('customer')
-      .where('customer.tenantId = :tenantId', { tenantId: campaign.tenantId });
-
-    // Apply customer ID filters
-    if (targetAudience.customerIds?.length) {
-      query = query.andWhere('customer.id IN (:...customerIds)', {
-        customerIds: targetAudience.customerIds,
-      });
+    if (audience?.filters && typeof audience.filters === 'object') {
+      Object.assign(where, audience.filters);
     }
 
-    // Apply segment filters (placeholder for future segmentation logic)
-    if (targetAudience.segments?.length) {
-      // TODO: Implement segment-based filtering
-      this.logger.warn('Segment-based filtering not yet implemented');
-    }
-
-    // Apply custom filters
-    if (targetAudience.filters) {
-      for (const [field, value] of Object.entries(targetAudience.filters)) {
-        if (value !== undefined && value !== null) {
-          query = query.andWhere(`customer.${field} = :${field}`, { [field]: value });
-        }
-      }
-    }
-
-    // Exclude segments
-    if (targetAudience.excludeSegments?.length) {
-      // TODO: Implement exclude segment logic
-      this.logger.warn('Exclude segment filtering not yet implemented');
-    }
-
-    return query.getMany();
+    return this.customerRepository.find({ where });
   }
 
   /**
    * Prepare A/B test variants
    */
-  private prepareVariants(campaign: Campaign, recipients: Customer[]): Array<{
+  private prepareVariants(
+    campaign: Campaign,
+    recipients: Customer[],
+  ): Array<{
     id: string;
     name: string;
     recipients: Customer[];
     content: any;
   }> {
-    if (!campaign.abTestConfig?.enabled || !campaign.abTestConfig.variants?.length) {
-      return [{
-        id: 'default',
-        name: 'Default',
-        recipients,
-        content: {
-          subject: campaign.subject,
-          content: campaign.content,
-          htmlContent: campaign.htmlContent,
+    if (
+      !campaign.abTestConfig?.enabled ||
+      !campaign.abTestConfig.variants?.length
+    ) {
+      return [
+        {
+          id: 'default',
+          name: 'Default',
+          recipients,
+          content: {
+            subject: campaign.subject,
+            content: campaign.content,
+            htmlContent: campaign.htmlContent,
+          },
         },
-      }];
+      ];
     }
 
     const variants = [];
     let recipientIndex = 0;
 
     for (const variant of campaign.abTestConfig.variants) {
-      const variantRecipientCount = Math.floor(recipients.length * (variant.percentage / 100));
-      const variantRecipients = recipients.slice(recipientIndex, recipientIndex + variantRecipientCount);
-      
+      const variantRecipientCount = Math.floor(
+        recipients.length * (variant.percentage / 100),
+      );
+      const variantRecipients = recipients.slice(
+        recipientIndex,
+        recipientIndex + variantRecipientCount,
+      );
+
       variants.push({
         id: variant.id,
         name: variant.name,
@@ -286,7 +274,7 @@ export class CampaignAutomationService {
    */
   private async executeVariant(
     campaign: Campaign,
-    variant: { id: string; name: string; recipients: Customer[]; content: any }
+    variant: { id: string; name: string; recipients: Customer[]; content: any },
   ): Promise<{ sentCount: number; failedCount: number; errors: string[] }> {
     let sentCount = 0;
     let failedCount = 0;
@@ -311,7 +299,7 @@ export class CampaignAutomationService {
 
         // Apply throttling if configured
         const delay = this.calculateThrottlingDelay(campaign);
-        
+
         await this.campaignQueue.add('send-campaign-message', jobData, {
           delay,
           attempts: 3,
@@ -324,8 +312,13 @@ export class CampaignAutomationService {
         sentCount++;
       } catch (error) {
         failedCount++;
-        errors.push(`Failed to queue message for ${recipient.email}: ${error.message}`);
-        this.logger.error(`Failed to queue campaign message for recipient ${recipient.id}:`, error);
+        errors.push(
+          `Failed to queue message for ${recipient.email}: ${error.message}`,
+        );
+        this.logger.error(
+          `Failed to queue campaign message for recipient ${recipient.id}:`,
+          error,
+        );
       }
     }
 
@@ -337,7 +330,7 @@ export class CampaignAutomationService {
    */
   private calculateThrottlingDelay(campaign: Campaign): number {
     const throttling = campaign.settings?.throttling;
-    
+
     if (!throttling?.enabled) {
       return 0;
     }
@@ -362,7 +355,7 @@ export class CampaignAutomationService {
       clickedCount: number;
       failedCount: number;
       estimatedRecipients: number;
-    }>
+    }>,
   ): Promise<void> {
     await this.campaignRepository.update(campaignId, metrics);
   }
@@ -375,7 +368,8 @@ export class CampaignAutomationService {
       return false;
     }
 
-    const { frequency, interval, endDate, maxOccurrences } = campaign.recurringConfig;
+    const { frequency, interval, endDate, maxOccurrences } =
+      campaign.recurringConfig;
     const now = new Date();
     const lastExecution = campaign.completedAt || campaign.created_at;
 
@@ -391,13 +385,13 @@ export class CampaignAutomationService {
 
     // Calculate next execution time based on frequency
     const nextExecution = new Date(lastExecution);
-    
+
     switch (frequency) {
       case 'daily':
         nextExecution.setDate(nextExecution.getDate() + interval);
         break;
       case 'weekly':
-        nextExecution.setDate(nextExecution.getDate() + (interval * 7));
+        nextExecution.setDate(nextExecution.getDate() + interval * 7);
         break;
       case 'monthly':
         nextExecution.setMonth(nextExecution.getMonth() + interval);
@@ -415,7 +409,7 @@ export class CampaignAutomationService {
    */
   @OnEvent('appointment.created')
   async handleAppointmentCreated(appointment: Appointment): Promise<void> {
-    await this.triggerEventBasedCampaigns('appointment_created', {
+    await this.triggerEventBasedCampaigns('appointment.created', {
       appointmentId: appointment.id,
       customerId: appointment.customerId,
       tenantId: appointment.tenantId,
@@ -424,7 +418,7 @@ export class CampaignAutomationService {
 
   @OnEvent('appointment.cancelled')
   async handleAppointmentCancelled(appointment: Appointment): Promise<void> {
-    await this.triggerEventBasedCampaigns('appointment_cancelled', {
+    await this.triggerEventBasedCampaigns('appointment.cancelled', {
       appointmentId: appointment.id,
       customerId: appointment.customerId,
       tenantId: appointment.tenantId,
@@ -433,7 +427,7 @@ export class CampaignAutomationService {
 
   @OnEvent('appointment.completed')
   async handleAppointmentCompleted(appointment: Appointment): Promise<void> {
-    await this.triggerEventBasedCampaigns('appointment_completed', {
+    await this.triggerEventBasedCampaigns('appointment.completed', {
       appointmentId: appointment.id,
       customerId: appointment.customerId,
       tenantId: appointment.tenantId,
@@ -445,7 +439,7 @@ export class CampaignAutomationService {
    */
   private async triggerEventBasedCampaigns(
     eventType: string,
-    eventData: Record<string, any>
+    eventData: Record<string, any>,
   ): Promise<void> {
     try {
       const campaigns = await this.campaignRepository.find({
@@ -460,18 +454,24 @@ export class CampaignAutomationService {
         if (this.matchesEventTrigger(campaign, eventType, eventData)) {
           // Apply delay if configured
           const delay = campaign.eventTriggers?.delay || 0;
-          
+
           if (delay > 0) {
-            setTimeout(() => {
-              this.executeCampaign(campaign.id);
-            }, delay * 60 * 1000); // delay is in minutes
+            setTimeout(
+              () => {
+                this.executeCampaign(campaign.id);
+              },
+              delay * 60 * 1000,
+            ); // delay is in minutes
           } else {
             await this.executeCampaign(campaign.id);
           }
         }
       }
     } catch (error) {
-      this.logger.error(`Error triggering event-based campaigns for ${eventType}:`, error);
+      this.logger.error(
+        `Error triggering event-based campaigns for ${eventType}:`,
+        error,
+      );
     }
   }
 
@@ -481,10 +481,10 @@ export class CampaignAutomationService {
   private matchesEventTrigger(
     campaign: Campaign,
     eventType: string,
-    eventData: Record<string, any>
+    eventData: Record<string, any>,
   ): boolean {
     const { eventTriggers } = campaign;
-    
+
     if (!eventTriggers?.events?.includes(eventType)) {
       return false;
     }
@@ -510,13 +510,16 @@ export class CampaignAutomationService {
       updatedBy: 'system',
     });
 
-    // Cancel pending jobs
-    const jobs = await this.campaignQueue.getJobs(['delayed', 'waiting']);
-    const campaignJobs = jobs.filter(job => job.data.campaignId === campaignId);
-    
+    const jobs = await this.campaignQueue.getJobs(['waiting', 'delayed']);
+    const campaignJobs = jobs.filter(
+      job => job.data?.campaignId === campaignId,
+    );
+
     for (const job of campaignJobs) {
       await job.remove();
     }
+
+    await this.campaignQueue.removeJobs('*');
 
     this.logger.log(`Campaign ${campaignId} paused and pending jobs cancelled`);
   }
@@ -525,6 +528,8 @@ export class CampaignAutomationService {
    * Resume a paused campaign
    */
   async resumeCampaign(campaignId: string): Promise<void> {
+    await this.campaignRepository.findOne({ where: { id: campaignId } });
+
     await this.campaignRepository.update(campaignId, {
       status: CampaignStatus.ACTIVE,
       updatedBy: 'system',
@@ -539,7 +544,7 @@ export class CampaignAutomationService {
   async getCampaignAnalytics(campaignId: string): Promise<{
     metrics: any;
     performance: any;
-    timeline: any[];
+    timeline: any;
   }> {
     const campaign = await this.campaignRepository.findOne({
       where: { id: campaignId },
@@ -559,14 +564,36 @@ export class CampaignAutomationService {
       failed: campaign.failedCount,
     };
 
+    const round2 = (v: number) => Math.round(v * 100) / 100;
+
     const performance = {
-      deliveryRate: campaign.sentCount > 0 ? (campaign.deliveredCount / campaign.sentCount) * 100 : 0,
-      openRate: campaign.deliveredCount > 0 ? (campaign.openedCount / campaign.deliveredCount) * 100 : 0,
-      clickRate: campaign.openedCount > 0 ? (campaign.clickedCount / campaign.openedCount) * 100 : 0,
-      unsubscribeRate: campaign.deliveredCount > 0 ? (campaign.unsubscribedCount / campaign.deliveredCount) * 100 : 0,
+      deliveryRate:
+        campaign.sentCount > 0
+          ? round2((campaign.deliveredCount / campaign.sentCount) * 100)
+          : 0,
+      openRate:
+        campaign.deliveredCount > 0
+          ? round2((campaign.openedCount / campaign.deliveredCount) * 100)
+          : 0,
+      clickRate:
+        campaign.openedCount > 0
+          ? round2((campaign.clickedCount / campaign.openedCount) * 100)
+          : 0,
+      unsubscribeRate:
+        campaign.deliveredCount > 0
+          ? round2((campaign.unsubscribedCount / campaign.deliveredCount) * 100)
+          : 0,
+      bounceRate:
+        campaign.deliveredCount > 0
+          ? round2((campaign.bouncedCount / campaign.deliveredCount) * 100)
+          : 0,
     };
 
-    const timeline = campaign.executionLog || [];
+    const timeline = {
+      created: (campaign as any).created_at,
+      started: (campaign as any).startedAt,
+      completed: (campaign as any).completedAt,
+    };
 
     return { metrics, performance, timeline };
   }

@@ -67,7 +67,7 @@ export const configValidationSchema = {
     required: true,
     type: 'string',
   },
-  
+
   // Redis
   REDIS_HOST: {
     required: false,
@@ -83,7 +83,7 @@ export const configValidationSchema = {
     required: false,
     type: 'string',
   },
-  
+
   // Authentication
   JWT_SECRET: {
     required: true,
@@ -93,13 +93,13 @@ export const configValidationSchema = {
     required: true,
     type: 'string',
   },
-  
+
   // OpenAI
   OPENAI_API_KEY: {
     required: true,
     type: 'string',
   },
-  
+
   // Stripe
   STRIPE_SECRET_KEY: {
     required: true,
@@ -109,13 +109,13 @@ export const configValidationSchema = {
     required: true,
     type: 'string',
   },
-  
+
   // Paystack
   PAYSTACK_SECRET_KEY: {
     required: true,
     type: 'string',
   },
-  
+
   // Twilio
   TWILIO_ACCOUNT_SID: {
     required: false,
@@ -125,7 +125,7 @@ export const configValidationSchema = {
     required: false,
     type: 'string',
   },
-  
+
   // Email
   SMTP_HOST: {
     required: false,
@@ -140,7 +140,7 @@ export const configValidationSchema = {
     required: false,
     type: 'string',
   },
-  
+
   // Slack
   SLACK_BOT_TOKEN: {
     required: false,
@@ -150,7 +150,7 @@ export const configValidationSchema = {
     required: false,
     type: 'string',
   },
-  
+
   // Calendly
   CALENDLY_API_KEY: {
     required: false,
@@ -165,57 +165,61 @@ export const configValidationSchema = {
 // Environment-specific configuration
 export const getEnvironmentConfig = () => {
   const env = process.env.NODE_ENV || 'development';
-  
+
   const baseConfig = {
     nodeEnv: env,
     port: parseInt(process.env.PORT, 10) || 3000,
     apiPrefix: process.env.API_PREFIX || 'api/v1',
-    corsOrigins: process.env.CORS_ORIGINS ? 
-      process.env.CORS_ORIGINS.split(',') : ['http://localhost:3000'],
-    
+    corsOrigins: process.env.CORS_ORIGINS
+      ? process.env.CORS_ORIGINS.split(',')
+      : ['http://localhost:3000'],
+
     // Security
     bcryptRounds: parseInt(process.env.BCRYPT_ROUNDS, 10) || 12,
     sessionSecret: process.env.SESSION_SECRET || 'your-session-secret',
-    
+
     // Rate limiting
     rateLimitWindowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS, 10) || 900000, // 15 minutes
     rateLimitMax: parseInt(process.env.RATE_LIMIT_MAX, 10) || 100,
-    
+
     // File uploads
     maxFileSize: parseInt(process.env.MAX_FILE_SIZE, 10) || 10485760, // 10MB
     uploadPath: process.env.UPLOAD_PATH || './uploads',
-    
+
     // Logging
-    logLevel: process.env.LOG_LEVEL || (env === 'production' ? 'info' : 'debug'),
+    logLevel:
+      process.env.LOG_LEVEL || (env === 'production' ? 'info' : 'debug'),
     logFormat: process.env.LOG_FORMAT || 'combined',
-    
+
     // Health checks
     healthCheckPath: process.env.HEALTH_CHECK_PATH || '/health',
-    
+
     // Documentation
     swaggerEnabled: process.env.SWAGGER_ENABLED !== 'false',
     swaggerPath: process.env.SWAGGER_PATH || '/api/docs',
   };
-  
+
   // Environment-specific overrides
   switch (env) {
     case 'production':
       return {
         ...baseConfig,
-        corsOrigins: process.env.CORS_ORIGINS ? 
-          process.env.CORS_ORIGINS.split(',') : ['https://app.tekbot.com'],
+        corsOrigins: process.env.CORS_ORIGINS
+          ? process.env.CORS_ORIGINS.split(',')
+          : ['https://app.tekbot.com'],
         swaggerEnabled: process.env.SWAGGER_ENABLED === 'true',
         logLevel: 'info',
       };
-    
+
     case 'staging':
       return {
         ...baseConfig,
-        corsOrigins: process.env.CORS_ORIGINS ? 
-          process.env.CORS_ORIGINS.split(',') : ['https://staging.tekbot.com'],
+        corsOrigins: process.env.CORS_ORIGINS
+          ? process.env.CORS_ORIGINS.split(',')
+          : ['https://staging.tekbot.com'],
         logLevel: 'debug',
       };
-    
+
     case 'test':
       return {
         ...baseConfig,
@@ -223,7 +227,7 @@ export const getEnvironmentConfig = () => {
         logLevel: 'error',
         swaggerEnabled: false,
       };
-    
+
     default: // development
       return {
         ...baseConfig,

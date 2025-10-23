@@ -152,23 +152,27 @@ const MessagesPanel: React.FC = () => {
                 <tr key={message.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">
-                      {message.recipient_id ? `Recipient ID: ${message.recipient_id}` : 'No recipient'}
+                      {message.recipient_id
+                        ? `Recipient ID: ${message.recipient_id}`
+                        : 'No recipient'}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getTypeColor(message.channel)}`}>
+                    <span
+                      className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getTypeColor(message.channel)}`}
+                    >
                       {message.channel.toUpperCase()}
                     </span>
                   </td>
                   <td className="px-6 py-4">
                     <div className="text-sm text-gray-900">
-                      <div className="text-gray-500">
-                        {truncateContent(message.content)}
-                      </div>
+                      <div className="text-gray-500">{truncateContent(message.content)}</div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(message.status)}`}>
+                    <span
+                      className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(message.status)}`}
+                    >
                       {message.status}
                     </span>
                   </td>
@@ -177,24 +181,18 @@ const MessagesPanel: React.FC = () => {
                       {new Date(message.created_at).toLocaleDateString()}
                     </div>
                     <div className="text-sm text-gray-500">
-                      {new Date(message.created_at).toLocaleTimeString([], { 
-                        hour: '2-digit', 
-                        minute: '2-digit' 
+                      {new Date(message.created_at).toLocaleTimeString([], {
+                        hour: '2-digit',
+                        minute: '2-digit',
                       })}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button className="text-blue-600 hover:text-blue-900 mr-3">
-                      View
-                    </button>
+                    <button className="text-blue-600 hover:text-blue-900 mr-3">View</button>
                     {message.status === 'failed' && (
-                      <button className="text-green-600 hover:text-green-900 mr-3">
-                        Resend
-                      </button>
+                      <button className="text-green-600 hover:text-green-900 mr-3">Resend</button>
                     )}
-                    <button className="text-red-600 hover:text-red-900">
-                      Delete
-                    </button>
+                    <button className="text-red-600 hover:text-red-900">Delete</button>
                   </td>
                 </tr>
               ))}

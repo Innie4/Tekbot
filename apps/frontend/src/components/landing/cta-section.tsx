@@ -18,7 +18,7 @@ export default function CtaSection() {
           {/* Background effects */}
           <div className="absolute top-0 left-1/4 w-64 h-64 bg-electric-blue/20 rounded-full blur-3xl z-0" />
           <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-electric-cyan/20 rounded-full blur-3xl z-0" />
-          
+
           <div className="relative z-10 text-center max-w-3xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
               Ready to Transform Your
@@ -26,11 +26,12 @@ export default function CtaSection() {
                 Technical Support Experience?
               </span>
             </h2>
-            
+
             <p className="text-xl text-foreground/80 mb-8">
-              Get started with TekAssist today and experience the power of AI-driven technical support.
+              Get started with TekAssist today and experience the power of AI-driven technical
+              support.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row justify-center gap-4">
               <Button size="lg" variant="glass" className="group">
                 Try It Now

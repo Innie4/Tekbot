@@ -13,7 +13,8 @@ export const Roles = (...roles: string[]) => SetMetadata('roles', roles);
  * Decorator to set required permissions for a route or controller
  * @param permissions - Array of permission names required to access the resource
  */
-export const Permissions = (...permissions: string[]) => SetMetadata('permissions', permissions);
+export const Permissions = (...permissions: string[]) =>
+  SetMetadata('permissions', permissions);
 
 /**
  * Decorator to mark a route as public (no authentication required)
@@ -44,7 +45,8 @@ export const TenantAdminOnly = () => SetMetadata('roles', ['tenant_admin']);
  * Decorator to set resource ownership field for authorization
  * @param field - The field name that contains the owner ID (default: 'userId')
  */
-export const ResourceOwnership = (field: string = 'userId') => SetMetadata('ownershipField', field);
+export const ResourceOwnership = (field: string = 'userId') =>
+  SetMetadata('ownershipField', field);
 
 /**
  * Decorator to allow multiple roles with OR logic

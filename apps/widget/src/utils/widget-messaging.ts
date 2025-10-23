@@ -26,7 +26,8 @@ export interface WidgetMessageHandler {
 }
 
 export class WidgetMessaging {
-  private handlers: Map<WidgetMessageTypes, Set<WidgetMessageHandler>> = new Map();
+  private handlers: Map<WidgetMessageTypes, Set<WidgetMessageHandler>> =
+    new Map();
   private allowedOrigins: Set<string> = new Set();
   private isInitialized: boolean = false;
 
@@ -44,7 +45,7 @@ export class WidgetMessaging {
     }
 
     this.isInitialized = true;
-    
+
     // Add current origin as allowed
     if (typeof window !== 'undefined') {
       this.allowedOrigins.add(window.location.origin);
@@ -68,13 +69,16 @@ export class WidgetMessaging {
   /**
    * Subscribe to widget messages
    */
-  subscribe(type: WidgetMessageTypes, handler: WidgetMessageHandler): () => void {
+  subscribe(
+    type: WidgetMessageTypes,
+    handler: WidgetMessageHandler,
+  ): () => void {
     if (!this.handlers.has(type)) {
       this.handlers.set(type, new Set());
     }
-    
+
     this.handlers.get(type)!.add(handler);
-    
+
     // Return unsubscribe function
     return () => {
       const handlers = this.handlers.get(type);
@@ -110,7 +114,7 @@ export class WidgetMessaging {
         timestamp: Date.now(),
         id: this.generateMessageId(),
       };
-      
+
       window.parent.postMessage(messageWithTimestamp, '*');
     }
   }
@@ -125,7 +129,7 @@ export class WidgetMessaging {
         timestamp: Date.now(),
         id: this.generateMessageId(),
       };
-      
+
       iframe.contentWindow.postMessage(messageWithTimestamp, '*');
     }
   }
@@ -161,9 +165,12 @@ export class WidgetMessaging {
       return;
     }
 
-    window.addEventListener('message', (event) => {
+    window.addEventListener('message', event => {
       // Validate origin if origins are specified
-      if (this.allowedOrigins.size > 0 && !this.allowedOrigins.has(event.origin)) {
+      if (
+        this.allowedOrigins.size > 0 &&
+        !this.allowedOrigins.has(event.origin)
+      ) {
         return;
       }
 
@@ -173,7 +180,7 @@ export class WidgetMessaging {
       }
 
       const message = event.data as WidgetMessage;
-      
+
       // Emit to local handlers
       const handlers = this.handlers.get(message.type);
       if (handlers) {
@@ -227,7 +234,10 @@ export class WidgetMessaging {
 /**
  * Create a widget message
  */
-export function createWidgetMessage(type: WidgetMessageTypes, data?: any): WidgetMessage {
+export function createWidgetMessage(
+  type: WidgetMessageTypes,
+  data?: any,
+): WidgetMessage {
   return {
     type,
     data,

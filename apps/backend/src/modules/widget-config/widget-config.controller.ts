@@ -23,7 +23,10 @@ export class WidgetConfigController {
 
   @Post()
   @UseGuards(JwtAuthGuard, TenantGuard)
-  create(@Body() createWidgetConfigDto: CreateWidgetConfigDto, @Req() req: any) {
+  create(
+    @Body() createWidgetConfigDto: CreateWidgetConfigDto,
+    @Req() req: any,
+  ) {
     return this.widgetConfigService.create({
       ...createWidgetConfigDto,
       tenantId: req.tenant.id,
@@ -38,8 +41,14 @@ export class WidgetConfigController {
 
   @Patch()
   @UseGuards(JwtAuthGuard, TenantGuard)
-  update(@Body() updateWidgetConfigDto: UpdateWidgetConfigDto, @Req() req: any) {
-    return this.widgetConfigService.update(req.tenant.id, updateWidgetConfigDto);
+  update(
+    @Body() updateWidgetConfigDto: UpdateWidgetConfigDto,
+    @Req() req: any,
+  ) {
+    return this.widgetConfigService.update(
+      req.tenant.id,
+      updateWidgetConfigDto,
+    );
   }
 
   @Patch('toggle')

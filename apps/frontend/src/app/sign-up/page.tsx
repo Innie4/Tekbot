@@ -1,10 +1,11 @@
-"use client";
+'use client';
 import React, { useState } from 'react';
 import { GlassCard } from '@/components/ui/glass-card';
 import { GlassInput } from '@/components/ui/glass-input';
 import { Button } from '@/components/ui/button';
 import { api } from '@/lib/api/api-client';
 import { useToast } from '@/components/ui/use-toast';
+import { ArrowRight, Chrome } from 'lucide-react';
 
 export default function SignUpPage() {
   const [firstName, setFirstName] = useState('');
@@ -88,6 +89,7 @@ export default function SignUpPage() {
         localStorage.setItem('auth-token', result.accessToken);
         localStorage.setItem('refresh-token', result.refreshToken);
         localStorage.setItem('auth-user', JSON.stringify(result.user));
+        localStorage.setItem('has-onboarded', 'false');
         if ((result.user as any)?.tenantId) {
           localStorage.setItem('tenant-id', (result.user as any).tenantId);
         }
@@ -97,12 +99,21 @@ export default function SignUpPage() {
       }
 
       toast({ title: 'Account created', description: 'Welcome to TekAssist!' });
-      window.location.href = '/admin';
+      window.location.href = '/onboarding';
     } catch (err: any) {
       const message = err?.message || 'Sign up failed';
       setError(message);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const startGoogleSignIn = () => {
+    try {
+      // If backend Google OAuth is configured, this route should exist
+      window.location.href = '/api/v1/auth/google';
+    } catch (e) {
+      toast({ title: 'Google Sign-In unavailable', description: 'OAuth not configured yet.' });
     }
   };
 
@@ -118,69 +129,91 @@ export default function SignUpPage() {
             {error}
           </div>
         )}
+        <Button type="button" variant="outline" className="w-full mb-4" onClick={startGoogleSignIn}>
+          <Chrome className="mr-2 h-4 w-4" /> Continue with Google
+        </Button>
+        <div className="relative my-4">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t border-border/50" />
+          </div>
+          <div className="relative flex justify-center text-xs">
+            <span className="px-2 bg-background text-muted-foreground">or</span>
+          </div>
+        </div>
         <form onSubmit={onSubmit} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
-              <label className="block text-sm mb-1">First Name</label>
-            <GlassInput
-              type="text"
-              value={firstName}
-              onChange={(e) => onFirstNameChange(e.target.value)}
-              placeholder="John"
-              required
-            />
-            {firstNameError && (
-              <p className="mt-1 text-xs text-red-600">{firstNameError}</p>
-            )}
+              <label htmlFor="first-name" className="block text-sm mb-1">
+                First Name
+              </label>
+              <GlassInput
+                id="first-name"
+                type="text"
+                value={firstName}
+                onChange={(e) => onFirstNameChange(e.target.value)}
+                placeholder="John"
+                required
+              />
+              {firstNameError && <p className="mt-1 text-xs text-red-600">{firstNameError}</p>}
             </div>
             <div>
-              <label className="block text-sm mb-1">Last Name</label>
-            <GlassInput
-              type="text"
-              value={lastName}
-              onChange={(e) => onLastNameChange(e.target.value)}
-              placeholder="Doe"
-              required
-            />
-            {lastNameError && (
-              <p className="mt-1 text-xs text-red-600">{lastNameError}</p>
-            )}
+              <label htmlFor="last-name" className="block text-sm mb-1">
+                Last Name
+              </label>
+              <GlassInput
+                id="last-name"
+                type="text"
+                value={lastName}
+                onChange={(e) => onLastNameChange(e.target.value)}
+                placeholder="Doe"
+                required
+              />
+              {lastNameError && <p className="mt-1 text-xs text-red-600">{lastNameError}</p>}
             </div>
           </div>
           <div>
-            <label className="block text-sm mb-1">Email</label>
+            <label htmlFor="email" className="block text-sm mb-1">
+              Email
+            </label>
             <GlassInput
+              id="email"
               type="email"
               value={email}
               onChange={(e) => onEmailChange(e.target.value)}
               placeholder="you@example.com"
               required
             />
-            {emailError && (
-              <p className="mt-1 text-xs text-red-600">{emailError}</p>
-            )}
+            {emailError && <p className="mt-1 text-xs text-red-600">{emailError}</p>}
           </div>
           <div>
-            <label className="block text-sm mb-1">Password</label>
+            <label htmlFor="password" className="block text-sm mb-1">
+              Password
+            </label>
             <GlassInput
+              id="password"
               type="password"
               value={password}
               onChange={(e) => onPasswordChange(e.target.value)}
               placeholder="••••••••"
               required
             />
-            {passwordError && (
-              <p className="mt-1 text-xs text-red-600">{passwordError}</p>
-            )}
+            {passwordError && <p className="mt-1 text-xs text-red-600">{passwordError}</p>}
           </div>
-          <Button type="submit" className="w-full" disabled={
-            loading || !!firstNameError || !!lastNameError || !!emailError || !!passwordError
-          }>
-            {loading ? 'Creating account…' : 'Sign Up'}
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={
+              loading || !!firstNameError || !!lastNameError || !!emailError || !!passwordError
+            }
+          >
+            {loading ? 'Creating account…' : 'Create Account'}
           </Button>
         </form>
         <div className="text-sm mt-4 text-center">
-          Already have an account? <a href="/sign-in" className="text-primary">Sign in</a>
+          Already have an account?{' '}
+          <a href="/sign-in" className="text-primary">
+            Sign in
+          </a>
         </div>
       </GlassCard>
     </div>

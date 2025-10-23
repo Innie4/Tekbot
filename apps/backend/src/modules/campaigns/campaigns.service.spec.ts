@@ -3,9 +3,18 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Repository } from 'typeorm';
 import { NotFoundException, BadRequestException } from '@nestjs/common';
-import { CampaignsService, CreateCampaignDto, UpdateCampaignDto } from './campaigns.service';
+import {
+  CampaignsService,
+  CreateCampaignDto,
+  UpdateCampaignDto,
+} from './campaigns.service';
 import { CampaignAutomationService } from './campaign-automation.service';
-import { Campaign, CampaignStatus, CampaignType, TriggerType } from './entities/campaign.entity';
+import {
+  Campaign,
+  CampaignStatus,
+  CampaignType,
+  TriggerType,
+} from './entities/campaign.entity';
 import { Customer } from '../customers/entities/customer.entity';
 
 describe('CampaignsService', () => {
@@ -63,9 +72,15 @@ describe('CampaignsService', () => {
     }).compile();
 
     service = module.get<CampaignsService>(CampaignsService);
-    campaignRepository = module.get<Repository<Campaign>>(getRepositoryToken(Campaign));
-    customerRepository = module.get<Repository<Customer>>(getRepositoryToken(Customer));
-    campaignAutomationService = module.get<CampaignAutomationService>(CampaignAutomationService);
+    campaignRepository = module.get<Repository<Campaign>>(
+      getRepositoryToken(Campaign),
+    );
+    customerRepository = module.get<Repository<Customer>>(
+      getRepositoryToken(Customer),
+    );
+    campaignAutomationService = module.get<CampaignAutomationService>(
+      CampaignAutomationService,
+    );
     eventEmitter = module.get<EventEmitter2>(EventEmitter2);
   });
 
@@ -139,7 +154,11 @@ describe('CampaignsService', () => {
       mockCustomerRepository.count.mockResolvedValue(1);
       mockCampaignRepository.save.mockResolvedValue(mockCampaign);
 
-      const result = await service.createForTenant('tenant1', createDto, 'user1');
+      const result = await service.createForTenant(
+        'tenant1',
+        createDto,
+        'user1',
+      );
 
       expect(result).toEqual(mockCampaign);
       expect(mockCampaignRepository.save).toHaveBeenCalledWith(
@@ -148,9 +167,12 @@ describe('CampaignsService', () => {
           status: CampaignStatus.DRAFT,
           estimatedRecipients: 1,
           createdBy: 'user1',
-        })
+        }),
       );
-      expect(mockEventEmitter.emit).toHaveBeenCalledWith('campaign.created', mockCampaign);
+      expect(mockEventEmitter.emit).toHaveBeenCalledWith(
+        'campaign.created',
+        mockCampaign,
+      );
     });
 
     it('should validate campaign data', async () => {
@@ -160,8 +182,9 @@ describe('CampaignsService', () => {
         subject: '', // Empty subject for email campaign
       };
 
-      await expect(service.createForTenant('tenant1', invalidDto, 'user1'))
-        .rejects.toThrow(BadRequestException);
+      await expect(
+        service.createForTenant('tenant1', invalidDto, 'user1'),
+      ).rejects.toThrow(BadRequestException);
     });
 
     it('should validate scheduled campaigns have scheduledAt', async () => {
@@ -171,8 +194,9 @@ describe('CampaignsService', () => {
         // Missing scheduledAt
       };
 
-      await expect(service.createForTenant('tenant1', scheduledDto, 'user1'))
-        .rejects.toThrow(BadRequestException);
+      await expect(
+        service.createForTenant('tenant1', scheduledDto, 'user1'),
+      ).rejects.toThrow(BadRequestException);
     });
   });
 
@@ -198,8 +222,9 @@ describe('CampaignsService', () => {
     it('should throw NotFoundException when campaign not found', async () => {
       mockCampaignRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.findOneForTenant('tenant1', '1'))
-        .rejects.toThrow(NotFoundException);
+      await expect(service.findOneForTenant('tenant1', '1')).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 
@@ -226,23 +251,32 @@ describe('CampaignsService', () => {
       mockCustomerRepository.count.mockResolvedValue(1);
       mockCampaignRepository.save.mockResolvedValue(updatedCampaign);
 
-      const result = await service.updateForTenant('tenant1', '1', updateDto, 'user1');
+      const result = await service.updateForTenant(
+        'tenant1',
+        '1',
+        updateDto,
+        'user1',
+      );
 
       expect(result).toEqual(updatedCampaign);
       expect(mockCampaignRepository.save).toHaveBeenCalledWith(
         expect.objectContaining({
           ...updateDto,
           updatedBy: 'user1',
-        })
+        }),
       );
-      expect(mockEventEmitter.emit).toHaveBeenCalledWith('campaign.updated', updatedCampaign);
+      expect(mockEventEmitter.emit).toHaveBeenCalledWith(
+        'campaign.updated',
+        updatedCampaign,
+      );
     });
 
     it('should throw NotFoundException when campaign not found', async () => {
       mockCampaignRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.updateForTenant('tenant1', '1', updateDto, 'user1'))
-        .rejects.toThrow(NotFoundException);
+      await expect(
+        service.updateForTenant('tenant1', '1', updateDto, 'user1'),
+      ).rejects.toThrow(NotFoundException);
     });
 
     it('should validate status transitions', async () => {
@@ -258,8 +292,9 @@ describe('CampaignsService', () => {
 
       mockCampaignRepository.findOne.mockResolvedValue(existingCampaign);
 
-      await expect(service.updateForTenant('tenant1', '1', invalidUpdateDto, 'user1'))
-        .rejects.toThrow(BadRequestException);
+      await expect(
+        service.updateForTenant('tenant1', '1', invalidUpdateDto, 'user1'),
+      ).rejects.toThrow(BadRequestException);
     });
   });
 
@@ -277,7 +312,10 @@ describe('CampaignsService', () => {
       await service.removeForTenant('tenant1', '1');
 
       expect(mockCampaignRepository.softDelete).toHaveBeenCalledWith('1');
-      expect(mockEventEmitter.emit).toHaveBeenCalledWith('campaign.deleted', mockCampaign);
+      expect(mockEventEmitter.emit).toHaveBeenCalledWith(
+        'campaign.deleted',
+        mockCampaign,
+      );
     });
 
     it('should pause active campaign before deletion', async () => {
@@ -292,15 +330,18 @@ describe('CampaignsService', () => {
 
       await service.removeForTenant('tenant1', '1');
 
-      expect(mockCampaignAutomationService.pauseCampaign).toHaveBeenCalledWith('1');
+      expect(mockCampaignAutomationService.pauseCampaign).toHaveBeenCalledWith(
+        '1',
+      );
       expect(mockCampaignRepository.softDelete).toHaveBeenCalledWith('1');
     });
 
     it('should throw NotFoundException when campaign not found', async () => {
       mockCampaignRepository.findOne.mockResolvedValue(null);
 
-      await expect(service.removeForTenant('tenant1', '1'))
-        .rejects.toThrow(NotFoundException);
+      await expect(service.removeForTenant('tenant1', '1')).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 
@@ -329,7 +370,7 @@ describe('CampaignsService', () => {
         expect.objectContaining({
           status: CampaignStatus.ACTIVE,
           startedAt: expect.any(Date),
-        })
+        }),
       );
     });
 
@@ -363,8 +404,9 @@ describe('CampaignsService', () => {
 
       mockCampaignRepository.findOne.mockResolvedValue(mockCampaign);
 
-      await expect(service.launchCampaign('tenant1', '1'))
-        .rejects.toThrow(BadRequestException);
+      await expect(service.launchCampaign('tenant1', '1')).rejects.toThrow(
+        BadRequestException,
+      );
     });
   });
 
@@ -385,7 +427,9 @@ describe('CampaignsService', () => {
       const result = await service.pauseCampaign('tenant1', '1');
 
       expect(result.status).toBe(CampaignStatus.PAUSED);
-      expect(mockCampaignAutomationService.pauseCampaign).toHaveBeenCalledWith('1');
+      expect(mockCampaignAutomationService.pauseCampaign).toHaveBeenCalledWith(
+        '1',
+      );
     });
   });
 
@@ -406,7 +450,9 @@ describe('CampaignsService', () => {
       const result = await service.resumeCampaign('tenant1', '1');
 
       expect(result.status).toBe(CampaignStatus.ACTIVE);
-      expect(mockCampaignAutomationService.resumeCampaign).toHaveBeenCalledWith('1');
+      expect(mockCampaignAutomationService.resumeCampaign).toHaveBeenCalledWith(
+        '1',
+      );
     });
   });
 
@@ -424,7 +470,9 @@ describe('CampaignsService', () => {
         }),
       };
 
-      mockCampaignRepository.createQueryBuilder.mockReturnValue(mockQueryBuilder);
+      mockCampaignRepository.createQueryBuilder.mockReturnValue(
+        mockQueryBuilder,
+      );
 
       const result = await service.getCampaignSummary('tenant1');
 
@@ -443,7 +491,10 @@ describe('CampaignsService', () => {
       const targetAudience = { customerIds: ['customer1', 'customer2'] };
       mockCustomerRepository.count.mockResolvedValue(2);
 
-      const result = await service['estimateRecipients']('tenant1', targetAudience);
+      const result = await service['estimateRecipients'](
+        'tenant1',
+        targetAudience,
+      );
 
       expect(result).toBe(2);
       expect(mockCustomerRepository.count).toHaveBeenCalledWith({
@@ -458,9 +509,14 @@ describe('CampaignsService', () => {
         getCount: jest.fn().mockResolvedValue(5),
       };
 
-      mockCustomerRepository.createQueryBuilder.mockReturnValue(mockQueryBuilder);
+      mockCustomerRepository.createQueryBuilder.mockReturnValue(
+        mockQueryBuilder,
+      );
 
-      const result = await service['estimateRecipients']('tenant1', targetAudience);
+      const result = await service['estimateRecipients'](
+        'tenant1',
+        targetAudience,
+      );
 
       expect(result).toBe(5);
     });
