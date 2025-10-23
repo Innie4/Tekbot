@@ -121,7 +121,7 @@ export class WidgetConfigController {
       return await this.widgetConfigService.generateEmbedCode(tenantId, domain);
     } catch (error) {
       // Return default embed code if tenant doesn't exist
-      const baseUrl = process.env.WIDGET_CDN_URL || process.env.BASE_URL || 'http://localhost:3002';
+      const baseUrl = process.env.WIDGET_CDN_URL || process.env.BASE_URL || 'http://localhost:3001';
       
       return `
 <!-- TekAssist Chat Widget -->

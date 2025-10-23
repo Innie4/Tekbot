@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const BASE_URL = 'http://localhost:3002/api/v1';
+const BASE_URL = 'http://localhost:3001/api/v1';
 
 async function testEndpoints() {
   console.log('🧪 Testing TekBot Backend Endpoints...\n');

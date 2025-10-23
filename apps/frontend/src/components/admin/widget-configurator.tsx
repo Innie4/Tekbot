@@ -144,7 +144,7 @@ export default function WidgetConfigurator({
   // removed obsolete generateEmbedCode function
 
   const getEmbedCode = (stack: EmbedTab) => {
-    const baseApi = `${(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002/api').replace(/\/$/, '')}`;
+    const baseApi = `${(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api').replace(/\/$/, '')}`;
     const tId = tenantId;
     const html = `<!-- TekAssist Widget (HTML) -->
 <div id="tekassist-widget-container"></div>

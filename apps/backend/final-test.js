@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-const BASE_URL = 'http://localhost:3002/api/v1';
+const BASE_URL = 'http://localhost:3001/api/v1';
 const MOCK_TENANT_ID = '550e8400-e29b-41d4-a716-446655440000';
 
 async function comprehensiveTest() {
@@ -91,7 +91,7 @@ async function comprehensiveTest() {
   // API Documentation
   console.log('\n📚 Documentation:');
   await test('Swagger Documentation', async () => {
-    const response = await axios.get('http://localhost:3002/api/docs', {
+    const response = await axios.get('http://localhost:3001/api/docs', {
       validateStatus: () => true
     });
     if (response.status !== 200) throw new Error('Swagger docs not accessible');
@@ -118,7 +118,7 @@ async function comprehensiveTest() {
   console.log(`   • Health: ${BASE_URL}/health`);
   console.log(`   • Chat: ${BASE_URL}/openai/chat`);
   console.log(`   • Widget: ${BASE_URL}/widget-config/public/{tenantId}`);
-  console.log(`   • Docs: http://localhost:3002/api/docs`);
+  console.log(`   • Docs: http://localhost:3001/api/docs`);
 }
 
 comprehensiveTest().catch(console.error);
