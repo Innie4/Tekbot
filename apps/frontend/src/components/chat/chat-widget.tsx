@@ -14,7 +14,7 @@ export default function ChatWidget() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [socket, setSocket] = useState<Socket | null>(null);
-  const [sessionId] = useState(`session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`);
+  const [sessionId] = useState(`session_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`);
   const [conversationId, setConversationId] = useState<string | null>(null);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -29,8 +29,8 @@ export default function ChatWidget() {
 
   useEffect(() => {
     // Initialize WebSocket connection
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
-    const socketInstance = io(`${apiUrl}/chat`, {
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3002';
+    const socketInstance = io(apiUrl, {
       query: {
         tenantId: 'default-tenant',
         sessionId: sessionId,
@@ -39,21 +39,33 @@ export default function ChatWidget() {
 
     socketInstance.on('connect', () => {
       console.log('Connected to WebSocket');
-      // Join tenant room for receiving messages
-      socketInstance.emit('join_room', { tenantId: 'default-tenant', sessionId });
     });
 
-    socketInstance.on('message_received', (data: any) => {
+    socketInstance.on('connected', (data: any) => {
+      console.log('WebSocket connection confirmed:', data);
+    });
+
+    socketInstance.on('chat_response', (data: any) => {
       const botMessage: Message = {
         sender: 'bot',
-        text:
-          data.content ||
-          data.message ||
-          data.response ||
-          "Sorry, I couldn't process your request.",
+        text: data.message || "Sorry, I couldn't process your request.",
         timestamp: new Date(data.timestamp || Date.now()),
       };
       setMessages((prev) => [...prev, botMessage]);
+      setIsLoading(false);
+
+      if (data.conversationId && !conversationId) {
+        setConversationId(data.conversationId);
+      }
+    });
+
+    socketInstance.on('chat_error', (data: any) => {
+      const errorMessage: Message = {
+        sender: 'bot',
+        text: data.message || 'Sorry, I encountered an error. Please try again.',
+        timestamp: new Date(data.timestamp || Date.now()),
+      };
+      setMessages((prev) => [...prev, errorMessage]);
       setIsLoading(false);
     });
 
@@ -99,11 +111,8 @@ export default function ChatWidget() {
     setIsLoading(true);
 
     // Send message via WebSocket
-    socket.emit('send_message', {
-      id: `msg_${Date.now()}`,
-      content: messageContent,
-      direction: 'outbound',
-      timestamp: new Date(),
+    socket.emit('chat_message', {
+      message: messageContent,
       sessionId: sessionId,
       tenantId: 'default-tenant',
       conversationId,

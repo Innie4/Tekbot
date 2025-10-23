@@ -55,6 +55,12 @@ async function bootstrap() {
     ],
   });
 
+  // Configure Socket.IO adapter for CORS
+  const httpAdapter = app.getHttpAdapter();
+  const server = httpAdapter.getHttpServer();
+  
+  // Socket.IO will be automatically configured by the WebSocketModule
+
   // API versioning
   app.enableVersioning({
     type: VersioningType.URI,
