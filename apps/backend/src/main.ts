@@ -14,6 +14,7 @@ import { TransformInterceptor } from './common/interceptors/transform.intercepto
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
 // import { TenantMiddleware } from './common/middleware/tenant.middleware';
+import { SentryService } from './modules/analytics/sentry.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -81,8 +82,9 @@ async function bootstrap() {
   );
 
   // Global filters (order matters - most specific first)
-  // Register exception filters without Sentry for now
-  const sentryService = undefined;
+  // Register exception filters with optional Sentry
+  const sentryEnabled = !!configService.get<string>('SENTRY_DSN');
+  const sentryService = sentryEnabled ? app.get(SentryService) : undefined;
 
   app.useGlobalFilters(
     new HttpExceptionFilter(sentryService),
@@ -137,43 +139,10 @@ async function bootstrap() {
       .build();
 
     const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('api/docs', app, document, {
-      swaggerOptions: {
-        persistAuthorization: true,
-        tagsSorter: 'alpha',
-        operationsSorter: 'alpha',
-      },
-    });
+    SwaggerModule.setup(envConfig.swaggerPath, app, document);
   }
-
-  // Global prefix
-  app.setGlobalPrefix('api');
-
-  // Global tenant resolution middleware
-  app.use((req: any, res: any, next: any) => {
-    // Simple tenant middleware - extract tenant ID from headers
-    const tenantId = req.get('x-tenant-id');
-    if (tenantId) {
-      req.tenant = { id: tenantId };
-      req.tenantId = tenantId;
-    }
-    next();
-  });
-
-  // Graceful shutdown
-  app.enableShutdownHooks();
 
   await app.listen(port);
-
-  console.log(
-    `🚀 TekBot Platform API is running on: http://localhost:${port}/api`,
-  );
-  if (nodeEnv === 'development') {
-    console.log(`📚 API Documentation: http://localhost:${port}/api/docs`);
-  }
 }
 
-bootstrap().catch(error => {
-  console.error('❌ Error starting server:', error);
-  process.exit(1);
-});
+bootstrap();
