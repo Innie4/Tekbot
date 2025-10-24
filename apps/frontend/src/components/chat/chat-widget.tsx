@@ -13,6 +13,7 @@ export default function ChatWidget() {
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   const [socket, setSocket] = useState<Socket | null>(null);
   const [sessionId] = useState(`session_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`);
   const [conversationId, setConversationId] = useState<string | null>(null);
@@ -39,53 +40,79 @@ export default function ChatWidget() {
 
     socketInstance.on('connect', () => {
       console.log('Connected to WebSocket');
+      // Join tenant/session room to receive broadcasted events
+      socketInstance.emit('joinRoom', { tenantId: 'default-tenant', sessionId });
     });
 
-    socketInstance.on('connected', (data: any) => {
+    socketInstance.on('connected', (data: unknown) => {
       console.log('WebSocket connection confirmed:', data);
     });
 
+    // ChatGateway path
     socketInstance.on('chat_response', (data: any) => {
       const botMessage: Message = {
         sender: 'bot',
         text: data.message || "Sorry, I couldn't process your request.",
         timestamp: new Date(data.timestamp || Date.now()),
       };
-      setMessages((prev) => [...prev, botMessage]);
+      setMessages(prev => [...prev, botMessage]);
       setIsLoading(false);
-
-      if (data.conversationId && !conversationId) {
+      if (data.conversationId) {
         setConversationId(data.conversationId);
       }
     });
 
-    socketInstance.on('chat_error', (data: any) => {
-      const errorMessage: Message = {
+    // WebSocketGateway path used by widget
+    socketInstance.on('message_received', (data: any) => {
+      const botMessage: Message = {
         sender: 'bot',
-        text: data.message || 'Sorry, I encountered an error. Please try again.',
+        text: data.content || data.message || "",
         timestamp: new Date(data.timestamp || Date.now()),
       };
-      setMessages((prev) => [...prev, errorMessage]);
+      setMessages(prev => [...prev, botMessage]);
       setIsLoading(false);
+      if (data.conversationId) {
+        setConversationId(data.conversationId);
+      }
     });
 
-    socketInstance.on('typing', (data: any) => {
-      if (data.sessionId !== sessionId) {
-        // Handle typing indicator if needed
-      }
+    // Typing indicators
+    socketInstance.on('user_typing', (payload: any) => {
+      const typingVal = typeof payload?.isTyping !== 'undefined' ? payload.isTyping : payload?.typing;
+      setIsTyping(Boolean(typingVal));
+    });
+    socketInstance.on('typing', (payload: any) => {
+      const typingVal = typeof payload?.isTyping !== 'undefined' ? payload.isTyping : payload?.typing;
+      setIsTyping(Boolean(typingVal));
     });
 
     socketInstance.on('disconnect', () => {
       console.log('Disconnected from WebSocket');
     });
 
+    // Error handling
     socketInstance.on('error', (error: any) => {
       console.error('WebSocket error:', error);
       const errorMessage: Message = {
         sender: 'bot',
         text: 'Sorry, I encountered a connection error. Please try again.',
       };
-      setMessages((prev) => [...prev, errorMessage]);
+      setMessages(prev => [...prev, errorMessage]);
+      setIsLoading(false);
+    });
+    socketInstance.on('connect_error', (error: any) => {
+      const msg = typeof error === 'string' ? error : error?.message || 'Connection error';
+      const errorMessage: Message = { sender: 'bot', text: msg };
+      setMessages(prev => [...prev, errorMessage]);
+      setIsLoading(false);
+    });
+    socketInstance.on('chat_error', (data: any) => {
+      const errorMessage: Message = {
+        sender: 'bot',
+        text: data?.message || 'Sorry, I encountered an error. Please try again.',
+        timestamp: new Date(data?.timestamp || Date.now()),
+      };
+      setMessages(prev => [...prev, errorMessage]);
       setIsLoading(false);
     });
 
@@ -104,13 +131,13 @@ export default function ChatWidget() {
       text: input.trim(),
       timestamp: new Date(),
     };
-    setMessages((prev) => [...prev, userMessage]);
+    setMessages(prev => [...prev, userMessage]);
 
     const messageContent = input.trim();
     setInput('');
     setIsLoading(true);
 
-    // Send message via WebSocket
+    // Send message via WebSocket using ChatGateway
     socket.emit('chat_message', {
       message: messageContent,
       sessionId: sessionId,
@@ -118,17 +145,17 @@ export default function ChatWidget() {
       conversationId,
     });
 
-    // Set a timeout to handle cases where no response is received
+    // Fallback timeout in case no response arrives
     setTimeout(() => {
       if (isLoading) {
         const timeoutMessage: Message = {
           sender: 'bot',
           text: 'Sorry, the response is taking longer than expected. Please try again.',
         };
-        setMessages((prev) => [...prev, timeoutMessage]);
+        setMessages(prev => [...prev, timeoutMessage]);
         setIsLoading(false);
       }
-    }, 30000); // 30 second timeout
+    }, 30000);
   };
 
   return (
@@ -152,6 +179,23 @@ export default function ChatWidget() {
             </div>
           ))}
           {isLoading && (
+            <div className="mb-3 flex justify-start">
+              <span className="inline-block px-4 py-2 rounded-xl shadow bg-glass text-white">
+                <div className="flex items-center space-x-1">
+                  <div className="w-2 h-2 bg-white rounded-full animate-bounce"></div>
+                  <div
+                    className="w-2 h-2 bg-white rounded-full animate-bounce"
+                    style={{ animationDelay: '0.1s' }}
+                  ></div>
+                  <div
+                    className="w-2 h-2 bg-white rounded-full animate-bounce"
+                    style={{ animationDelay: '0.2s' }}
+                  ></div>
+                </div>
+              </span>
+            </div>
+          )}
+          {!isLoading && isTyping && (
             <div className="mb-3 flex justify-start">
               <span className="inline-block px-4 py-2 rounded-xl shadow bg-glass text-white">
                 <div className="flex items-center space-x-1">

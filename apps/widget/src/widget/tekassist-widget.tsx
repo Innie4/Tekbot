@@ -32,6 +32,8 @@ export class TekAssistWidget {
     this.container = options.container;
     this.widgetId = `tekassist-widget-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     this.messaging = new WidgetMessaging();
+    // Initialize messaging to set allowed origins and internal state
+    this.messaging.init();
 
     this.setupMessaging();
     this.init();
@@ -164,7 +166,7 @@ export class TekAssistWidget {
         this.options.onMessage?.(message);
         this.messaging.sendToParent({
           type: WidgetMessageTypes.MESSAGE,
-          data: this.state,
+          data: message,
         });
       },
       onStateChange: newState => {
@@ -286,6 +288,8 @@ export class TekAssistWidget {
       this.root.unmount();
       this.root = null;
     }
+    // Clean up messaging handlers/state before destroy
+    this.messaging.cleanup();
     this.messaging.destroy();
     this.isInitialized = false;
   }

@@ -61,6 +61,31 @@ const initialState: WidgetState = {
   unreadCount: 0,
 };
 
+function mapEventTypeToMessageType(type: WidgetEventType): WidgetMessageTypes {
+  switch (type) {
+    case 'WIDGET_READY':
+      return WidgetMessageTypes.READY;
+    case 'WIDGET_OPEN':
+      return WidgetMessageTypes.OPEN;
+    case 'WIDGET_CLOSE':
+      return WidgetMessageTypes.CLOSE;
+    case 'WIDGET_MINIMIZE':
+      return WidgetMessageTypes.MINIMIZE;
+    case 'WIDGET_MAXIMIZE':
+      return WidgetMessageTypes.MAXIMIZE;
+    case 'WIDGET_MESSAGE':
+      return WidgetMessageTypes.MESSAGE;
+    case 'WIDGET_ERROR':
+      return WidgetMessageTypes.ERROR;
+    case 'WIDGET_RESIZE':
+      return WidgetMessageTypes.RESIZE;
+    case 'WIDGET_STATE_CHANGE':
+      return WidgetMessageTypes.STATUS_CHANGE;
+    default:
+      return WidgetMessageTypes.STATUS_CHANGE;
+  }
+}
+
 export function useTekAssistWidget(
   options: UseTekAssistWidgetOptions,
 ): UseTekAssistWidgetReturn {
@@ -70,6 +95,9 @@ export function useTekAssistWidget(
   const [error, setError] = useState<Error | null>(null);
   const eventHandlersRef = useRef<
     Map<WidgetEventType, Set<(event: WidgetEvent) => void>>
+  >(new Map());
+  const unsubscribersRef = useRef<
+    Map<WidgetEventType, Map<(event: WidgetEvent) => void, () => void>>
   >(new Map());
 
   // Initialize widget
@@ -113,6 +141,16 @@ export function useTekAssistWidget(
 
   // Destroy widget
   const destroy = useCallback(() => {
+    // Unsubscribe all registered handlers
+    unsubscribersRef.current.forEach(map => {
+      map.forEach(unsub => {
+        try {
+          unsub();
+        } catch {}
+      });
+    });
+    unsubscribersRef.current.clear();
+
     if (widgetRef.current) {
       widgetRef.current.destroy();
       widgetRef.current = null;
@@ -153,16 +191,60 @@ export function useTekAssistWidget(
   // Event handling
   const addEventListener = useCallback(
     (type: WidgetEventType, handler: (event: WidgetEvent) => void) => {
-      // Widget doesn't have addEventListener method, so we'll handle events through callbacks
-      console.warn('addEventListener not implemented on TekAssistWidget');
+      // Track handler in local registry
+      if (!eventHandlersRef.current.has(type)) {
+        eventHandlersRef.current.set(type, new Set());
+      }
+      eventHandlersRef.current.get(type)!.add(handler);
+
+      // Subscribe immediately if widget exists
+      const widget = widgetRef.current;
+      if (widget) {
+        const messageType = mapEventTypeToMessageType(type);
+        const wrapped = (msg: any) => {
+          const event: WidgetEvent = {
+            type,
+            data: msg?.data,
+            timestamp: new Date(msg?.timestamp || Date.now()),
+          };
+          try {
+            handler(event);
+          } catch (err) {
+            // Swallow handler errors to avoid breaking other listeners
+          }
+        };
+        const unsub = widget.subscribe(messageType, wrapped);
+        if (!unsubscribersRef.current.has(type)) {
+          unsubscribersRef.current.set(type, new Map());
+        }
+        unsubscribersRef.current.get(type)!.set(handler, unsub);
+      }
     },
     [],
   );
 
   const removeEventListener = useCallback(
     (type: WidgetEventType, handler: (event: WidgetEvent) => void) => {
-      // Widget doesn't have removeEventListener method, so we'll handle events through callbacks
-      console.warn('removeEventListener not implemented on TekAssistWidget');
+      // Remove from registry
+      const set = eventHandlersRef.current.get(type);
+      if (set) {
+        set.delete(handler);
+        if (set.size === 0) {
+          eventHandlersRef.current.delete(type);
+        }
+      }
+
+      const typeMap = unsubscribersRef.current.get(type);
+      const unsub = typeMap?.get(handler);
+      if (unsub) {
+        try {
+          unsub();
+        } catch {}
+        typeMap!.delete(handler);
+        if (typeMap && typeMap.size === 0) {
+          unsubscribersRef.current.delete(type);
+        }
+      }
     },
     [],
   );
@@ -177,6 +259,36 @@ export function useTekAssistWidget(
       destroy();
     };
   }, [init, destroy, options.autoInit]);
+
+  // Ensure handlers are subscribed once widget becomes ready
+  useEffect(() => {
+    const widget = widgetRef.current;
+    if (!isReady || !widget) return;
+
+    eventHandlersRef.current.forEach((set, type) => {
+      if (!unsubscribersRef.current.has(type)) {
+        unsubscribersRef.current.set(type, new Map());
+      }
+      const typeMap = unsubscribersRef.current.get(type)!;
+
+      set.forEach(handler => {
+        if (typeMap.has(handler)) return; // already subscribed
+        const messageType = mapEventTypeToMessageType(type);
+        const wrapped = (msg: any) => {
+          const event: WidgetEvent = {
+            type,
+            data: msg?.data,
+            timestamp: new Date(msg?.timestamp || Date.now()),
+          };
+          try {
+            handler(event);
+          } catch {}
+        };
+        const unsub = widget.subscribe(messageType, wrapped);
+        typeMap.set(handler, unsub);
+      });
+    });
+  }, [isReady]);
 
   // Update widget config when options change
   useEffect(() => {

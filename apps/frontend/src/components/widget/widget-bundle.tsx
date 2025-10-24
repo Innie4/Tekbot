@@ -49,9 +49,9 @@ interface WidgetOptions {
   sessionId?: string;
   customerId?: string;
   metadata?: Record<string, any>;
-  onMessage?: (message: any) => void;
+  onMessage?: (message: unknown) => void;
   onResize?: (height: number) => void;
-  onError?: (error: any) => void;
+  onError?: (error: unknown) => void;
 }
 
 class TekAssistWidget {
@@ -62,6 +62,8 @@ class TekAssistWidget {
   private widgetRef: React.RefObject<any>;
   private config: WidgetConfig | null = null;
   private isInitialized = false;
+  private resizeObserver: ResizeObserver | null = null;
+  private beforeUnloadHandler: ((e: BeforeUnloadEvent) => void) | null = null;
 
   constructor(options: WidgetOptions) {
     this.options = options;
@@ -77,11 +79,21 @@ class TekAssistWidget {
 
     // Handle messages from parent window
     this.messaging.on(WidgetMessageTypes.UPDATE_CONFIG, (message) => {
-      this.updateConfig(message.data);
+      const data = (message as { data?: unknown })?.data;
+      if (data && typeof data === 'object') {
+        this.updateConfig(data as Partial<WidgetConfig>);
+      } else {
+        this.options.onError?.(new Error('Invalid config payload'));
+      }
     });
 
     this.messaging.on(WidgetMessageTypes.SEND_MESSAGE, (message) => {
-      this.sendMessage(message.data.message);
+      const data = (message as { data?: unknown })?.data;
+      if (data && typeof (data as any).message === 'string') {
+        this.sendMessage((data as any).message as string);
+      } else {
+        this.options.onError?.(new Error('Invalid message payload'));
+      }
     });
 
     this.messaging.on(WidgetMessageTypes.OPEN_WIDGET, () => {
@@ -98,6 +110,10 @@ class TekAssistWidget {
   }
 
   async init(): Promise<void> {
+    if (this.isInitialized) {
+      console.warn('TekAssistWidget already initialized; skipping duplicate init');
+      return;
+    }
     try {
       // Load configuration
       await this.loadConfig();
@@ -118,6 +134,14 @@ class TekAssistWidget {
 
       // Initial resize notification
       this.notifyResize();
+
+      // Attach cleanup on page unload
+      this.beforeUnloadHandler = (e: BeforeUnloadEvent) => {
+        try {
+          this.destroy();
+        } catch {}
+      };
+      window.addEventListener('beforeunload', this.beforeUnloadHandler);
     } catch (error) {
       console.error('Widget initialization failed:', error);
       this.messaging.sendToParent(
@@ -125,6 +149,7 @@ class TekAssistWidget {
           message: error instanceof Error ? error.message : 'Unknown initialization error',
         })
       );
+      this.options.onError?.(error);
       throw error;
     }
   }
@@ -179,28 +204,43 @@ class TekAssistWidget {
   private renderWidget(): void {
     if (!this.root || !this.config) return;
 
-    this.root.render(
-      React.createElement(ChatWidgetStandalone, {
-        tenantId: this.options.tenantId,
-        apiUrl: this.options.apiUrl,
-        ...(this.options.sessionId && { sessionId: this.options.sessionId }),
-        onMessage: (message: any) => {
-          this.options.onMessage?.(message);
-          this.messaging.sendToParent(
-            createWidgetMessage(WidgetMessageTypes.WIDGET_MESSAGE, message)
-          );
-        },
-        onConfigLoad: (config: WidgetConfig) => {
-          this.config = config;
-          this.notifyResize();
-        },
-      })
-    );
+    try {
+      this.root.render(
+        React.createElement(ChatWidgetStandalone, {
+          tenantId: this.options.tenantId,
+          apiUrl: this.options.apiUrl,
+          ...(this.options.sessionId && { sessionId: this.options.sessionId }),
+          onMessage: (message: unknown) => {
+            this.options.onMessage?.(message);
+            this.messaging.sendToParent(
+              createWidgetMessage(WidgetMessageTypes.WIDGET_MESSAGE, message)
+            );
+          },
+          onConfigLoad: (config: WidgetConfig) => {
+            this.config = config;
+            this.notifyResize();
+          },
+        })
+      );
+    } catch (error) {
+      this.messaging.sendToParent(
+        createWidgetMessage(WidgetMessageTypes.WIDGET_ERROR, {
+          message: error instanceof Error ? error.message : 'Render error',
+        })
+      );
+      this.options.onError?.(error);
+    }
   }
 
   private notifyResize(): void {
     // Use ResizeObserver for accurate height detection
-    const resizeObserver = new ResizeObserver((entries) => {
+    if (this.resizeObserver) {
+      try {
+        this.resizeObserver.disconnect();
+      } catch {}
+    }
+
+    this.resizeObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
         const height = entry.contentRect.height;
         this.options.onResize?.(height);
@@ -210,7 +250,7 @@ class TekAssistWidget {
       }
     });
 
-    resizeObserver.observe(this.container);
+    this.resizeObserver.observe(this.container);
   }
 
   updateConfig(newConfig: Partial<WidgetConfig>): void {
@@ -252,10 +292,29 @@ class TekAssistWidget {
 
   destroy(): void {
     if (this.root) {
-      this.root.unmount();
+      try {
+        this.root.unmount();
+      } catch {}
     }
 
-    this.messaging.destroy();
+    try {
+      this.messaging.destroy();
+    } catch {}
+
+    if (this.resizeObserver) {
+      try {
+        this.resizeObserver.disconnect();
+      } catch {}
+      this.resizeObserver = null;
+    }
+
+    if (this.beforeUnloadHandler) {
+      try {
+        window.removeEventListener('beforeunload', this.beforeUnloadHandler);
+      } catch {}
+      this.beforeUnloadHandler = null;
+    }
+
     this.isInitialized = false;
   }
 

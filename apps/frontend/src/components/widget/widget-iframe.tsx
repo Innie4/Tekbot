@@ -9,7 +9,7 @@ interface WidgetMessage {
     | 'WIDGET_MESSAGE'
     | 'WIDGET_CONFIG_UPDATE'
     | 'WIDGET_ERROR';
-  data?: any;
+  data?: unknown;
   source?: string;
 }
 
@@ -19,7 +19,7 @@ interface WidgetIframeProps {
   sessionId?: string;
   customerId?: string;
   metadata?: Record<string, any>;
-  onMessage?: (message: any) => void;
+  onMessage?: (message: unknown) => void;
   onReady?: () => void;
   onError?: (error: string) => void;
   className?: string;
@@ -41,6 +41,7 @@ export default function WidgetIframe({
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [isReady, setIsReady] = useState(false);
   const [widgetUrl, setWidgetUrl] = useState<string>('');
+  const [currentConfig, setCurrentConfig] = useState<unknown>(null);
 
   useEffect(() => {
     // Construct widget URL with parameters
@@ -85,8 +86,8 @@ export default function WidgetIframe({
           break;
 
         case 'WIDGET_RESIZE':
-          if (iframeRef.current && data?.height) {
-            iframeRef.current.style.height = `${data.height}px`;
+          if (iframeRef.current && (data as any)?.height) {
+            iframeRef.current.style.height = `${(data as any).height}px`;
           }
           break;
 
@@ -96,12 +97,15 @@ export default function WidgetIframe({
 
         case 'WIDGET_ERROR':
           console.error('Widget error:', data);
-          onError?.(data?.message || 'Unknown widget error');
+          onError?.((data as any)?.message || 'Unknown widget error');
           break;
 
-        case 'WIDGET_CONFIG_UPDATE':
-          // Handle configuration updates if needed
+        case 'WIDGET_CONFIG_UPDATE': {
+          // Persist latest config and notify parent
+          setCurrentConfig(data);
+          onMessage?.({ type, data });
           break;
+        }
 
         default:
           console.log('Unknown widget message type:', type);
@@ -115,13 +119,13 @@ export default function WidgetIframe({
     };
   }, [onMessage, onReady, onError]);
 
-  const sendMessageToWidget = (message: any) => {
+  const sendMessageToWidget = (message: unknown) => {
     if (iframeRef.current && isReady) {
-      iframeRef.current.contentWindow?.postMessage(message, '*');
+      iframeRef.current.contentWindow?.postMessage(message as any, '*');
     }
   };
 
-  const updateConfig = (config: any) => {
+  const updateConfig = (config: unknown) => {
     sendMessageToWidget({
       type: 'UPDATE_CONFIG',
       data: config,
@@ -161,6 +165,7 @@ export default function WidgetIframe({
     closeWidget,
     resetConversation,
     isReady,
+    currentConfig,
   }));
 
   if (!widgetUrl) {

@@ -89,18 +89,62 @@ export function ChatWidgetStandalone({
           ...data.metadata,
         },
       };
+      // Update conversationId if provided
+      if (data.conversationId) {
+        setConversationId(data.conversationId);
+      }
       setMessages(prev => [...prev, botMessage]);
+      setIsLoading(false);
       callbacks.onMessage?.(botMessage);
     });
 
-    socketInstance.on('typing', (data: any) => {
-      if (data.sessionId !== currentSessionId) {
-        setIsTyping(data.isTyping);
+    // Newer event carrying full chat message
+    socketInstance.on('message_received', (data: any) => {
+      const botMessage: ChatMessage = {
+        id: data.id || data.messageId || `bot_${Date.now()}`,
+        content: data.content || data.message,
+        direction: 'inbound',
+        timestamp: new Date(data.timestamp || Date.now()),
+        metadata: {
+          conversationId: data.conversationId,
+          sessionId: currentSessionId,
+          ...(data.metadata || {}),
+        },
+      };
+      if (data.conversationId) {
+        setConversationId(data.conversationId);
       }
+      setMessages(prev => [...prev, botMessage]);
+      setIsLoading(false);
+      callbacks.onMessage?.(botMessage);
+    });
+
+    // Typing indicator from other participants
+    socketInstance.on('user_typing', (data: any) => {
+      const typingVal = typeof data?.isTyping !== 'undefined' ? data.isTyping : data?.typing;
+      setIsTyping(Boolean(typingVal));
+    });
+    // Backward compatibility
+    socketInstance.on('typing', (data: any) => {
+      const typingVal = typeof data?.isTyping !== 'undefined' ? data.isTyping : data?.typing;
+      setIsTyping(Boolean(typingVal));
     });
 
     socketInstance.on('disconnect', () => {
       console.log('Disconnected from WebSocket');
+    });
+
+    // Error handling
+    socketInstance.on('error', (err: any) => {
+      const message = typeof err === 'string' ? err : err?.message || 'Socket error';
+      callbacks.onError?.(new Error(message));
+    });
+    socketInstance.on('connect_error', (err: any) => {
+      callbacks.onError?.(err instanceof Error ? err : new Error(err?.message || 'Connection error'));
+    });
+    socketInstance.on('chat_error', (payload: any) => {
+      const message = payload?.message || payload?.error || 'Chat error';
+      callbacks.onError?.(new Error(message));
     });
 
     setSocket(socketInstance);
@@ -159,18 +203,15 @@ export function ChatWidgetStandalone({
     // Notify parent of new message
     callbacks.onMessage?.(userMessage);
 
-    // Send message via WebSocket
-    socket.emit('message', {
-      message: inputValue.trim(),
+    // Send message via WebSocket (align with backend expectations)
+    socket.emit('send_message', {
+      content: userMessage.content,
       tenantId,
       sessionId: currentSessionId,
       conversationId,
       customerId,
       metadata,
     });
-
-    // Set loading to false after a short delay (will be updated when response arrives)
-    setTimeout(() => setIsLoading(false), 1000);
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
