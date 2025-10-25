@@ -4,11 +4,13 @@ import DashboardLayout from '@/components/admin/dashboard-layout';
 import WidgetConfigurator from '@/components/admin/widget-configurator';
 import { GlassCard } from '@/components/ui/glass-card';
 import { motion } from 'framer-motion';
+import { logger } from '@/lib/logger';
 
 export default function AdminWidgetPage() {
   const apiUrl = `${(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api').replace(/\/$/, '')}/v${process.env.NEXT_PUBLIC_API_VERSION || '1'}/widget`;
+
   const handleConfigSave = (config: unknown) => {
-    console.warn('Widget configuration saved:', config);
+    logger.warn('Widget configuration saved', { config });
     // Here you would typically save to your backend
   };
 

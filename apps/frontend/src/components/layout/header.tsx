@@ -2,20 +2,19 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { Menu, X, ChevronDown, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
 const navItems = [
-  { name: 'Services', href: '/services' },
-  { name: 'Pricing', href: '/pricing' },
   { name: 'Admin', href: '/admin' },
 ];
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -24,6 +23,22 @@ export default function Header() {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  useEffect(() => {
+    const checkAuth = () => {
+      try {
+        const token = localStorage.getItem('auth-token');
+        setIsAuthenticated(!!token);
+      } catch {
+        setIsAuthenticated(false);
+      }
+    };
+
+    checkAuth();
+    const onStorage = () => checkAuth();
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
   }, []);
 
   return (
@@ -54,8 +69,24 @@ export default function Header() {
         </nav>
 
         <div className="hidden md:flex items-center space-x-4">
-          <Button variant="ghost">Sign In</Button>
-          <Button variant="glass">Get Started</Button>
+          {isAuthenticated ? (
+            <Link
+              href="/profile"
+              className="flex items-center space-x-2 text-foreground hover:text-foreground/80"
+            >
+              <User className="h-5 w-5" />
+              <span>Profile</span>
+            </Link>
+          ) : (
+            <>
+              <Link href="/sign-in">
+                <Button variant="ghost">Sign In</Button>
+              </Link>
+              <Link href="/sign-up">
+                <Button variant="glass">Get Started</Button>
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile Navigation Toggle */}
@@ -90,12 +121,21 @@ export default function Header() {
                 </Link>
               ))}
               <div className="flex flex-col space-y-2 pt-4 border-t border-border/10">
-                <Button variant="ghost" className="justify-start">
-                  Sign In
-                </Button>
-                <Button variant="glass" className="justify-start">
-                  Get Started
-                </Button>
+                {isAuthenticated ? (
+                  <Link href="/profile" className="flex items-center space-x-2" onClick={() => setIsOpen(false)}>
+                    <User className="h-5 w-5" />
+                    <span>Profile</span>
+                  </Link>
+                ) : (
+                  <>
+                    <Link href="/sign-in" onClick={() => setIsOpen(false)}>
+                      <Button variant="ghost" className="justify-start">Sign In</Button>
+                    </Link>
+                    <Link href="/sign-up" onClick={() => setIsOpen(false)}>
+                      <Button variant="glass" className="justify-start">Get Started</Button>
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </motion.div>

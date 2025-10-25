@@ -5,7 +5,7 @@ import { GlassInput } from '@/components/ui/glass-input';
 import { Button } from '@/components/ui/button';
 import { api } from '@/lib/api/api-client';
 import { useToast } from '@/components/ui/use-toast';
-import { ArrowRight, Chrome } from 'lucide-react';
+import { Chrome } from 'lucide-react';
 
 export default function SignUpPage() {
   const [firstName, setFirstName] = useState('');
@@ -80,7 +80,7 @@ export default function SignUpPage() {
 
     setLoading(true);
     try {
-      const result = await api.post<{ user: any; accessToken: string; refreshToken: string }>(
+      const result = await api.post<{ user: unknown; accessToken: string; refreshToken: string }>(
         '/auth/register',
         { firstName, lastName, email, password }
       );
@@ -90,19 +90,21 @@ export default function SignUpPage() {
         localStorage.setItem('refresh-token', result.refreshToken);
         localStorage.setItem('auth-user', JSON.stringify(result.user));
         localStorage.setItem('has-onboarded', 'false');
-        if ((result.user as any)?.tenantId) {
-          localStorage.setItem('tenant-id', (result.user as any).tenantId);
+
+        const user = result.user as { tenantId?: string; tenantSlug?: string };
+        if (user?.tenantId) {
+          localStorage.setItem('tenant-id', user.tenantId);
         }
-        if ((result.user as any)?.tenantSlug) {
-          localStorage.setItem('tenant-slug', (result.user as any).tenantSlug);
+        if (user?.tenantSlug) {
+          localStorage.setItem('tenant-slug', user.tenantSlug);
         }
       }
 
       toast({ title: 'Account created', description: 'Welcome to TekAssist!' });
       window.location.href = '/onboarding';
-    } catch (err: any) {
-      const message = err?.message || 'Sign up failed';
-      setError(message);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      setError(message || 'Sign up failed');
     } finally {
       setLoading(false);
     }
@@ -194,7 +196,7 @@ export default function SignUpPage() {
               type="password"
               value={password}
               onChange={(e) => onPasswordChange(e.target.value)}
-              placeholder="••••••••"
+              placeholder="********"
               required
             />
             {passwordError && <p className="mt-1 text-xs text-red-600">{passwordError}</p>}
@@ -206,7 +208,7 @@ export default function SignUpPage() {
               loading || !!firstNameError || !!lastNameError || !!emailError || !!passwordError
             }
           >
-            {loading ? 'Creating account…' : 'Create Account'}
+            {loading ? 'Creating account...' : 'Create Account'}
           </Button>
         </form>
         <div className="text-sm mt-4 text-center">

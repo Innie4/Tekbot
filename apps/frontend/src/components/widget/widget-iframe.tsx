@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import { logger } from '@/lib/logger';
 
 interface WidgetMessage {
   type:
@@ -73,7 +74,7 @@ export default function WidgetIframe({
       ];
 
       if (!allowedOrigins.includes(event.origin)) {
-        console.warn('Received message from unauthorized origin:', event.origin);
+        logger.warn('Received message from unauthorized origin:', event.origin);
         return;
       }
 
@@ -96,7 +97,7 @@ export default function WidgetIframe({
           break;
 
         case 'WIDGET_ERROR':
-          console.error('Widget error:', data);
+          logger.error('Widget error:', data);
           onError?.((data as any)?.message || 'Unknown widget error');
           break;
 
@@ -108,7 +109,7 @@ export default function WidgetIframe({
         }
 
         default:
-          console.log('Unknown widget message type:', type);
+          logger.debug('Unknown widget message type:', type);
       }
     };
 
@@ -201,7 +202,7 @@ export const WidgetAPI = {
 
     // This would be implemented with a framework-agnostic approach
     // For now, it's a placeholder for the actual implementation
-    console.log('Creating widget in container:', containerId, config);
+    logger.debug('Creating widget in container:', containerId, config);
   },
 
   destroyWidget: (containerId: string) => {

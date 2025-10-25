@@ -44,7 +44,6 @@ export default function SignInPage() {
     e.preventDefault();
     setError(null);
 
-    // Client-side validation
     if (!isValidEmail(email)) {
       setError('Please enter a valid email address.');
       return;
@@ -56,29 +55,29 @@ export default function SignInPage() {
 
     setLoading(true);
     try {
-      const result = await api.post<{ user: any; accessToken: string; refreshToken: string }>(
+      const result = await api.post<{ user: unknown; accessToken: string; refreshToken: string }>(
         '/auth/login',
         { email, password }
       );
 
-      // Store tokens, user, and tenant context
       if (typeof window !== 'undefined') {
         localStorage.setItem('auth-token', result.accessToken);
         localStorage.setItem('refresh-token', result.refreshToken);
         localStorage.setItem('auth-user', JSON.stringify(result.user));
-        if (result.user?.tenantId) {
-          localStorage.setItem('tenant-id', result.user.tenantId);
+        const user = result.user as { tenantId?: string; tenantSlug?: string };
+        if (user?.tenantId) {
+          localStorage.setItem('tenant-id', user.tenantId);
         }
-        if (result.user?.tenantSlug) {
-          localStorage.setItem('tenant-slug', result.user.tenantSlug);
+        if (user?.tenantSlug) {
+          localStorage.setItem('tenant-slug', user.tenantSlug);
         }
       }
 
       toast({ title: 'Signed in', description: 'Welcome back!' });
       window.location.href = '/admin';
-    } catch (err: any) {
-      const message = err?.message || 'Sign in failed';
-      setError(message);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      setError(message || 'Sign in failed');
     } finally {
       setLoading(false);
     }
@@ -120,7 +119,7 @@ export default function SignInPage() {
               type="password"
               value={password}
               onChange={(e) => onPasswordChange(e.target.value)}
-              placeholder="••••••••"
+              placeholder="********"
               required
             />
             {passwordError && <p className="mt-1 text-xs text-red-600">{passwordError}</p>}
@@ -130,11 +129,11 @@ export default function SignInPage() {
             className="w-full"
             disabled={loading || !!emailError || !!passwordError}
           >
-            {loading ? 'Signing in…' : 'Log In'}
+            {loading ? 'Signing in...' : 'Log In'}
           </Button>
         </form>
         <div className="text-sm mt-4 text-center">
-          Don’t have an account?{' '}
+          Don&apos;t have an account?{' '}
           <a href="/sign-up" className="text-primary">
             Sign up
           </a>

@@ -8,6 +8,7 @@ import {
   WidgetMessageTypes,
   createWidgetMessage,
 } from '../../lib/widget-messaging';
+import { logger } from '@/lib/logger';
 
 interface WidgetConfig {
   title: string;
@@ -111,7 +112,7 @@ class TekAssistWidget {
 
   async init(): Promise<void> {
     if (this.isInitialized) {
-      console.warn('TekAssistWidget already initialized; skipping duplicate init');
+      logger.warn('TekAssistWidget already initialized; skipping duplicate init');
       return;
     }
     try {
@@ -143,7 +144,7 @@ class TekAssistWidget {
       };
       window.addEventListener('beforeunload', this.beforeUnloadHandler);
     } catch (error) {
-      console.error('Widget initialization failed:', error);
+      logger.error('Widget initialization failed:', error);
       this.messaging.sendToParent(
         createWidgetMessage(WidgetMessageTypes.WIDGET_ERROR, {
           message: error instanceof Error ? error.message : 'Unknown initialization error',
@@ -164,7 +165,7 @@ class TekAssistWidget {
       }
       this.config = await response.json();
     } catch (error) {
-      console.error('Failed to load widget config:', error);
+      logger.error('Failed to load widget config:', error);
       // Use default config
       this.config = this.getDefaultConfig();
     }
@@ -342,7 +343,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('widget-root');
   if (container) {
     // This will be handled by embed.html
-    console.log('Widget container found, waiting for initialization...');
+    logger.debug('Widget container found, waiting for initialization...');
   }
 });
 

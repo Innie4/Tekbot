@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Send, X, Minimize2, MessageCircle, Bot, User } from 'lucide-react';
 import { ThemeEngine, AdvancedThemeConfig } from '../../lib/theme-engine';
 import { io, Socket } from 'socket.io-client';
+import { logger } from '@/lib/logger';
 
 interface Message {
   id: string;
@@ -123,7 +124,7 @@ export default function ChatWidgetStandalone({
     });
 
     socketInstance.on('connect', () => {
-      console.log('Connected to WebSocket');
+      logger.debug('Connected to WebSocket');
       // Join tenant room for receiving messages
       socketInstance.emit('joinRoom', { tenantId, sessionId: currentSessionId });
     });
@@ -146,7 +147,7 @@ export default function ChatWidgetStandalone({
     });
 
     socketInstance.on('disconnect', () => {
-      console.log('Disconnected from WebSocket');
+      logger.debug('Disconnected from WebSocket');
     });
 
     setSocket(socketInstance);
@@ -201,7 +202,7 @@ export default function ChatWidgetStandalone({
         }
       }
     } catch (error) {
-      console.error('Failed to load widget config:', error);
+      logger.error('Failed to load widget config:', error);
     }
   };
 

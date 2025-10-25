@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
+import { logger } from '@/lib/logger';
 
 interface Message {
   sender: 'bot' | 'user';
@@ -39,13 +40,13 @@ export default function ChatWidget() {
     });
 
     socketInstance.on('connect', () => {
-      console.log('Connected to WebSocket');
+      logger.debug('Connected to WebSocket');
       // Join tenant/session room to receive broadcasted events
       socketInstance.emit('joinRoom', { tenantId: 'default-tenant', sessionId });
     });
 
     socketInstance.on('connected', (data: unknown) => {
-      console.log('WebSocket connection confirmed:', data);
+      logger.debug('WebSocket connection confirmed:', data);
     });
 
     // ChatGateway path
@@ -87,12 +88,12 @@ export default function ChatWidget() {
     });
 
     socketInstance.on('disconnect', () => {
-      console.log('Disconnected from WebSocket');
+      logger.debug('Disconnected from WebSocket');
     });
 
     // Error handling
     socketInstance.on('error', (error: any) => {
-      console.error('WebSocket error:', error);
+      logger.error('WebSocket error:', error);
       const errorMessage: Message = {
         sender: 'bot',
         text: 'Sorry, I encountered a connection error. Please try again.',

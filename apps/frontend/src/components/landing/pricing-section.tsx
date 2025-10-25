@@ -1,8 +1,10 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { GlassCard } from '@/components/ui/glass-card';
 import { Button } from '@/components/ui/button';
+import { GlassInput } from '@/components/ui/glass-input';
 import { Check } from 'lucide-react';
 
 const pricingPlans = [
@@ -50,6 +52,11 @@ const pricingPlans = [
 ];
 
 export default function PricingSection() {
+  const [budget, setBudget] = useState<number>(50);
+  const costPerMessage = 0.01;
+  const estimatedMessages = Math.max(0, Math.floor(budget / costPerMessage));
+  const recommendedPlan = budget === 0 ? 'Free' : budget <= 29 ? 'Pro' : 'Business';
+
   return (
     <section className="py-20 w-full bg-tech-dark/50">
       <div className="container mx-auto px-4">
@@ -71,7 +78,7 @@ export default function PricingSection() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {pricingPlans.map((plan, index) => (
             <motion.div
               key={index}
@@ -109,6 +116,55 @@ export default function PricingSection() {
               </GlassCard>
             </motion.div>
           ))}
+
+          {/* Custom interactive pricing card */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+            className="flex"
+          >
+            <GlassCard className="flex flex-col h-full p-6 border-electric-blue" variant="default">
+              <div className="mb-6">
+                <h3 className="text-xl font-semibold mb-2">Custom</h3>
+                <p className="text-foreground/70 mb-4">
+                  Tailor your plan based on monthly budget and usage
+                </p>
+
+                <div className="space-y-3">
+                  <label htmlFor="monthly-budget" className="text-sm font-medium">
+                    Monthly Budget (USD)
+                  </label>
+                  <GlassInput
+                    id="monthly-budget"
+                    type="number"
+                    min={0}
+                    step={1}
+                    value={budget}
+                    onChange={(e) => setBudget(Number(e.target.value) || 0)}
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2 mb-8">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-foreground/70">Estimated messages</span>
+                  <span className="font-semibold">{estimatedMessages.toLocaleString()}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-foreground/70">Recommended plan</span>
+                  <span className="font-semibold">{recommendedPlan}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-foreground/70">Cost per message</span>
+                  <span className="font-semibold">${costPerMessage.toFixed(2)}</span>
+                </div>
+              </div>
+
+              <Button variant="glass" className="w-full mt-auto">Choose Plan</Button>
+            </GlassCard>
+          </motion.div>
         </div>
       </div>
     </section>
